@@ -6,19 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dirty_white"
+    android:padding="20dp"
     tools:context=".ui.activity.MainActivity">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="58dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/libre_baskerville_regular"
         android:text="Hello, Carl Angelo"
         android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/libre_baskerville_family"
+        android:fontFamily="@font/inter_family"
         android:text="Believe you can and you're halfway there."
         android:textColor="@color/black"
         android:textSize="12sp"
@@ -38,7 +38,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="24sp"
         android:fontFamily="@font/libre_baskerville_regular"
         android:text="Today's Schedule"
         android:textColor="@color/black"
@@ -46,30 +46,28 @@
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_marginStart="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="30dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardButton1"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSchedule1"
+            style="@style/HomeDateMaterialCard"
+            app:cardBackgroundColor="#E9F3F7"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#FDEFF4"
-            android:focusable="true"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginVertical="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -92,19 +90,15 @@
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardButton2"
+            style="@style/HomeDateMaterialCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cardButton1"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#C0D8C0"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardCornerRadius="16dp"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginVertical="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -131,245 +125,85 @@
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-    </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/libre_baskerville_family"
-        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/libre_baskerville_regular"
         android:text="Kanban Board"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/relativeLayout"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
+        style="@style/KanbanBoardAddTaskButton"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/shape_text_border"
-        android:backgroundTint="#D8D2C2"
-        android:text="Add Task +"
-        android:textAllCaps="false"
-        android:textSize="10sp"
+        android:layout_marginTop="16dp"
+        android:text="Add Task"
+        app:icon="@drawable/ic_add_24px"
         app:layout_constraintEnd_toEndOf="@+id/relativeLayout"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp" />
 
-    <LinearLayout
-        android:id="@+id/statusTabs"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggleButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="30dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView4">
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/task_listview"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:layout_editor_absoluteX="20dp">
 
-        <TextView
-            android:id="@+id/todoTab"
+        <Button
+            android:id="@+id/button1"
+            style="@style/KanbanBoardToggleButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/libre_baskerville_family"
-            android:gravity="center"
             android:text="To Do"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:backgroundTint="#cecece"
+            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/inProgressTab"
+        <Button
+            android:id="@+id/button2"
+            style="@style/KanbanBoardToggleButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/libre_baskerville_family"
-            android:gravity="center"
-            android:text="In Progress"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:backgroundTint="#c0d7c0"
+            android:text="In Progress" />
 
-        <TextView
-            android:id="@+id/completedTab"
+        <Button
+            android:id="@+id/button3"
+            style="@style/KanbanBoardToggleButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/libre_baskerville_family"
-            android:gravity="center"
-            android:text="Completed"
-            android:textColor="@color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
+            android:backgroundTint="#caf0f8"
+            android:text="Completed" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutBoard"
+    <ListView
+        android:id="@+id/task_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_height="0dp"
+        android:dividerHeight="12dp"
+        android:divider="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/statusTabs">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/task1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/shape_card_border"
-            android:focusable="true"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_task_design"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/taskText1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_family"
-                    android:text="Activity 1 : Wireframe"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="end"
-                    android:background="@drawable/shape_text_border"
-                    android:text="todo" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/task2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/task1"
-            android:background="@drawable/shape_card_border"
-            android:focusable="true"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_task_design"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/taskText2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_family"
-                    android:text="PE : Asian Dance Practice"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="end"
-                    android:background="@drawable/shape_text_border"
-                    android:text="todo" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/task3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/task2"
-            android:background="@drawable/shape_card_border"
-            android:focusable="true"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_task_design"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/taskText3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_family"
-                    android:text="Prototype : Mobile Development"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="end"
-                    android:background="@drawable/shape_text_border"
-                    android:text="todo" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/task4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/task3"
-            android:background="@drawable/shape_card_border"
-            android:focusable="true"
-            android:padding="10dp"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_task_design"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/taskText4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_family"
-                    android:text="OOP : Java Calculator"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="end"
-                    android:background="@drawable/shape_text_border"
-                    android:text="todo" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

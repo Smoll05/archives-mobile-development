@@ -17,15 +17,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val Button_Login = findViewById<Button>(R.id.btnLogin)
-        val emailEditText = findViewById<EditText>(R.id.Email)
+        val emailEditText = findViewById<EditText>(R.id.tfEmail)
+        val passwordEditText = findViewById<EditText>(R.id.tfPassword)
 
         Button_Login.setOnClickListener {
             val email: String = emailEditText.getText().toString().trim()
+            val password: String = passwordEditText.getText().toString().trim()
 
-            if (email.isEmpty()) {
-                emailEditText.setError("Email is required")
+            if (email.isEmpty() || password.isEmpty()) {
+                emailEditText.error = "Email is required"
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                emailEditText.setError("Invalid email format")
+                emailEditText.error = "Invalid email format"
             } else {
                 Log.e("Logging in", "Logged In")
                 Toast.makeText(this, "Logged In!", Toast.LENGTH_LONG).show()

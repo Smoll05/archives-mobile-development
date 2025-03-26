@@ -20,11 +20,13 @@ class ProfileActivity : AppCompatActivity() {
         val saveProfileBtn = findViewById<Button>(R.id.save_profile_btn)
 
         profileReturnBtn.setOnClickListener {
-            startActivity(Intent(this, SettingsFragment::class.java))
+            finish()
+//            startActivity(Intent(this, SettingsFragment::class.java))
         }
 
         saveProfileBtn.setOnClickListener {
-            startActivity(Intent(this, SettingsFragment::class.java))
+            finish()
+//            startActivity(Intent(this, SettingsFragment::class.java))
         }
     }
 }
