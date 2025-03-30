@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="white">#FFFFFF</color>
-    <color name="dirty_white">#FAF7F0</color>
-    <color name="gray">#D8D2C2</color>
-    <color name="brown">#B17457</color>
-    <color name="coal">#4A4947</color>
     <color name="black">#000000</color>
+
+    <color name="primary">#5F5E59</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryContainer">#FAF7F0</color>
+    <color name="onPrimaryContainer">#72716C</color>
+    <color name="secondary">#844E34</color>
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#A1664A</color>
+    <color name="onSecondaryContainer">#FFFBFF</color>
+    <color name="tertiary">#333331</color>
+    <color name="onTertiary">#FFFFFF</color>
+    <color name="tertiaryContainer">#4A4947</color>
+    <color name="onTertiaryContainer">#BBB8B5</color>
+    <color name="error">#AD292F</color>
+    <color name="onError">#FFFFFF</color>
+    <color name="errorContainer">#CF4244</color>
+    <color name="onErrorContainer">#FFFBFF</color>
+    <color name="background">#FDF8F7</color>
+    <color name="onBackground">#1C1B1B</color>
+    <color name="surface">#FDF8F7</color>
+    <color name="onSurface">#1C1B1B</color>
+    <color name="surfaceVariant">#E5E3D9</color>
+    <color name="onSurfaceVariant">#474740</color>
+    
+    <color name="orange">#FBECDD</color>
+    <color name="yellow">#FBF3DB</color>
+    <color name="green">#EDF3EC</color>
+    <color name="blue">#E7F3F8</color>
+    <color name="purple">#F8F3FC</color>
+    <color name="pink">#FCF1F6</color>
+    <color name="red">#FDEBEC</color>
+
 </resources>

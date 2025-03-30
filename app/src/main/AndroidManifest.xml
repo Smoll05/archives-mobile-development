@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Archives"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.ButtonLayout"
+            android:exported="false" />
+        <activity
             android:name=".LogOuutDialog"
             android:exported="false"
             android:theme="@style/Theme.Archives" />

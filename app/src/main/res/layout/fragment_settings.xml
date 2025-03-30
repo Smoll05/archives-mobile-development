@@ -5,7 +5,7 @@
     android:id="@+id/developer_page_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dirty_white"
+    android:background="@color/background"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="3dp">
 
@@ -13,15 +13,15 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDeveloper"
         style="@style/Widget.Material3.Button.TextButton.Icon"
-        android:textColor="@color/black"
-        android:layout_width="302dp"
-        android:layout_height="44dp"
+        android:layout_width="319dp"
+        android:layout_height="42dp"
         android:layout_marginTop="24dp"
         android:background="@null"
         android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
         android:text="About the developers"
         android:textAlignment="textStart"
         android:textAllCaps="false"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +30,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReport"
         style="@style/Widget.Material3.Button.TextButton.Icon"
-        android:layout_width="303dp"
-        android:layout_height="42dp"
+        android:layout_width="318dp"
+        android:layout_height="40dp"
         android:layout_marginTop="4dp"
         android:background="@null"
         android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
@@ -145,13 +145,12 @@
         android:id="@+id/IMGprofile"
         android:layout_width="322dp"
         android:layout_height="167dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/img_profile_card"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
@@ -165,12 +164,10 @@
         android:text="Email"
         android:textAlignment="viewStart"
         android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
         android:id="@+id/textView7"
