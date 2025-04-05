@@ -5,47 +5,40 @@
     android:id="@+id/developer_page_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dirty_white"
+    android:background="@color/background"
     android:paddingHorizontal="20dp"
     android:paddingTop="20dp"
     tools:context=".ui.activity.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/homeAppBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/libre_baskerville_regular"
-        android:text="Hello, Carl Angelo"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Believe you can and you're halfway there."
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface"
+            android:elevation="0dp"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Hello Carl" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24sp"
         android:fontFamily="@font/libre_baskerville_regular"
         android:text="Today's Schedule"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/homeAppBar" />
 
     <LinearLayout
         android:id="@+id/relativeLayout"
@@ -60,7 +53,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardSchedule1"
             style="@style/HomeDateMaterialCard"
-            app:cardBackgroundColor="#E9F3F7"
+            app:cardBackgroundColor="@color/blue"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -96,6 +89,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardButton2"
             style="@style/HomeDateMaterialCard"
+            android:backgroundTint="@color/pink"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

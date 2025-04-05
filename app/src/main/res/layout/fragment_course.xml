@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dirty_white"
+    android:background="@color/background"
     android:paddingHorizontal="20dp"
     android:paddingTop="20dp"
     tools:context=".ui.activity.MainActivity">
@@ -37,7 +37,7 @@
 
     <ListView
         android:id="@+id/fileList"
-        android:backgroundTint="@color/dirty_white"
+        android:backgroundTint="@color/background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@android:color/white"
