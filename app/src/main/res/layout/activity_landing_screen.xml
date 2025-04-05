@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/developer_page_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dirty_white"
+    tools:context=".ui.activity.LoginActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Archives"
+        android:textSize="32dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/libre_baskerville_family"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15"
+        tools:ignore="MissingConstraints" />
+
+
+    <TextView
+        android:id="@+id/Youracademic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Your academic success starts with"
+        android:fontFamily="@font/libre_baskerville_family"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Title"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/BetterOrganization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="better organization"
+        android:fontFamily="@font/libre_baskerville_family"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Youracademic"
+        app:layout_constraintVertical_bias="0.024" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        style="@style/MaterialButton.Primary"
+        android:layout_width="262dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="244dp"
+        android:layout_marginBottom="24dp"
+        android:paddingLeft="105dp"
+        android:paddingRight="105dp"
+        android:text="Login"
+        app:circularflow_radiusInDP="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BetterOrganization"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegister"
+        style="@style/MaterialButton.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
+        android:paddingLeft="105dp"
+        android:paddingRight="105dp"
+        android:text="Register"
+        app:circularflow_radiusInDP="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BetterOrganization"
+        app:layout_constraintVertical_bias="0.709" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,69 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+
+    <EditText
+        android:id="@+id/etCourseName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="30dp"
+        android:textColor="@color/black"
+        android:hint="Enter Course Name"
+        android:background="@drawable/edittext_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Color"
+        android:layout_marginTop="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/colorOption1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_folder_red"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/colorOption2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_folder_blue"
+            android:padding="4dp"
+            android:layout_marginStart="16dp"/>
+
+        <ImageView
+            android:id="@+id/colorOption3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_folder_green"
+            android:padding="4dp"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Course"
+        android:layout_marginTop="24dp" />
+
+    <Button
+        android:id="@+id/btnCancelCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_marginTop="8dp" />
+</LinearLayout>
