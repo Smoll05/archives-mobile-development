@@ -26,6 +26,8 @@
     <color name="onSurface">#1C1B1B</color>
     <color name="surfaceVariant">#E5E3D9</color>
     <color name="onSurfaceVariant">#474740</color>
+
+    <color name="ic_launcher_background">#FDF8F7</color>
     
     <color name="orange">#FBECDD</color>
     <color name="yellow">#FBF3DB</color>
