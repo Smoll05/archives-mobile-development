@@ -5,16 +5,17 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/dirty_white"
     android:padding="24dp">
 
     <TextView
         android:id="@+id/EnterPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/inter"
         android:text="Enter Password"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,26 +52,44 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/forgotpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:autoLink="all"
+        android:text="@string/forgotpassword"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/Password"
+        app:layout_constraintTop_toBottomOf="@+id/Password"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/Youracademic"
         android:layout_width="259dp"
         android:layout_height="17dp"
+        android:layout_marginStart="56dp"
         android:fontFamily="@font/libre_baskerville_family"
         android:text="Welcome back! Stay on top of your"
         android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="@+id/Login"
-        app:layout_constraintTop_toBottomOf="@+id/Login" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.195" />
 
     <TextView
         android:id="@+id/BetterOrganization"
-        android:layout_width="wrap_content"
+        android:layout_width="208dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
         android:fontFamily="@font/libre_baskerville_family"
         android:text="academic journey with ease."
         android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/Youracademic"
-        app:layout_constraintTop_toBottomOf="@+id/Youracademic" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Youracademic"
+        app:layout_constraintVertical_bias="0.026" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/Email"
@@ -89,6 +108,7 @@
             android:id="@+id/tfEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/inter"
             android:inputType="textEmailAddress"
             android:paddingTop="15dp"
@@ -97,51 +117,49 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <TextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
-        android:text="Email Address"
+        android:layout_marginTop="224dp"
+        android:text="Name"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BetterOrganization"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
         android:fontFamily="@font/libre_baskerville_regular"
-        android:text="login"
+        android:text="Archive"
         android:textColor="#000000"
         android:textSize="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        style="@style/MaterialButton.Tertiary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:paddingLeft="105dp"
-        android:paddingRight="105dp"
-        android:text="Login"
-        app:circularflow_radiusInDP="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Password"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.111" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        style="@style/MaterialButton.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="105dp"
+        android:paddingRight="105dp"
+        android:text="Login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/Password"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/Password"
+        app:layout_constraintTop_toBottomOf="@+id/Password"
+        app:layout_constraintVertical_bias="0.647" />
+
+    <ImageButton
+        android:id="@+id/btnBACK"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -151,9 +169,3 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-

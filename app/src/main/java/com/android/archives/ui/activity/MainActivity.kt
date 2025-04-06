@@ -5,8 +5,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.android.archives.R
-import com.android.archives.ui.fragment.CourseFragment
 import com.android.archives.ui.fragment.HomeFragment
+import com.android.archives.ui.fragment.MainCourseFragment
 import com.android.archives.ui.fragment.ScheduleFragment
 import com.android.archives.ui.fragment.SettingsFragment
 import com.google.android.material.navigation.NavigationBarView
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.navigation_course -> {
-                selectedFragment = CourseFragment()
+                selectedFragment = MainCourseFragment()
             }
 
             R.id.navigation_schedule -> {

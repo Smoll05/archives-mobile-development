@@ -1,5 +1,6 @@
 package com.android.archives.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.android.archives.R
 import com.android.archives.data.model.Task
+import com.android.archives.ui.activity.FilesActivity
 import com.android.archives.ui.adapter.TaskListViewAdapter
 
 class HomeFragment : Fragment() {
@@ -42,12 +44,15 @@ class HomeFragment : Fragment() {
         val adapter = TaskListViewAdapter(
             requireContext(), taskList,
             onClick = { task ->
-                Toast.makeText(requireContext(), "On click: ${task.title}", Toast.LENGTH_LONG).show()
+                val intent = Intent(requireContext(), FilesActivity::class.java)
+                intent.putExtra("taskTitle", task.title) // optional
+                startActivity(intent)
             },
             onLongClicK = { task ->
                 Toast.makeText(requireContext(), "On long click: ${task.description}", Toast.LENGTH_LONG).show()
             }
         )
+
 
         listView.adapter = adapter
 
