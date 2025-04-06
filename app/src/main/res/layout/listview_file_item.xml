@@ -24,6 +24,6 @@
         android:textSize="16sp"
         android:padding="12dp"
         android:textColor="@color/black"
-        android:background="@color/dirty_white"
+        android:background="@color/primaryContainer"
         tools:text="File Name"/>
 </LinearLayout>

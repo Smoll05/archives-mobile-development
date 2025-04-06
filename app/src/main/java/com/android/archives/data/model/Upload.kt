@@ -1,4 +1,4 @@
-package com.android.archives.ui.Class
+package com.android.archives.data.model
 
 import android.net.Uri
 

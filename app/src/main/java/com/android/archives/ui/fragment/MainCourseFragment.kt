@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
@@ -14,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.archives.R
 import com.android.archives.databinding.FragmentMainCourseBinding
-import com.android.archives.ui.Class.FolderItem
+import com.android.archives.data.model.FolderItem
 import com.android.archives.ui.activity.FilesActivity
 import com.android.archives.ui.adapter.FolderAdapter
 import com.android.archives.ui.viewmodel.MainCourseViewModel

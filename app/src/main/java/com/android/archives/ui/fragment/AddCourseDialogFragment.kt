@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.android.archives.R
-import com.android.archives.ui.Class.FolderItem
+import com.android.archives.data.model.FolderItem
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class AddCourseDialogFragment(

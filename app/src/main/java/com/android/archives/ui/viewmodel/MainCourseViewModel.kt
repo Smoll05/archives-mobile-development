@@ -2,7 +2,7 @@ package com.android.archives.ui.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.android.archives.ui.Class.FolderItem
+import com.android.archives.data.model.FolderItem
 
 class MainCourseViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 

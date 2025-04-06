@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
-import com.android.archives.ui.Class.Upload
+import com.android.archives.data.model.Upload
 
 class FileListAdapter(
     private val onFileClick: (Upload) -> Unit

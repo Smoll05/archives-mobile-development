@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.databinding.ActivityFilesBinding
-import com.android.archives.ui.Class.Upload
+import com.android.archives.data.model.Upload
 import com.android.archives.ui.adapter.FileListAdapter
 import org.json.JSONArray
 import org.json.JSONObject

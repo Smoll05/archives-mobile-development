@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dirty_white"
+    android:background="@color/background"
     android:padding="16dp"
     tools:context=".ui.activity.FilesActivity">
 
@@ -61,12 +61,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAdd"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/MaterialButton.SecondaryContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="48dp"
-            android:backgroundTint="@color/brown"
-            android:textColor="@color/black"
             android:text="Add" />
     </LinearLayout>
 
@@ -119,14 +117,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnBACK"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="76dp"
-        android:layout_height="49dp"
-        android:backgroundTint="@color/brown"
+        style="@style/MaterialButton.SecondaryContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:minWidth="48dp"
         android:text="Back"
-        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/buttonContainer"
         app:layout_constraintEnd_toStartOf="@+id/buttonContainer"
         app:layout_constraintHorizontal_bias="0.0"
