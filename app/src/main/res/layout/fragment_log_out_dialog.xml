@@ -18,7 +18,7 @@
         android:id="@+id/byemsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/libre_baskerville_family"
+        android:fontFamily="@font/libre_baskerville_regular"
         android:text="You are Leaving, are you"
         android:textFontWeight="700"
         android:textColor="#B17457"
@@ -30,7 +30,7 @@
         android:id="@+id/byemsg1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/libre_baskerville_family"
+        android:fontFamily="@font/libre_baskerville_regular"
         android:text="sure you want to go?"
         android:textColor="#B17457"
         android:textSize="20dp"
@@ -54,30 +54,5 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="#808080"
         android:text="Yes, log me out" />
-
-    <!--    <Button-->
-<!--        android:id="@+id/btnCancel"-->
-<!--        android:layout_width="314dp"-->
-<!--        android:layout_height="43dp"-->
-<!--        android:background="@drawable/shape_text_border"-->
-<!--        android:paddingLeft="85dp"-->
-<!--        android:paddingRight="85dp"-->
-<!--        android:text="No, Keep Organizing"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:layout_marginBottom="10dp"/>-->
-<!--    &lt;!&ndash;Yes Button&ndash;&gt;-->
-<!--    <Button-->
-<!--        android:id="@+id/btnYesLogout"-->
-<!--        android:textAllCaps="false"-->
-<!--        android:layout_width="317dp"-->
-<!--        android:layout_height="38dp"-->
-<!--        android:background="@drawable/shape_text_border"-->
-<!--        android:backgroundTint="#808080"-->
-<!--        android:paddingLeft="100dp"-->
-<!--        android:paddingRight="100dp"-->
-<!--        android:text="Yes, log me out"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:layout_gravity="center"/>-->
 
 </LinearLayout>

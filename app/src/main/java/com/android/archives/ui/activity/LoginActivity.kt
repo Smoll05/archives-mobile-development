@@ -1,41 +1,50 @@
 package com.android.archives.ui.activity
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.archives.R
-
+import com.android.archives.util.SharedPrefsHelper
+import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val Button_Login = findViewById<Button>(R.id.btnLogin)
+
         val emailEditText = findViewById<EditText>(R.id.tfEmail)
         val passwordEditText = findViewById<EditText>(R.id.tfPassword)
+        val loginButton = findViewById<Button>(R.id.btnLogin)
+        val btnBack = findViewById<ImageButton>(R.id.btnBACK)
 
-        Button_Login.setOnClickListener {
-            val email: String = emailEditText.getText().toString().trim()
-            val password: String = passwordEditText.getText().toString().trim()
-
-            if (email.isEmpty() || password.isEmpty()) {
-                emailEditText.error = "Email is required"
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                emailEditText.error = "Invalid email format"
-            } else {
-                Log.e("Logging in", "Logged In")
-                Toast.makeText(this, "Logged In!", Toast.LENGTH_LONG).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-            }
+        btnBack.setOnClickListener {
+            startActivity(Intent(this, LandingScreen::class.java))
         }
 
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "All fields are required!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (SharedPrefsHelper.UserSession.isUserValid(this, email, password)) {
+                // Clear previous data and set new user
+                SharedPrefsHelper.UserSession.clearAllUserData(this)
+                SharedPrefsHelper.UserSession.setCurrentUser(this, email)
+
+                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
