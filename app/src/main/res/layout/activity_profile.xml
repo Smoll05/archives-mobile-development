@@ -1,167 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/developer_page_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:background="@color/background"
-    android:paddingStart="30dp"
-    android:paddingEnd="30dp"
     tools:context=".ui.activity.ProfileActivity">
 
-    <TextView
-        android:id="@+id/profile_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:fontFamily="@font/libre_baskerville_family"
-        android:text="Profile Identification"
-        android:textColor="@color/black"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.315"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/edit_text_name"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/shape_text_border"
-        android:hint="Enter name"
-        android:textColor="@color/primaryContainer"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_name_profile" />
-
-    <TextView
-        android:id="@+id/text_view_name_profile"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Edit Name"
-        android:textColor="@color/black"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/proflie_card" />
+        android:paddingHorizontal="10dp"
+        android:paddingTop="12dp"
+        android:background="@color/background">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/save_profile_btn"
-        style="@style/MaterialButton.Primary"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/shape_text_border"
-        android:text="Save Profile"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_school" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/profile_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/App.ToolBar.MiniTitle"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:title="Edit ID">
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <ImageButton
-        android:id="@+id/profile_page_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@null"
-        android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/edit_text_bday"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/shape_text_border"
-        android:drawableEnd="@drawable/ic_calendar_view_24px"
-        android:ems="10"
-        android:hint="Enter birthday"
-        android:inputType="date"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_bday_profile" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp">
 
-    <EditText
-        android:id="@+id/edit_text_program"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/shape_text_border"
-        android:hint="Enter program"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_program_profile" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="4dp"
+            app:contentPadding="16dp"
+            app:cardBackgroundColor="@color/white">
 
-    <EditText
-        android:id="@+id/edit_text_school"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/shape_text_border"
-        android:hint="Enter school"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_school_profile" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profile_card_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_view_school_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Edit School"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_program" />
+                <TextView
+                    android:id="@+id/profile_card_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎓 Scholar Pass"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/libre_baskerville_bold"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/profile_card_parent"/>
 
-    <TextView
-        android:id="@+id/text_view_bday_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Edit Birthday"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
+                <ImageView
+                    android:id="@+id/profile_card_img"
+                    android:layout_width="120dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="Card Photo"
+                    android:background="@drawable/shape_image_border"
+                    android:src="@drawable/img_add_photo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@id/profile_card_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-    <TextView
-        android:id="@+id/text_view_program_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Edit Program"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_bday" />
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/profile_card_img"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/proflie_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/img_profile_card"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_header"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/divider"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NAME"
+                        android:textAllCaps="false"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:id="@+id/profile_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Carl Angelo T. Pepino"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="BIRTHDAY"
+                        android:textAllCaps="false"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:id="@+id/profile_birthday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="08-30-2005"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="PROGRAM"
+                        android:textAllCaps="true"
+                        android:textSize="8sp" />
+
+
+                    <TextView
+                        android:id="@+id/profile_program"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="BSCS"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="SCHOOL"
+                        android:textAllCaps="false"
+                        android:textSize="8sp" />
+
+                    <TextView
+                        android:id="@+id/profile_school"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cebu Institute of Technology"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textAllCaps="true"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@android:color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_card_title" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Name"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/gray"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="50"
+                    app:hintEnabled="false"
+                    android:layout_marginBottom="4dp"
+                    app:errorTextAppearance="@style/Archives.Error.TextAppearance"
+                    app:counterTextAppearance="@style/Archives.Counter.TextAppearance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Archives.EditText.Style"
+                        android:maxLength="50"
+                        android:hint="Enter Name"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Birthday"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_birthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    android:layout_marginBottom="12dp"
+                    app:errorTextAppearance="@style/Archives.Error.TextAppearance"
+                    android:textColorHint="@color/gray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_birthday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Archives.EditText.Style"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        android:cursorVisible="false"
+                        android:hint="Enter Birthday" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Program"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_program"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/gray"
+                    app:counterMaxLength="50"
+                    app:counterEnabled="true"
+                    app:hintEnabled="false"
+                    android:layout_marginBottom="4dp"
+                    app:errorTextAppearance="@style/Archives.Error.TextAppearance"
+                    app:counterTextAppearance="@style/Archives.Counter.TextAppearance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_program"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Archives.EditText.Style"
+                        android:maxLength="50"
+                        android:hint="Enter Program" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit School"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_school"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@color/gray"
+                    app:counterMaxLength="50"
+                    app:counterEnabled="true"
+                    app:hintEnabled="false"
+                    app:errorTextAppearance="@style/Archives.Error.TextAppearance"
+                    app:counterTextAppearance="@style/Archives.Counter.TextAppearance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_school"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Archives.EditText.Style"
+                        android:maxLength="50"
+                        android:hint="Enter School" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/profile_save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            style="@style/MaterialButton.Tertiary"
+            android:text="Save Profile"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,228 +1,510 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/developer_page_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="3dp">
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnDeveloper"
-        style="@style/Widget.Material3.Button.TextButton.Icon"
-        android:layout_width="319dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="24dp"
-        android:background="@null"
-        android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
-        android:text="About the developers"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnReport"
-        style="@style/Widget.Material3.Button.TextButton.Icon"
-        android:layout_width="318dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="4dp"
-        android:background="@null"
-        android:drawableEnd="@drawable/ic_baseline_arrow_forward_24"
-        android:text="Report a problem"
-        android:textAlignment="textStart"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDeveloper" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="325dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/shape_text_border"
-        android:backgroundTint="#E3E0D8"
-        android:fontFamily="@font/inter_family"
-        android:paddingLeft="20dp"
-        android:paddingRight="100dp"
-        android:text="Task Notification"
-        android:textAlignment="viewStart"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        android:paddingHorizontal="10dp"
+        android:paddingTop="12dp"
+        android:background="@color/background">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/shape_text_border"
-        android:backgroundTint="#E3E0D8"
-        android:fontFamily="@font/inter_family"
-        android:paddingLeft="20dp"
-        android:paddingRight="100dp"
-        android:text="Schedule Notification"
-        android:textAlignment="viewStart"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/settings_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:titleTextAppearance="@style/App.ToolBar.Title"
+            app:title="Settings">
+        </com.google.android.material.appbar.MaterialToolbar>
 
-    <Switch
-        android:id="@+id/switchSchedule"
-        android:layout_width="47dp"
-        android:layout_height="36dp"
-        android:backgroundTint="#008000"
-        android:textSize="14sp"
-        android:trackTint="#008000"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4"
-        app:layout_constraintVertical_bias="1.0" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Notifcations"
-        android:textColor="#000000"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.127"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Switch
-        android:id="@+id/switchNotification"
-        android:layout_width="47dp"
-        android:layout_height="36dp"
-        android:backgroundTint="#008000"
-        android:textSize="14sp"
-        android:trackTint="#008000"
-        app:layout_constraintBottom_toBottomOf="@+id/textView8"
-        app:layout_constraintEnd_toEndOf="@+id/textView8"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="@+id/textView8"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="24dp"
+            android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnEditProfile"
-        style="@style/MaterialButton.Primary"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/shape_text_border"
-        android:backgroundTint="#4A4947"
-        android:fontFamily="@font/inter_family"
-        android:text="Edit Profile Identification"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="#FAF7F0"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:circularflow_radiusInDP="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IMGprofile" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="4dp"
+                app:contentPadding="16dp"
+                app:cardBackgroundColor="@color/white">
 
-    <ImageView
-        android:id="@+id/IMGprofile"
-        android:layout_width="322dp"
-        android:layout_height="167dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/img_profile_card"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_card_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="325dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_text_border"
-        android:backgroundTint="#E3E0D8"
-        android:fontFamily="@font/inter_family"
-        android:paddingLeft="20dp"
-        android:paddingRight="100dp"
-        android:text="Email"
-        android:textAlignment="viewStart"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                    <TextView
+                        android:id="@+id/profile_card_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🎓 Scholar Pass"
+                        android:textSize="16dp"
+                        android:fontFamily="@font/libre_baskerville_bold"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/profile_card_parent"/>
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_family"
-        android:text="Account Information"
-        android:textColor="#000000"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.142"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEditProfile" />
+                    <ImageView
+                        android:id="@+id/profile_card_img"
+                        android:layout_width="120dp"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="12dp"
+                        android:contentDescription="Card Photo"
+                        android:background="@drawable/shape_image_border"
+                        android:src="@drawable/img_add_photo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@id/profile_card_title"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider2" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/BtnNo"
-        style="@style/MaterialButton.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_text_border"
-        android:backgroundTint="#4A4947"
-        android:paddingVertical="1dp"
-        android:paddingLeft="75dp"
-        android:paddingRight="75dp"
-        android:text="Delete account and data"
-        android:textAllCaps="false"
-        android:textColor="#FAF7F0"
-        android:textSize="12sp"
-        app:circularflow_radiusInDP="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnYes"
-        app:layout_constraintVertical_bias="0.0" />
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@android:color/transparent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/profile_card_img"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnYes"
-        style="@style/MaterialButton.Tertiary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="100dp"
-        android:paddingRight="100dp"
-        android:text="Yes, log me out"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:circularflow_radiusInDP="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnReport" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/divider"
+                        app:layout_constraintTop_toBottomOf="@+id/divider2"
+                        app:layout_constraintVertical_bias="0.0">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NAME"
+                            android:textAllCaps="false"
+                            android:textSize="8sp" />
+
+                        <TextView
+                            android:id="@+id/profile_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Carl Angelo T. Pepino"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textAllCaps="true"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="BIRTHDAY"
+                            android:textAllCaps="false"
+                            android:textSize="8sp" />
+
+                        <TextView
+                            android:id="@+id/profile_birthday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="08-30-2005"
+                            android:textAllCaps="true"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="PROGRAM"
+                            android:textAllCaps="true"
+                            android:textSize="8sp" />
+
+
+                        <TextView
+                            android:id="@+id/profile_program"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="BSCS"
+                            android:textAllCaps="true"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="SCHOOL"
+                            android:textAllCaps="false"
+                            android:textSize="8sp" />
+
+                        <TextView
+                            android:id="@+id/profile_school"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cebu Institute of Technology"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textAllCaps="true"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@android:color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_card_title" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settings_edit_profile"
+                android:layout_marginTop="4dp"
+                style="@style/MaterialButton.Tertiary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile card" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Account Information"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/App.Settings.Preference.Card">
+
+                <LinearLayout
+                    android:id="@+id/settings_edit_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="14dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_profile"
+                        android:layout_marginEnd="12dp"/>
+
+                    <TextView
+                        android:textAppearance="@style/App.Settings.Preference.Text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Edit User Details"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Notifications"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/App.Settings.Preference.Card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="14dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_notifications_24px"
+                            android:layout_marginEnd="12dp"/>
+
+                        <TextView
+                            android:textAppearance="@style/App.Settings.Preference.Text"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Schedule Notification"/>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            style="@style/Widget.App.Switch" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:dividerColor="@color/black"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_task_24px"
+                            android:layout_marginEnd="12dp"/>
+
+                        <TextView
+                            android:textAppearance="@style/App.Settings.Preference.Text"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Task Notification"/>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            style="@style/Widget.App.Switch"
+                            android:checked="true"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Application Feature"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/App.Settings.Preference.Card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="14dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/settings_report_problem"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_report_24px"
+                            android:layout_marginEnd="12dp"/>
+
+                        <TextView
+                            android:textAppearance="@style/App.Settings.Preference.Text"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Report a Problem"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:dividerColor="@color/black"/>
+
+                    <LinearLayout
+                        android:id="@+id/settings_request_feature"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_lightbulb_24px"
+                            android:layout_marginEnd="12dp"/>
+
+                        <TextView
+                            android:textAppearance="@style/App.Settings.Preference.Text"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Request a Feature"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="About"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/App.Settings.Preference.Card">
+
+                <LinearLayout
+                    android:id="@+id/settings_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="14dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_code_24px"
+                        android:layout_marginEnd="12dp"/>
+
+                    <TextView
+                        android:textAppearance="@style/App.Settings.Preference.Text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="About the developers"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Application Feature"
+                android:fontFamily="@font/inter"
+                android:textStyle="bold"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                style="@style/App.Settings.Preference.Card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="14dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/settings_erase"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_warning_24px"
+                            android:layout_marginEnd="12dp"/>
+
+                        <TextView
+                            android:textAppearance="@style/App.Settings.Preference.Text"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Erase all content and data"/>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:dividerColor="@color/black"/>
+
+                    <LinearLayout
+                        android:id="@+id/settings_delete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingVertical="14dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_person_remove_24px"
+                            android:layout_marginEnd="12dp"/>
+
+                        <TextView
+                            android:textAppearance="@style/App.Settings.Preference.Text"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Delete user account"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settings_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                style="@style/MaterialButton.SecondaryContainer"
+                android:text="Logout"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

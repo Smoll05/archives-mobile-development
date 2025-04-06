@@ -30,6 +30,7 @@
         <item name="colorOnSurfaceVariant">@color/onSurfaceVariant</item>
 
         <item name="bottomNavigationStyle">@style/Widget.Material3.BottomNavigationView</item>
+        <item name="switchStyle">@style/Widget.App.Switch</item>
     </style>
 
     <style name="Theme.Archives" parent="Base.Theme.Archives" />
