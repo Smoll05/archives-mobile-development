@@ -81,4 +81,64 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="App.ToolBar.Title" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/libre_baskerville_italic</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="App.ToolBar.MiniTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="App.Settings.Preference.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="strokeColor">@color/black</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardBackgroundColor">#dedbd3</item>
+        <item name="cornerRadius">50dp</item>
+    </style>
+
+    <style name="App.Settings.Preference.Text" parent="TextAppearance.AppCompat.Body1">
+        <item name="color">@color/onPrimary</item>
+    </style>
+
+    <!-- Switch -->
+    <style name="Widget.App.Switch" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+        <item name="thumbTint">@color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorPrimaryContainer">#5dc880</item>
+        <item name="colorPrimary">#5dc880</item>
+    </style>
+
+    <!--Edit Text Style-->
+    <style name="Archives.EditText.Style" parent="Widget.Material3.TextInputEditText.FilledBox">
+        <item name="android:background">@drawable/shape_edittext_border</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+    <style name="Archives.Counter.TextAppearance" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">8sp</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+    <style name="Archives.Error.TextAppearance" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+
+
 </resources>

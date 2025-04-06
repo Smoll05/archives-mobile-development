@@ -19,13 +19,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/settings_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/surface"
-            android:elevation="0dp"
             android:minHeight="?attr/actionBarSize"
-            app:title="Hello Carl" />
+            app:titleTextAppearance="@style/App.ToolBar.Title"
+            app:title="Hello">
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.android.archives.LogOutDialogFragment
@@ -20,17 +21,16 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            // Handle any result here if needed
-        }
+        val activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        val openBottomSheet = view.findViewById<Button>(R.id.btnYes)
-        val developersBtn = view.findViewById<Button>(R.id.btnDeveloper)
-        val editProfileBtn = view.findViewById<Button>(R.id.btnEditProfile)
+        val btnLogout = view.findViewById<Button>(R.id.settings_logout)
+        val btnProfileEdit = view.findViewById<Button>(R.id.settings_edit_profile)
 
-        openBottomSheet.setOnClickListener {
+        val btnDeveloper = view.findViewById<LinearLayout>(R.id.settings_about)
+
+        btnLogout.setOnClickListener {
             val bottomSheet = LogOutDialogFragment()
             bottomSheet.show(
                 parentFragmentManager,
@@ -38,11 +38,11 @@ class SettingsFragment : Fragment() {
             )
         }
 
-        developersBtn.setOnClickListener {
+        btnDeveloper.setOnClickListener {
             activityLauncher.launch(Intent(requireContext(), DeveloperActivity::class.java))
         }
 
-        editProfileBtn.setOnClickListener {
+        btnProfileEdit.setOnClickListener {
             startActivity(Intent(requireContext(), ProfileActivity::class.java))
         }
         return view

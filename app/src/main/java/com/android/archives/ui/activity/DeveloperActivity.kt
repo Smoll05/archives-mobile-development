@@ -6,16 +6,17 @@ import com.android.archives.R
 import android.content.Intent
 import android.widget.ImageButton
 import com.android.archives.ui.fragment.SettingsFragment
+import com.google.android.material.appbar.MaterialToolbar
 
 class DeveloperActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_developer)
 
-        val btnBack = findViewById<ImageButton>(R.id.developer_page_back)
+        val toolBar = findViewById<MaterialToolbar>(R.id.developer_toolbar)
 
-        btnBack.setOnClickListener {
-            finish()
+        toolBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 }
