@@ -1,15 +1,13 @@
 package com.android.archives.ui.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.android.archives.R
-import com.android.archives.util.SharedPrefsHelper
-import com.android.archives.util.SharedPrefsHelper.*
+import com.android.archives.utils.SharedPrefsHelper.*
 import com.google.android.material.textfield.TextInputEditText
-import org.json.JSONObject
+
 class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

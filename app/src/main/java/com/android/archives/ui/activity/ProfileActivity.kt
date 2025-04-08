@@ -16,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.android.archives.R
-import com.android.archives.util.isFieldEmptyOrNull
-import com.android.archives.util.smoothTextChangeAnimation
+import com.android.archives.utils.isFieldEmptyOrNull
+import com.android.archives.utils.smoothTextChangeAnimation
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward

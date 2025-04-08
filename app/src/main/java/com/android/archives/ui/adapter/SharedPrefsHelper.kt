@@ -1,4 +1,4 @@
-package com.android.archives.util
+package com.android.archives.utils
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -1,205 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/developer_page_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:paddingHorizontal="20dp"
-    android:paddingTop="20dp"
+    android:orientation="vertical"
     tools:context=".ui.activity.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/homeAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/settings_toolbar"
+            android:id="@+id/home_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:titleTextAppearance="@style/App.ToolBar.Title"
-            app:title="Hello">
+            app:subtitleTextAppearance="@style/App.ToolBar.Subtitle"
+            app:title="Hello, "
+            app:subtitle="Date Today">
 
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/libre_baskerville_regular"
-        android:text="Today's Schedule"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/homeAppBar" />
-
-    <LinearLayout
-        android:id="@+id/relativeLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="24dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardSchedule1"
-            style="@style/HomeDateMaterialCard"
-            app:cardBackgroundColor="@color/blue"
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/libre_baskerville_regular"
+            android:text="Today's Schedule"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginVertical="4dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSchedule1"
+                style="@style/HomeDateMaterialCard"
+                app:cardBackgroundColor="@color/blue"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginVertical="4dp">
 
-                <TextView
-                    android:id="@+id/titleText1"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/titleText1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/libre_baskerville_regular"
+                        android:text="Study Mobile Development"
+                        android:textColor="@android:color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/timeText1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="8:00AM - 10:00AM"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardButton2"
+                style="@style/HomeDateMaterialCard"
+                android:backgroundTint="@color/pink"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginVertical="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/libre_baskerville_regular"
-                    android:text="Study Mobile Development"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/timeText1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="8:00AM - 10:00AM"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/titleText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/libre_baskerville_regular"
+                        android:text="Study Linear Algebra"
+                        android:textColor="@android:color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardButton2"
-            style="@style/HomeDateMaterialCard"
-            android:backgroundTint="@color/pink"
+                    <TextView
+                        android:id="@+id/timeText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="10:30AM - 12:00PM"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/libre_baskerville_regular"
+            android:text="Kanban Board"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/relativeLayout"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/KanbanBoardAddTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Add Task"
+            app:icon="@drawable/ic_add_24px"
+            app:layout_constraintEnd_toEndOf="@+id/relativeLayout"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/home_tablayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginVertical="4dp">
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/shape_tab_layout_background"
+            app:tabIndicator="@drawable/shape_tab_indicator"
+            app:layout_constraintBottom_toTopOf="@id/task_frame"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:tabIndicatorAnimationDuration="@integer/material_motion_duration_long_2"
+            app:tabIndicatorFullWidth="true"
+            app:tabTextColor="@color/black"
+            app:tabIndicatorColor="@color/lightbrown"
+            tools:layout_editor_absoluteX="24dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:text="To-Do" />
 
-                <TextView
-                    android:id="@+id/titleText2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/libre_baskerville_regular"
-                    android:text="Study Linear Algebra"
-                    android:textColor="@android:color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Completed" />
 
-                <TextView
-                    android:id="@+id/timeText2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="10:30AM - 12:00PM"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-            </LinearLayout>
+        </com.google.android.material.tabs.TabLayout>
 
-        </com.google.android.material.card.MaterialCardView>
-
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/libre_baskerville_regular"
-        android:text="Kanban Board"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/relativeLayout"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
-        style="@style/KanbanBoardAddTaskButton"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Add Task"
-        app:icon="@drawable/ic_add_24px"
-        app:layout_constraintEnd_toEndOf="@+id/relativeLayout"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp" />
-
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleButton"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/task_listview"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        tools:layout_editor_absoluteX="20dp">
-
-        <Button
-            android:id="@+id/button1"
-            style="@style/KanbanBoardToggleButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/task_frame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="To Do"
-            android:backgroundTint="#cecece"
-            android:textSize="12sp" />
+            app:layout_constraintTop_toBottomOf="@id/home_tablayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <Button
-            android:id="@+id/button2"
-            style="@style/KanbanBoardToggleButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#c0d7c0"
-            android:text="In Progress" />
-
-        <Button
-            android:id="@+id/button3"
-            style="@style/KanbanBoardToggleButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="#caf0f8"
-            android:text="Completed" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
-
-    <ListView
-        android:id="@+id/task_listview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:dividerHeight="12dp"
-        android:divider="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -4,4 +4,5 @@ data class Task(
     var title: String,
     var description: String,
     var emojiIcon: String,
+    var isComplete: Boolean
 )
