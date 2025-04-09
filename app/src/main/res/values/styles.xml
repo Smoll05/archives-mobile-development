@@ -48,6 +48,25 @@
         <item name="android:textColor">@color/onTertiaryContainer</item>
     </style>
 
+    <!-- Error Button -->
+    <style name="MaterialButton.Error" parent="MaterialButton.Base">
+        <item name="backgroundTint">@color/error</item>
+        <item name="android:textColor">@color/onError</item>
+    </style>
+
+    <!-- Error Container Button -->
+    <style name="MaterialButton.ErrorContainer" parent="MaterialButton.Base">
+        <item name="backgroundTint">@color/errorContainer</item>
+        <item name="android:textColor">@color/onErrorContainer</item>
+    </style>
+
+    <!-- Error Outlined Button -->
+    <style name="MaterialButton.ErrorOutlined" parent="MaterialButton.Base">
+        <item name="strokeColor">@color/error</item>
+        <item name="backgroundTint">@color/background</item>
+        <item name="android:textColor">@color/error</item>
+    </style>
+
     <!-- Bottom Navigation Bar Style -->
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="backgroundTint">@color/background</item>

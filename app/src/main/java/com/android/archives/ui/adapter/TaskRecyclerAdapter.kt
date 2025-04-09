@@ -12,6 +12,7 @@ import com.android.archives.data.model.Task
 class TaskRecyclerAdapter (
     private var taskList : List<Task>,
     private val onClick : (Task) -> Unit,
+    private val onCheckChanged: (Task, Boolean) -> Unit
 ) : RecyclerView.Adapter<TaskRecyclerAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val icon = view.findViewById<TextView>(R.id.task_item_icon)
@@ -34,6 +35,10 @@ class TaskRecyclerAdapter (
         holder.title.text = task.title
         holder.desc.text = task.description
         holder.checkbox.isChecked = task.isComplete
+
+        holder.checkbox.setOnCheckedChangeListener {_, isChecked ->
+            onCheckChanged(task, isChecked)
+        }
 
         holder.itemView.setOnClickListener {
             onClick(task)

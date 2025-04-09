@@ -144,6 +144,7 @@
                         android:text="BSCS"
                         android:textAllCaps="true"
                         android:textSize="12sp"
+                        android:ellipsize="end"
                         android:maxLines="1"
                         android:textStyle="bold" />
 

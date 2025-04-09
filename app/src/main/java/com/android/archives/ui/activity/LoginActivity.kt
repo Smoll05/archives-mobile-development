@@ -39,7 +39,10 @@ class LoginActivity : AppCompatActivity() {
                 SharedPrefsHelper.UserSession.setCurrentUser(this, email)
 
                 Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
                 finish()
             } else {
                 Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
