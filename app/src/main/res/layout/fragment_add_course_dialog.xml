@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/background"
     android:padding="16dp">
 
-
-
-    <EditText
-        android:id="@+id/etCourseName"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="30dp"
-        android:textColor="@color/black"
-        android:hint="Enter Course Name"
-        android:background="@drawable/edittext_bg" />
+        android:layout_height="wrap_content"
+        android:hint="Enter Course Name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCourseName"
+            style="@style/Archives.EditText.Style"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:background="@drawable/edittext_bg" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,41 +32,65 @@
         android:gravity="center"
         android:layout_marginTop="8dp">
 
+
+
         <ImageView
             android:id="@+id/colorOption1"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_folder_red"
-            android:padding="4dp" />
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            android:src="@drawable/ic_folder_yellow" />
 
         <ImageView
             android:id="@+id/colorOption2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_folder_blue"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
             android:padding="4dp"
-            android:layout_marginStart="16dp"/>
+            android:src="@drawable/ic_folder_orange" />
 
         <ImageView
             android:id="@+id/colorOption3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_folder_green"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
             android:padding="4dp"
-            android:layout_marginStart="16dp"/>
+            android:src="@drawable/ic_folder_red" />
+
+        <ImageView
+            android:id="@+id/colorOption4"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_folder_violet" />
+
+        <ImageView
+            android:id="@+id/colorOption5"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_folder_blue" />
+
+        <ImageView
+            android:id="@+id/colorOption6"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_folder_green" />
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddCourse"
+        style="@style/MaterialButton.Primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Course"
-        android:layout_marginTop="24dp" />
+        android:layout_marginBottom="10dp"
+        android:text="Add Course"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCancelCourse"
+        style="@style/MaterialButton.SecondaryContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:layout_marginTop="8dp" />
+        android:layout_marginBottom="10dp"
+        android:text="Cancel"/>
+
 </LinearLayout>

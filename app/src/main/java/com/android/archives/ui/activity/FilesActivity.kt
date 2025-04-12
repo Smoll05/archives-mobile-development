@@ -40,14 +40,12 @@ class FilesActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val courseName = intent.getStringExtra("courseTitle") ?: "Course"
-        val coverUri = intent.getStringExtra("coverImageUri")
-        val profileUri = intent.getStringExtra("profileImageUri")
 
         courseKey = courseName.replace(" ", "_")
         currentUser = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
             .getString("currentUser", "") ?: ""
 
-        setupHeader(courseName, coverUri, profileUri)
+        setupHeader(courseName)
         setupRecyclerView()
         loadFilesFromStorage()
         filterList("") // <- This ensures the adapter updates right after loading
@@ -58,17 +56,9 @@ class FilesActivity : AppCompatActivity() {
         binding.btnBACK.setOnClickListener { finish() }
     }
 
-    private fun setupHeader(name: String, coverUri: String?, profileUri: String?) {
+    private fun setupHeader(name: String) {
         findViewById<TextView>(R.id.CourseName).text = name
 
-        val coverImage = findViewById<ImageView>(R.id.coverPhoto)
-        val profileImage = findViewById<ImageView>(R.id.profilePhoto)
-
-        coverImage.setImageURI(coverUri?.let { Uri.parse(it) })
-        if (coverUri.isNullOrEmpty()) coverImage.setImageResource(R.drawable.gray_placeholder)
-
-        profileImage.setImageURI(profileUri?.let { Uri.parse(it) })
-        if (profileUri.isNullOrEmpty()) profileImage.setImageResource(R.drawable.gray_placeholder)
     }
 
     private fun setupRecyclerView() {
