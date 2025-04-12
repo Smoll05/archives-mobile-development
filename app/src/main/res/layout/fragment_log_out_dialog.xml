@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/background"
     android:padding="50dp">
@@ -18,10 +18,10 @@
         android:id="@+id/byemsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/libre_baskerville_regular"
-        android:text="You are Leaving, are you"
+        android:fontFamily="@font/libre_baskerville_bold"
+        android:text="You are leaving, are you"
         android:textFontWeight="700"
-        android:textColor="#B17457"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"/>
@@ -30,9 +30,9 @@
         android:id="@+id/byemsg1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/libre_baskerville_regular"
+        android:fontFamily="@font/libre_baskerville_bold"
         android:text="sure you want to go?"
-        android:textColor="#B17457"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:textFontWeight="700"
         android:layout_gravity="center"
@@ -40,7 +40,7 @@
     
    <com.google.android.material.button.MaterialButton
        android:id="@+id/btnCancel"
-       style="@style/MaterialButton.Secondary"
+       style="@style/MaterialButton.Primary"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:layout_marginBottom="10dp"
@@ -48,11 +48,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnYesLogout"
-        style="@style/MaterialButton.Primary"
+        style="@style/MaterialButton.SecondaryContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:backgroundTint="#808080"
         android:text="Yes, log me out" />
 
 </LinearLayout>

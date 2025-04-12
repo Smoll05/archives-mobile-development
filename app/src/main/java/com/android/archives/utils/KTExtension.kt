@@ -1,10 +1,11 @@
-package com.android.archives.util
+package com.android.archives.utils
 
 import android.animation.ValueAnimator
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.CharacterStyle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 
@@ -44,3 +45,8 @@ class AlphaSpan(var alpha: Int = 0) : CharacterStyle() {
 }
 
 fun EditText.isFieldEmptyOrNull() : Boolean = this.text.isNullOrEmpty()
+
+fun EditText.getContent() : String = this.text.toString().trim()
+
+fun Button.getContent() : String = this.text.toString().trim()
+

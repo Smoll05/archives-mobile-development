@@ -48,6 +48,25 @@
         <item name="android:textColor">@color/onTertiaryContainer</item>
     </style>
 
+    <!-- Error Button -->
+    <style name="MaterialButton.Error" parent="MaterialButton.Base">
+        <item name="backgroundTint">@color/error</item>
+        <item name="android:textColor">@color/onError</item>
+    </style>
+
+    <!-- Error Container Button -->
+    <style name="MaterialButton.ErrorContainer" parent="MaterialButton.Base">
+        <item name="backgroundTint">@color/errorContainer</item>
+        <item name="android:textColor">@color/onErrorContainer</item>
+    </style>
+
+    <!-- Error Outlined Button -->
+    <style name="MaterialButton.ErrorOutlined" parent="MaterialButton.Base">
+        <item name="strokeColor">@color/error</item>
+        <item name="backgroundTint">@color/background</item>
+        <item name="android:textColor">@color/error</item>
+    </style>
+
     <!-- Bottom Navigation Bar Style -->
     <style name="BottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="backgroundTint">@color/background</item>
@@ -85,6 +104,13 @@
         <item name="fontFamily">@font/libre_baskerville_italic</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="App.ToolBar.Subtitle" parent="TextAppearance.Material3.ActionBar.Subtitle">
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="App.ToolBar.MiniTitle" parent="TextAppearance.Material3.TitleLarge">
@@ -140,5 +166,8 @@
         <item name="fontFamily">@font/inter</item>
     </style>
 
+    <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">#fecc87</item>
+    </style>
 
 </resources>

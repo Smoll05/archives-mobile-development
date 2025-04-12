@@ -1,6 +1,5 @@
 package com.android.archives
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.android.archives.ui.activity.LandingScreen
-import com.android.archives.ui.activity.LoginActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LogOutDialogFragment : BottomSheetDialogFragment() {
@@ -32,7 +30,10 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
                 "Logging Out", Toast.LENGTH_SHORT
             ).show()
             dismiss()
-            startActivity(Intent(requireContext(), LandingScreen::class.java))
+
+            val intent = Intent(requireContext(), LandingScreen::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
         cancelBtn.setOnClickListener {

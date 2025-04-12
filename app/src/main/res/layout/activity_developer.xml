@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            app:navigationIconTint="@color/black"
             app:navigationIcon="@drawable/ic_arrow_back_24px">
         </com.google.android.material.appbar.MaterialToolbar>
 
