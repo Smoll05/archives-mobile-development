@@ -49,3 +49,4 @@ fun EditText.isFieldEmptyOrNull() : Boolean = this.text.isNullOrEmpty()
 fun EditText.getContent() : String = this.text.toString().trim()
 
 fun Button.getContent() : String = this.text.toString().trim()
+

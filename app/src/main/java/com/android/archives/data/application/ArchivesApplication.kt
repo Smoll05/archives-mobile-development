@@ -1,6 +1,8 @@
 package com.android.archives.data.application
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
+import com.android.archives.data.model.Schedule
 import com.android.archives.data.model.Task
 
 class ArchivesApplication : Application() {
@@ -19,4 +21,13 @@ class ArchivesApplication : Application() {
         Task(12, "Git: Learn Branching & Merging", "Practice Git branching strategies for collaboration.", "🌿", false),
         Task(13, "Game Dev: Create a 2D Game", "Use libGDX to build a simple 2D game.", "🎮", false),
     )
+
+    val scheduleList : MutableList<Schedule> = mutableListOf(
+
+    )
+
+    override fun onCreate() {
+        super.onCreate()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
 }

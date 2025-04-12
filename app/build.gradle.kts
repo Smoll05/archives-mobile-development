@@ -55,4 +55,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.github.yalantis:ucrop:2.2.10")
+    implementation("com.github.thellmund.Android-Week-View:core:5.2.4")
 }

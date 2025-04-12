@@ -166,4 +166,8 @@
         <item name="fontFamily">@font/inter</item>
     </style>
 
+    <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">#fecc87</item>
+    </style>
+
 </resources>

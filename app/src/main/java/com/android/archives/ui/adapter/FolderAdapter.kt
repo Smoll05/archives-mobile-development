@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
+
 class FolderAdapter(
     private var folderList: List<FolderItem>,
     private val onItemClick: (FolderItem) -> Unit,

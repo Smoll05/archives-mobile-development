@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ProfileActivity : AppCompatActivity() {
+class OnboardingActivity : AppCompatActivity() {
     private lateinit var tilName: TextInputLayout
     private lateinit var tilDate: TextInputLayout
     private lateinit var tilProgram: TextInputLayout
@@ -47,11 +47,9 @@ class ProfileActivity : AppCompatActivity() {
 
     private val pickerTag = "DATE PICKER"
     private var existingPicker: Fragment? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.activity_onboarding)
 
         val toolBar = findViewById<MaterialToolbar>(R.id.profile_toolbar)
 
@@ -122,7 +120,11 @@ class ProfileActivity : AppCompatActivity() {
 
         btnSave.setOnClickListener {
             if(areFieldsEmpty()) return@setOnClickListener
-            Toast.makeText(this, "Fields Input Correct", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
         }
     }
 
