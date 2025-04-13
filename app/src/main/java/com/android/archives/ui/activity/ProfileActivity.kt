@@ -1,7 +1,8 @@
 package com.android.archives.ui.activity
 
-import android.content.Intent
+import android.app.Activity
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.android.archives.R
+import com.android.archives.utils.DateConverter
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.android.archives.utils.smoothTextChangeAnimation
 import com.google.android.material.appbar.MaterialToolbar
@@ -25,9 +27,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.io.IOException
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var tilName: TextInputLayout
@@ -44,7 +44,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var ivImage: ImageView
     private lateinit var datePicker: MaterialDatePicker<Long>
 
-
+    private lateinit var cachedDestinationUr: Uri
     private val pickerTag = "DATE PICKER"
     private var existingPicker: Fragment? = null
 
@@ -132,7 +132,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         datePicker.addOnPositiveButtonClickListener { selection ->
-            val selectedDate = convertMillisToDateString(selection)
+            val selectedDate = DateConverter.convertMillisToDateString(selection)
             etDate.setText(selectedDate)
             tvBirthday.smoothTextChangeAnimation(selectedDate)
         }
@@ -152,39 +152,54 @@ class ProfileActivity : AppCompatActivity() {
         existingPicker = datePicker
     }
 
-    private fun convertMillisToDateString(millis: Long): String {
-        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        return sdf.format(Date(millis))
-    }
+//    @Deprecated("Deprecated in Java")
+//    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+//            val resultUri = UCrop.getOutput(data!!)
+//            resultUri?.let {
+//                ivImage.setImageURI(it)
+//            }
+//        } else if (resultCode == UCrop.RESULT_ERROR) {
+//            val cropError = UCrop.getError(data!!)
+//            Log.e("Crop Error", "Cropping Image Failed: $cropError")
+//        }
+//    }
 
-    private fun convertDateStringToMillis(dateString: String): Long {
-        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        return try {
-            val date: Date? = sdf.parse(dateString)
-            date?.time ?: 0L
-        } catch (e: Exception) {
-            e.printStackTrace()
-            0L
-        }
-    }
 
-    @Deprecated("Deprecated in Java")
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+//    private fun startUCrop(sourceUri: Uri) {
+//        val destinationUri = Uri.fromFile(File(cacheDir, "profile_picture_${System.currentTimeMillis()}.png"))
+//
+//        val options = UCrop.Options().apply {
+//            setToolbarTitle("Crop Image")
+//            setFreeStyleCropEnabled(false)
+//            setAspectRatioOptions(0, com.yalantis.ucrop.model.AspectRatio("4:5", 4f, 5f))
+//            setShowCropGrid(true)
+//        }
+//
+//        UCrop.of(sourceUri, destinationUri)
+//            .withAspectRatio(4f, 5f)
+//            .withOptions(options)
+//            .start(this)
+//    }
 
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            val resultUri = UCrop.getOutput(data!!)
+    private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data = result.data
+            val resultUri = data?.let { UCrop.getOutput(it) }
             resultUri?.let {
                 ivImage.setImageURI(it)
+                savePhotoToInternalStorage(it) // Save the cropped image
             }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            val cropError = UCrop.getError(data!!)
+        } else if (result.resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(result.data!!)
             Log.e("Crop Error", "Cropping Image Failed: $cropError")
         }
     }
 
     private fun startUCrop(sourceUri: Uri) {
-        val destinationUri = Uri.fromFile(File(cacheDir, "profile_picture_${System.currentTimeMillis()}.jpg"))
+        cachedDestinationUr = Uri.fromFile(File(cacheDir, "profile_picture_${System.currentTimeMillis()}.png"))
 
         val options = UCrop.Options().apply {
             setToolbarTitle("Crop Image")
@@ -194,11 +209,67 @@ class ProfileActivity : AppCompatActivity() {
             setCompressionFormat(Bitmap.CompressFormat.PNG)
         }
 
-        UCrop.of(sourceUri, destinationUri)
+        val intent = UCrop.of(sourceUri, cachedDestinationUr)
             .withAspectRatio(4f, 5f)
             .withOptions(options)
-            .start(this)
+            .getIntent(this)
+
+        cropImageLauncher.launch(intent)
     }
+
+    private fun savePhotoToInternalStorage(uri: Uri): Boolean {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+
+            val filename = "profile_${System.currentTimeMillis()}.png"
+            val file = File(filesDir, filename)
+
+            file.outputStream().use { stream ->
+                if (!bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)) {
+                    throw IOException("Couldn't save bitmap.")
+                }
+
+                val deleted = cachedDestinationUr.path?.let { File(it).delete() }
+
+                if (deleted == true) {
+                    Log.d("SaveImage", "Temporary cropped image deleted.")
+                } else {
+                    Log.e("SaveImage", "Failed to delete temporary cropped image.")
+                }
+
+                Log.d("SaveImage", "Saved image path: ${file.absolutePath}")
+            }
+            bitmap.recycle()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+//    private fun savePhotoToInternalStorage(uri: Uri): Boolean {
+//        return try {
+//            val inputStream = contentResolver.openInputStream(uri)
+//            val bitmap = BitmapFactory.decodeStream(inputStream)
+//
+//            val filename = "profile_${System.currentTimeMillis()}.png"
+//
+//
+//            openFileOutput("$filename.jpg", MODE_PRIVATE).use { stream ->
+//                if(!bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)) {
+//                    throw IOException("Couldn't save bitmap.")
+//                }
+//
+//                Log.d("SaveImage", "Saved image path: ${stream.absolutePath}")
+//            }
+//
+//            true
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            false
+//        }
+//    }
 
     private fun areFieldsEmpty() : Boolean {
         var isEmpty = false

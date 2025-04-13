@@ -1,12 +1,24 @@
 package com.android.archives.data.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import java.util.Calendar
 
+@Entity(tableName = "schedules",
+    foreignKeys = [ForeignKey(
+        entity = User::class,
+        parentColumns = ["userId"],
+        childColumns = ["userId"],
+        onDelete = ForeignKey.CASCADE
+    )])
 data class Schedule (
-    val id: Long,
-    val title: String,
-    val location: String,
-    val color: Int,
-    val startTime: Calendar,
-    val endTime: Calendar,
+    @PrimaryKey(autoGenerate = true)
+    val scheduleId: Long = 0L,
+    var title: String,
+    var location: String? = null,
+    var color: Int,
+    var startTime: Calendar,
+    var endTime: Calendar,
+    val userId: Long = 0L
 )

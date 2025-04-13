@@ -33,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+
             if (SharedPrefsHelper.UserSession.isUserValid(this, email, password)) {
                 // Clear previous data and set new user
                 SharedPrefsHelper.UserSession.clearAllUserData(this)

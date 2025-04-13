@@ -9,6 +9,8 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.android.archives.R
 import com.android.archives.ui.activity.AddTaskActivity
+import com.android.archives.ui.activity.MainActivity
+import com.android.archives.ui.viewmodel.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
@@ -17,11 +19,18 @@ import java.util.Locale
 
 
 class HomeFragment : Fragment() {
+    private lateinit var userViewModel: UserViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        userViewModel = (activity as MainActivity).userViewModel
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val toolBar = view.findViewById<MaterialToolbar>(R.id.home_toolbar)
         val tabLayout = view.findViewById<TabLayout>(R.id.home_tablayout)
@@ -32,6 +41,7 @@ class HomeFragment : Fragment() {
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val formattedDate = dateFormat.format(currentDate)
 
+//        toolBar.title = "Hello, ${}"
         toolBar.subtitle = formattedDate
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -62,7 +72,5 @@ class HomeFragment : Fragment() {
                 Intent(requireActivity(), AddTaskActivity::class.java)
             )
         }
-
-        return view
     }
 }

@@ -2,8 +2,12 @@ package com.android.archives.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class SharedPrefsHelper(context: Context) {
+class SharedPrefsHelper @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
     private val prefs: SharedPreferences = context.getSharedPreferences("file_prefs", Context.MODE_PRIVATE)
 
     fun saveFiles(files: List<Pair<String, String>>) {
@@ -39,9 +43,9 @@ class SharedPrefsHelper(context: Context) {
             return email == savedEmail && password == savedPassword
         }
 
-        fun setCurrentUser(context: Context, email: String) {
+        fun setCurrentUser(context: Context, userId: Long) {
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            prefs.edit().putString(KEY_CURRENT_USER, email).apply()
+            prefs.edit().putLong(KEY_CURRENT_USER, userId).apply()
         }
 
         fun getCurrentUser(context: Context): String? {

@@ -44,7 +44,7 @@ class AlphaSpan(var alpha: Int = 0) : CharacterStyle() {
     }
 }
 
-fun EditText.isFieldEmptyOrNull() : Boolean = this.text.isNullOrEmpty()
+fun EditText.isFieldEmptyOrNull() : Boolean = this.text.toString().isEmpty()
 
 fun EditText.getContent() : String = this.text.toString().trim()
 

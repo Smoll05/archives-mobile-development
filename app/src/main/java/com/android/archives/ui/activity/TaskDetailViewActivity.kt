@@ -26,7 +26,7 @@ class TaskDetailViewActivity : AppCompatActivity() {
 
         intent?.let { it ->
             it.getIntExtra("task_id", 0).let {id ->
-                task = app.taskList.find { it.taskId == id }!!
+                task = app.taskList.find { it.taskId.toInt() == id }!!
             }
         }
 
