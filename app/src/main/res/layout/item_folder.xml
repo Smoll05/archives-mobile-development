@@ -8,16 +8,18 @@
 
     <ImageView
         android:id="@+id/folderIcon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="90dp"
+        android:layout_height="92dp"
         android:src="@drawable/ic_folder" />
 
     <TextView
         android:id="@+id/folderName"
-        android:layout_width="wrap_content"
+        android:layout_width="169dp"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter"
+        android:hint="Object Oriented Programming"
         android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>
