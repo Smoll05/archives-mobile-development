@@ -4,6 +4,7 @@ import com.android.archives.data.model.User
 
 sealed interface UserEvent {
     data object SaveUser: UserEvent
+    data object LoadUser: UserEvent
     data class SetUserName(val username: String): UserEvent
     data class SetPassword(val password: String): UserEvent
     data class SetFullName(val fullName: String): UserEvent

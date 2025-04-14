@@ -8,6 +8,13 @@ import android.text.style.CharacterStyle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 fun TextView.smoothTextChangeAnimation(newText: String) {
     val oldText = this.text
@@ -19,6 +26,7 @@ fun TextView.smoothTextChangeAnimation(newText: String) {
         this.text = newText
     }
 }
+
 
 private fun animateAddedChar(textView: TextView, fullText: String, index: Int) {
     val spannable = SpannableString(fullText)
@@ -38,15 +46,32 @@ private fun animateAddedChar(textView: TextView, fullText: String, index: Int) {
     }
 }
 
+
 class AlphaSpan(var alpha: Int = 0) : CharacterStyle() {
     override fun updateDrawState(tp: TextPaint) {
         tp.alpha = alpha
     }
 }
 
+
 fun EditText.isFieldEmptyOrNull() : Boolean = this.text.toString().isEmpty()
+
 
 fun EditText.getContent() : String = this.text.toString().trim()
 
+
 fun Button.getContent() : String = this.text.toString().trim()
 
+
+// Fragment extension function to collect the latest state of a ViewModel
+fun <T> Fragment.collectLatestOnViewLifecycle(
+    flow: Flow<T>,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    collector: suspend (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(state) {
+            flow.collectLatest { collector(it) }
+        }
+    }
+}

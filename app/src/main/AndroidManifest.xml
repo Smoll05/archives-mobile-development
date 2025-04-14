@@ -14,6 +14,17 @@
         android:theme="@style/Theme.Archives"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.StartupActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.AuthActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.OnboardingActivity"
             android:exported="false" />
         <activity
@@ -55,13 +66,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.LandingScreen"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
     </application>
 
 </manifest>

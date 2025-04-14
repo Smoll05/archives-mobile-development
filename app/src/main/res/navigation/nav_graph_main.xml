@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main.xml"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.android.archives.ui.fragment.main.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_taskDetailViewFragment"
+            app:destination="@id/taskDetailViewFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editTaskFragment"
+            app:destination="@id/editTaskFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addTaskFragment"
+            app:destination="@id/addTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTaskFragment"
+        android:name="com.android.archives.ui.fragment.main.EditTaskFragment"
+        android:label="fragment_edit_task"
+        tools:layout="@layout/fragment_edit_task" />
+    <fragment
+        android:id="@+id/addTaskFragment"
+        android:name="com.android.archives.ui.fragment.main.AddTaskFragment"
+        android:label="fragment_add_task"
+        tools:layout="@layout/fragment_add_task" />
+    <fragment
+        android:id="@+id/taskDetailViewFragment"
+        android:name="com.android.archives.ui.fragment.main.TaskDetailViewFragment"
+        android:label="fragment_task_detail_view"
+        tools:layout="@layout/fragment_task_detail_view" />
+    <fragment
+        android:id="@+id/mainCourseFragment"
+        android:name="com.android.archives.ui.fragment.main.MainCourseFragment"
+        android:label="MainCourseFragment" >
+        <action
+            android:id="@+id/action_mainCourseFragment_to_filesFragment"
+            app:destination="@id/filesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.android.archives.ui.fragment.main.ScheduleFragment"
+        android:label="ScheduleFragment" >
+        <action
+            android:id="@+id/action_scheduleFragment_to_addScheduleFragment"
+            app:destination="@id/addScheduleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.android.archives.ui.fragment.main.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_developerFragment"
+            app:destination="@id/developerFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filesFragment"
+        android:name="com.android.archives.ui.fragment.main.FilesFragment"
+        android:label="fragment_files"
+        tools:layout="@layout/fragment_files" />
+    <fragment
+        android:id="@+id/addScheduleFragment"
+        android:name="com.android.archives.ui.fragment.main.AddScheduleFragment"
+        android:label="fragment_add_schedule"
+        tools:layout="@layout/fragment_add_schedule" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.android.archives.ui.fragment.main.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/developerFragment"
+        android:name="com.android.archives.ui.fragment.main.DeveloperFragment"
+        android:label="fragment_developer"
+        tools:layout="@layout/fragment_developer" />
+</navigation>

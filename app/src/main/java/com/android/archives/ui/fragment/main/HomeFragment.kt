@@ -1,4 +1,4 @@
-package com.android.archives.ui.fragment
+package com.android.archives.ui.fragment.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,16 +6,13 @@ import android.view.View
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.android.archives.R
 import com.android.archives.ui.activity.AddTaskActivity
 import com.android.archives.ui.viewmodel.UserViewModel
+import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -67,12 +64,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             )
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userViewModel.state.collect { state ->
-                    toolBar.title = "Hello, ${state.fullName}"
-                }
-            }
+        collectLatestOnViewLifecycle(userViewModel.state) { state ->
+            toolBar.title = "Hello, ${state.fullName}"
         }
     }
 }

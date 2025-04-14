@@ -10,10 +10,8 @@ import com.android.archives.ui.state.UserState
 import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,16 +24,55 @@ class UserViewModel @Inject constructor (
 
     private val TAG = "UserViewModel"
 
-    private val _state = MutableStateFlow(UserState())
-    private val _user = sharedPrefs.getCurrentUser()?.let {
-        dao.getUserWithId(it)
-    } ?: flowOf(null)
+//    private val _userId = MutableStateFlow(sharedPrefs.getCurrentUser())
 
-    val state = combine(_state, _user) { state, user ->
-        state.copy(
-            user = user
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserState())
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    private val _user = _userId.flatMapLatest { userId ->
+//        if (userId != -1L) {
+//            dao.getUserWithId(userId)
+//        } else {
+//            flowOf(null)
+//        }
+//    }
+
+    private val _state = MutableStateFlow(UserState())
+    val state = _state.asStateFlow()
+
+//    val state = combine(_state, _user) { state, user ->
+//        state.copy(
+//            userId = user?.userId ?: -1L,
+//            username = user?.username ?: "",
+//            password = user?.password ?: "",
+//            fullName = user?.fullName ?: "",
+//            birthday = user?.birthday ?: 0L,
+//            program = user?.program ?: "",
+//            school = user?.school ?: "",
+//            pictureFilePath = user?.pictureFilePath,
+//            isAddingUser = false
+//        )
+//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UserState())
+
+//    private val _currentUserId = MutableStateFlow(
+//        sharedPrefs.getCurrentUser().takeIf { it != -1L }
+//    )
+
+//    private val _user = _currentUserId
+//        .flatMapLatest { userId ->
+//            userId?.let {
+//                dao.getUserWithId(it)
+//            } ?: flowOf(null)
+//        }
+//        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+//    private val _user = MutableStateFlow(
+//        dao.getUserWithId(sharedPrefs.getCurrentUser())
+//    ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+//
+//    val state = combine(_state, _user) { state, user ->
+//        state.copy(
+//            user = user
+//        )
+//    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserState())
 
     init {
         Log.d(TAG, "User View Model Created")
@@ -53,7 +90,7 @@ class UserViewModel @Inject constructor (
                     isAddingUser = false
                 ) }
             }
-            is UserEvent.SaveUser -> {
+            UserEvent.SaveUser -> {
                 val username = state.value.username
                 val password = state.value.password
                 val fullName = state.value.fullName
@@ -65,7 +102,14 @@ class UserViewModel @Inject constructor (
                 if(username.isBlank() || password.isBlank() || fullName.isBlank() ||
                     birthday == 0L || program.isBlank() || school.isBlank()) {
 
-                    Log.d(TAG, "Filed Blank")
+                    Log.d(TAG, "Filled Blank")
+
+                    Log.d(TAG, "Username: $username")
+                    Log.d(TAG, "Password: $password")
+                    Log.d(TAG, "Full Name: $fullName")
+                    Log.d(TAG, "Birthday: $birthday")
+                    Log.d(TAG, "Program: $program")
+                    Log.d(TAG, "School: $school")
                     return
                 }
 
@@ -84,16 +128,29 @@ class UserViewModel @Inject constructor (
                     sharedPrefs.setCurrentUser(userId)
                 }
 
-                _state.update { it.copy(
-                    isAddingUser = false,
-                    username = "",
-                    password = "",
-                    fullName = "",
-                    birthday = 0L,
-                    program = "",
-                    school = "",
-                    pictureFilePath = null
-                ) }
+                emptyCurrentState()
+            }
+            UserEvent.LoadUser -> {
+                val userId = sharedPrefs.getCurrentUser()
+                if(userId == -1L) return
+
+                viewModelScope.launch {
+                    dao.getUserWithId(userId).collectLatest { user ->
+                        _state.update { state ->
+                            state.copy(
+                                userId = user.userId,
+                                username = user.username,
+                                password = user.password,
+                                fullName = user.fullName,
+                                birthday = user.birthday,
+                                program = user.program,
+                                school = user.school,
+                                pictureFilePath = user.pictureFilePath,
+                                isAddingUser = false
+                            )
+                        }
+                    }
+                }
             }
             is UserEvent.SetBirthday -> {
                 _state.update { it.copy(
@@ -109,6 +166,9 @@ class UserViewModel @Inject constructor (
                 _state.update { it.copy(
                     password = event.password
                 ) }
+
+
+                Log.d(TAG, "Password: ${state.value.password}")
             }
             is UserEvent.SetPictureFilePath -> {
                 _state.update { it.copy(
@@ -124,15 +184,11 @@ class UserViewModel @Inject constructor (
                 _state.update { it.copy(
                     school = event.school
                 ) }
-
-                Log.d(TAG, "Added user ${_state.value.username}")
             }
             is UserEvent.SetUserName -> {
                 _state.update { it.copy(
                     username = event.username
                 ) }
-
-                Log.d(TAG, "Added user ${_state.value.username}")
             }
             UserEvent.ShowForm -> {
                 _state.update { it.copy(
@@ -140,5 +196,18 @@ class UserViewModel @Inject constructor (
                 ) }
             }
         }
+    }
+
+    private fun emptyCurrentState() {
+        _state.update { it.copy(
+            isAddingUser = false,
+            username = "",
+            password = "",
+            fullName = "",
+            birthday = 0L,
+            program = "",
+            school = "",
+            pictureFilePath = null
+        ) }
     }
 }

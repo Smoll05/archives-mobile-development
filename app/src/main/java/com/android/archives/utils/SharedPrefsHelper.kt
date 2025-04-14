@@ -56,4 +56,8 @@ class SharedPrefsHelper @Inject constructor(
         prefs.edit().clear().apply()
     }
 
+    fun isUserLoggedIn() : Boolean {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getLong(KEY_CURRENT_USER, -1L) != -1L
+    }
 }

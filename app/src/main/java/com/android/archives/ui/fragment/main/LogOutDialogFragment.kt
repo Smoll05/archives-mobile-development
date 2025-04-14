@@ -1,4 +1,4 @@
-package com.android.archives
+package com.android.archives.ui.fragment.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.android.archives.R
 import com.android.archives.ui.activity.LandingScreen
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint

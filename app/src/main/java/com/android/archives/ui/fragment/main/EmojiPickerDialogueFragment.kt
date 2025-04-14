@@ -1,4 +1,4 @@
-package com.android.archives.ui.fragment
+package com.android.archives.ui.fragment.main
 
 import android.content.Context
 import android.os.Bundle

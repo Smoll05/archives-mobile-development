@@ -11,7 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import com.android.archives.R
 import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
-import com.android.archives.ui.fragment.EmojiPickerDialogueFragment
+import com.android.archives.ui.fragment.main.EmojiPickerDialogueFragment
 import com.android.archives.utils.getContent
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.google.android.material.appbar.MaterialToolbar

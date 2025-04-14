@@ -3,9 +3,6 @@ package com.android.archives.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.archives.R
-import android.content.Intent
-import android.widget.ImageButton
-import com.android.archives.ui.fragment.SettingsFragment
 import com.google.android.material.appbar.MaterialToolbar
 
 class DeveloperActivity : AppCompatActivity() {

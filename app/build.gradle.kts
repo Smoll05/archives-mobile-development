@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.emoji2.emojipicker)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -78,4 +80,8 @@ dependencies {
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
+
+    // Navigation Components
+    implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
 }

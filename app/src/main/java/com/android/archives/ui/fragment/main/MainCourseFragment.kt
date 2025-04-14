@@ -1,4 +1,4 @@
-package com.android.archives.ui.fragment
+package com.android.archives.ui.fragment.main
 
 import android.app.AlertDialog
 import android.content.Context
