@@ -26,9 +26,10 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
-
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
     private lateinit var tilName: TextInputLayout
     private lateinit var tilDate: TextInputLayout

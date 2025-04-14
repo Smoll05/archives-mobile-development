@@ -11,7 +11,9 @@ import android.widget.Toast
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddCourseDialogFragment(
     private val onFolderAdded: (FolderItem) -> Unit
 ) : BottomSheetDialogFragment() {

@@ -13,7 +13,9 @@ import com.android.archives.ui.activity.AddScheduleActivity
 import com.android.archives.ui.adapter.ScheduleWeekViewAdapter
 import com.android.archives.ui.viewmodel.ScheduleViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ScheduleFragment : Fragment() {
     private lateinit var viewModel: ScheduleViewModel
     private lateinit var weekView: WeekView

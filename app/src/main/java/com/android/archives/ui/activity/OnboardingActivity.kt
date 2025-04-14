@@ -13,14 +13,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.android.archives.R
-import com.android.archives.data.db.ArchivesDatabase
 import com.android.archives.data.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
+import com.android.archives.utils.DateConverter
 import com.android.archives.utils.getContent
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.android.archives.utils.smoothTextChangeAnimation
@@ -30,12 +30,11 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
+@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
     private lateinit var tilName: TextInputLayout
     private lateinit var tilDate: TextInputLayout
@@ -55,18 +54,13 @@ class OnboardingActivity : AppCompatActivity() {
     private val pickerTag = "DATE PICKER"
     private lateinit var cachedDestinationUr: Uri
 
-    private lateinit var userViewModel: UserViewModel
+    private val userViewModel: UserViewModel by viewModels()
     private lateinit var onEvent: (UserEvent) -> Unit
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
-        val userDao = ArchivesDatabase(this).userDao
-        val viewModelProviderFactory = UserViewModel.UserViewModelProviderFactory(userDao)
-
-        userViewModel = ViewModelProvider(this, viewModelProviderFactory)[UserViewModel::class.java]
         onEvent = userViewModel::onEvent
-
         onEvent(UserEvent.ShowForm)
 
 
@@ -148,7 +142,7 @@ class OnboardingActivity : AppCompatActivity() {
             onEvent(UserEvent.SetSchool(etSchool.getContent()))
 
             // SAVE USER TO DATABASE
-            onEvent(UserEvent.SaveUser(this))
+            onEvent(UserEvent.SaveUser)
 
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -162,8 +156,9 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         datePicker.addOnPositiveButtonClickListener { selection ->
-            val selectedDate = convertMillisToDateString(selection)
+            val selectedDate = DateConverter.convertMillisToDateString(selection)
             etDate.setText(selectedDate)
+            tvBirthday.text = selectedDate
             onEvent(UserEvent.SetBirthday(selection))
         }
 
@@ -180,22 +175,6 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         existingPicker = datePicker
-    }
-
-    private fun convertMillisToDateString(millis: Long): String {
-        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        return sdf.format(Date(millis))
-    }
-
-    private fun convertDateStringToMillis(dateString: String): Long {
-        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        return try {
-            val date: Date? = sdf.parse(dateString)
-            date?.time ?: 0L
-        } catch (e: Exception) {
-            e.printStackTrace()
-            0L
-        }
     }
 
     private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

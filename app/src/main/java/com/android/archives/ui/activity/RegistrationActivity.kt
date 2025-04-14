@@ -8,11 +8,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.android.archives.R
-import com.android.archives.data.db.ArchivesDatabase
 import com.android.archives.data.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.PasswordEncryptor
-import com.android.archives.utils.SharedPrefsHelper.UserSession
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,10 +23,6 @@ class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
-
-        val userDao = ArchivesDatabase(this).userDao
-        val viewModelProviderFactory = UserViewModel.UserViewModelProviderFactory(userDao)
-
 
         onEvent = userViewModel::onEvent
         onEvent(UserEvent.ShowForm)
@@ -65,8 +59,8 @@ class RegistrationActivity : AppCompatActivity() {
             }
 
             // Save user data and clear all previous session data
-            UserSession.clearAllUserData(this)
-            UserSession.saveUser(this, username, password)
+//            UserSession.clearAllUserData(this)
+//            UserSession.saveUser(this, username, password)
 
             onEvent(UserEvent.SetUserName(username))
             onEvent(UserEvent.SetPassword(

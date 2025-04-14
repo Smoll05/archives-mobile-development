@@ -9,7 +9,9 @@ import androidx.emoji2.emojipicker.EmojiPickerView
 import com.android.archives.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
     interface EmojiPickerListener {
         fun onEmojiPicked(emoji: String)

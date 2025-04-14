@@ -11,12 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
-import com.android.archives.data.application.ArchivesApplication
+import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
 import com.android.archives.ui.activity.TaskDetailViewActivity
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.utils.SpacingDecorator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TaskTodoFragment : Fragment() {
     lateinit var adapter: TaskRecyclerAdapter
     override fun onCreateView(

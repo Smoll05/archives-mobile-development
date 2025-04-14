@@ -1,7 +1,7 @@
 package com.android.archives.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.android.archives.data.dao.UserDao
 import com.android.archives.data.event.UserEvent
@@ -10,7 +10,10 @@ import com.android.archives.ui.state.UserState
 import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,21 +24,21 @@ class UserViewModel @Inject constructor (
     private val dao: UserDao
 ) : ViewModel() {
 
+    private val TAG = "UserViewModel"
+
     private val _state = MutableStateFlow(UserState())
-//    private val _user = dao.getUserWithId(SharedPrefsHelper.UserSession.getCurrentUser())
+    private val _user = sharedPrefs.getCurrentUser()?.let {
+        dao.getUserWithId(it)
+    } ?: flowOf(null)
 
-    val state : StateFlow<UserState> = _state
+    val state = combine(_state, _user) { state, user ->
+        state.copy(
+            user = user
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserState())
 
-    class UserViewModelProviderFactory(
-        private val userDao: UserDao
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return UserViewModel(userDao) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
+    init {
+        Log.d(TAG, "User View Model Created")
     }
 
     fun onEvent(event: UserEvent) {
@@ -51,8 +54,6 @@ class UserViewModel @Inject constructor (
                 ) }
             }
             is UserEvent.SaveUser -> {
-                val context = event.context
-
                 val username = state.value.username
                 val password = state.value.password
                 val fullName = state.value.fullName
@@ -63,6 +64,8 @@ class UserViewModel @Inject constructor (
 
                 if(username.isBlank() || password.isBlank() || fullName.isBlank() ||
                     birthday == 0L || program.isBlank() || school.isBlank()) {
+
+                    Log.d(TAG, "Filed Blank")
                     return
                 }
 
@@ -78,8 +81,9 @@ class UserViewModel @Inject constructor (
 
                 viewModelScope.launch {
                     val userId = dao.upsertUser(user)
-                    SharedPrefsHelper.UserSession.setCurrentUser(context, userId)
+                    sharedPrefs.setCurrentUser(userId)
                 }
+
                 _state.update { it.copy(
                     isAddingUser = false,
                     username = "",
@@ -120,11 +124,15 @@ class UserViewModel @Inject constructor (
                 _state.update { it.copy(
                     school = event.school
                 ) }
+
+                Log.d(TAG, "Added user ${_state.value.username}")
             }
             is UserEvent.SetUserName -> {
                 _state.update { it.copy(
                     username = event.username
                 ) }
+
+                Log.d(TAG, "Added user ${_state.value.username}")
             }
             UserEvent.ShowForm -> {
                 _state.update { it.copy(

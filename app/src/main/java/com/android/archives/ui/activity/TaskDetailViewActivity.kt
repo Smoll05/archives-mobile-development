@@ -11,11 +11,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.android.archives.R
-import com.android.archives.data.application.ArchivesApplication
+import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TaskDetailViewActivity : AppCompatActivity() {
     lateinit var task: Task
     override fun onCreate(savedInstanceState: Bundle?) {

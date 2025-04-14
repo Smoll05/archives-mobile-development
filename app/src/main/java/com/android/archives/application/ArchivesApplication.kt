@@ -1,10 +1,12 @@
-package com.android.archives.data.application
+package com.android.archives.application
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.android.archives.data.model.Schedule
 import com.android.archives.data.model.Task
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class ArchivesApplication : Application() {
     var taskList : MutableList<Task> = mutableListOf(
         Task(1, "Mobile Development: ListView", "Implement a scrollable list using ListView in a mobile app.", "📱", false),

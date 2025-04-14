@@ -9,14 +9,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.android.archives.R
-import com.android.archives.data.application.ArchivesApplication
+import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
 import com.android.archives.ui.fragment.EmojiPickerDialogueFragment
 import com.android.archives.utils.getContent
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditTaskActivity : AppCompatActivity(), EmojiPickerDialogueFragment.EmojiPickerListener {
     lateinit var etTaskTitle : EditText
     lateinit var etTaskDescription : EditText

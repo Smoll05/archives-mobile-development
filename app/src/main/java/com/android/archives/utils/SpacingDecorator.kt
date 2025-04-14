@@ -4,23 +4,12 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-open class SpacingDecorator : RecyclerView.ItemDecoration {
-    protected val top: Int
-    protected val start: Int
-    protected val end: Int
+open class SpacingDecorator(
+    protected val top: Int,
+    protected val start: Int,
+    protected val end: Int,
     protected val bottom: Int
-
-    constructor(
-        top: Int,
-        start: Int,
-        end: Int,
-        bottom: Int
-    ) : super() {
-        this.top = top
-        this.start = start
-        this.end = end
-        this.bottom = bottom
-    }
+) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -47,6 +36,13 @@ open class SpacingDecorator : RecyclerView.ItemDecoration {
     fun bottom(spaceSize: Int) = SpacingDecorator(top, start, end, spaceSize)
     fun vertical(spaceSize: Int) = SpacingDecorator(spaceSize, start, end, spaceSize)
     fun horizontal(spaceSize: Int) = SpacingDecorator(top, spaceSize, spaceSize, bottom)
+    override fun hashCode(): Int {
+        var result = top
+        result = 31 * result + start
+        result = 31 * result + end
+        result = 31 * result + bottom
+        return result
+    }
 
     companion object {
         fun top(spaceSize: Int) = SpacingDecorator(spaceSize, 0, 0, 0)

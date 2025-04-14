@@ -17,13 +17,15 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
-import com.android.archives.databinding.ActivityFilesBinding
 import com.android.archives.data.model.Upload
+import com.android.archives.databinding.ActivityFilesBinding
 import com.android.archives.ui.adapter.FileListAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
+import java.util.Locale
 
+@AndroidEntryPoint
 class FilesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFilesBinding

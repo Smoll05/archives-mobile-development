@@ -53,12 +53,12 @@ class ScheduleWeekViewAdapter(
 
         val subtitle = SpannableStringBuilder(item.location).apply {
             val subtitleSpan = RelativeSizeSpan(0.8f) // 0.8f makes it 80% of the normal size
-            setSpan(subtitleSpan, 0, item.location.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(subtitleSpan, 0, item.location?.length ?: 0, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
 
         return WeekViewEntity.Event.Builder(item)
-            .setId(item.id)
+            .setId(item.scheduleId)
             .setTitle(title)
             .setStartTime(item.startTime)
             .setEndTime(item.endTime)

@@ -9,7 +9,9 @@ import android.widget.Button
 import android.widget.Toast
 import com.android.archives.ui.activity.LandingScreen
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LogOutDialogFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,

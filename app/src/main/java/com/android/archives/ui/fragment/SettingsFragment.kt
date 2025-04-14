@@ -13,9 +13,9 @@ import com.android.archives.LogOutDialogFragment
 import com.android.archives.R
 import com.android.archives.ui.activity.DeveloperActivity
 import com.android.archives.ui.activity.ProfileActivity
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

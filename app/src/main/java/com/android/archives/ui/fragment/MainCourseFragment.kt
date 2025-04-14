@@ -4,7 +4,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -12,14 +14,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.archives.R
-import com.android.archives.databinding.FragmentMainCourseBinding
 import com.android.archives.data.model.FolderItem
+import com.android.archives.databinding.FragmentMainCourseBinding
 import com.android.archives.ui.activity.FilesActivity
 import com.android.archives.ui.adapter.FolderAdapter
 import com.android.archives.ui.viewmodel.MainCourseViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
 import org.json.JSONObject
 
+@AndroidEntryPoint
 class MainCourseFragment : Fragment() {
 
     private var _binding: FragmentMainCourseBinding? = null

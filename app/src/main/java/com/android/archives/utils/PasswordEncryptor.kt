@@ -10,5 +10,6 @@ class PasswordEncryptor {
             val digest = md.digest(bytes)
             return digest.joinToString("") { "%02x".format(it) }
         }
+
     }
 }

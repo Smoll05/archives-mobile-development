@@ -9,17 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.android.archives.R
-import com.android.archives.data.application.ArchivesApplication
+import com.android.archives.application.ArchivesApplication
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
+@AndroidEntryPoint
 class AddScheduleActivity : AppCompatActivity() {
     private lateinit var etDate : EditText
     private lateinit var etStart : EditText

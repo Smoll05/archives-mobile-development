@@ -8,8 +8,9 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.archives.R
-import com.android.archives.utils.SharedPrefsHelper
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,20 +35,20 @@ class LoginActivity : AppCompatActivity() {
             }
 
 
-            if (SharedPrefsHelper.UserSession.isUserValid(this, email, password)) {
-                // Clear previous data and set new user
-                SharedPrefsHelper.UserSession.clearAllUserData(this)
-                SharedPrefsHelper.UserSession.setCurrentUser(this, email)
-
-                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            } else {
-                Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
-            }
+//            if (SharedPrefsHelper.UserSession.isUserValid(this, email, password)) {
+//                // Clear previous data and set new user
+////                SharedPrefsHelper.UserSession.clearAllUserData(this)
+////                SharedPrefsHelper.UserSession.setCurrentUser(this, email)
+//
+//                Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
+//
+//                val intent = Intent(this, MainActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                startActivity(intent)
+//                finish()
+//            } else {
+//                Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 }

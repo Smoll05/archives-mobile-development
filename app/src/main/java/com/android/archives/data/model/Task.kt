@@ -2,6 +2,7 @@ package com.android.archives.data.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -11,7 +12,8 @@ import androidx.room.PrimaryKey
         parentColumns = ["userId"],
         childColumns = ["userId"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["userId"])]
 )
 data class Task(
     @PrimaryKey(autoGenerate = true)

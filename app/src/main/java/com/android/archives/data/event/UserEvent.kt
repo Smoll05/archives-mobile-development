@@ -1,10 +1,9 @@
 package com.android.archives.data.event
 
-import android.content.Context
 import com.android.archives.data.model.User
 
 sealed interface UserEvent {
-    data class SaveUser(val context: Context): UserEvent
+    data object SaveUser: UserEvent
     data class SetUserName(val username: String): UserEvent
     data class SetPassword(val password: String): UserEvent
     data class SetFullName(val fullName: String): UserEvent

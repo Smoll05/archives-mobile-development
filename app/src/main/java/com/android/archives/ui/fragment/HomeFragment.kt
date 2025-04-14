@@ -2,32 +2,27 @@ package com.android.archives.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.android.archives.R
 import com.android.archives.ui.activity.AddTaskActivity
-import com.android.archives.ui.activity.MainActivity
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-
-class HomeFragment : Fragment() {
-    private lateinit var userViewModel: UserViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        userViewModel = (activity as MainActivity).userViewModel
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+@AndroidEntryPoint
+class HomeFragment : Fragment(R.layout.fragment_home) {
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +36,6 @@ class HomeFragment : Fragment() {
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val formattedDate = dateFormat.format(currentDate)
 
-//        toolBar.title = "Hello, ${}"
         toolBar.subtitle = formattedDate
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -71,6 +65,14 @@ class HomeFragment : Fragment() {
             startActivity(
                 Intent(requireActivity(), AddTaskActivity::class.java)
             )
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userViewModel.state.collect { state ->
+                    toolBar.title = "Hello, ${state.fullName}"
+                }
+            }
         }
     }
 }
