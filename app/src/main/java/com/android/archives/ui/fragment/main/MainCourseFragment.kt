@@ -2,7 +2,6 @@ package com.android.archives.ui.fragment.main
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +15,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 import com.android.archives.databinding.FragmentMainCourseBinding
-import com.android.archives.ui.activity.FilesActivity
 import com.android.archives.ui.adapter.FolderAdapter
+import com.android.archives.ui.fragment.main.FilesFragment.Companion.deleteFilesForCourse
 import com.android.archives.ui.viewmodel.MainCourseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
@@ -59,12 +58,13 @@ class MainCourseFragment : Fragment() {
         adapter = FolderAdapter(
             folderList = viewModel.getFolders().toMutableList(),
             onItemClick = { folderItem ->
-                val intent = Intent(requireContext(), FilesActivity::class.java).apply {
-                    putExtra("courseTitle", folderItem.name)
-                    putExtra("coverImageUri", folderItem.coverImageUri)
-                    putExtra("profileImageUri", folderItem.profileImageUri)
-                }
-                startActivity(intent)
+//                val intent = Intent(requireContext(), FilesActivity::class.java).apply {
+//                    putExtra("courseTitle", folderItem.name)
+//                    putExtra("coverImageUri", folderItem.coverImageUri)
+//                    putExtra("profileImageUri", folderItem.profileImageUri)
+//                }
+//                startActivity(intent)
+                FilesFragment().show(parentFragmentManager, "FullScreenDialog")
             },
             onItemLongClick = { folderItem ->
                 AlertDialog.Builder(requireContext())
@@ -91,7 +91,7 @@ class MainCourseFragment : Fragment() {
         saveFoldersToStorage()
 
         // Also delete all files associated with this folder
-        FilesActivity.deleteFilesForCourse(requireContext(), currentUser, folderItem.name)
+        deleteFilesForCourse(requireContext(), currentUser, folderItem.name)
 
         toggleEmptyState(updatedList)
     }

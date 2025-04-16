@@ -22,16 +22,21 @@ import com.android.archives.ui.viewmodel.ScheduleViewModel
 
 class ScheduleWeekViewAdapter(
     private val viewModel: ScheduleViewModel,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val editScheduleClickListener: OnEditScheduleClickListener
 ) : WeekView.SimpleAdapter<Schedule>() {
     private var currentEvents: List<Schedule> = emptyList()
 
     init {
-        // Observe the ViewModel's events
         viewModel.events.observe(lifecycleOwner) { newEvents ->
             submitList(newEvents)
         }
     }
+
+    interface OnEditScheduleClickListener {
+        fun onEditScheduleClick()
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateEntity(item: Schedule): WeekViewEntity {
@@ -69,6 +74,7 @@ class ScheduleWeekViewAdapter(
 
     override fun onEventClick(data: Schedule, bounds: RectF) {
         Log.d("CalendarListener", "You have clicked {${data.title}")
+        editScheduleClickListener.onEditScheduleClick()
     }
 
 //    override fun onLoadMore(startDate: LocalDate, endDate: LocalDate): List<CalendarEvent> {

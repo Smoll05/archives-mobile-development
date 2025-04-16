@@ -1,15 +1,21 @@
-package com.android.archives.ui.activity
+package com.android.archives.ui.fragment.main
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.android.archives.R
 import com.android.archives.application.ArchivesApplication
+import com.android.archives.databinding.FragmentEditScheduleBinding
+import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -20,8 +26,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 @AndroidEntryPoint
-class AddScheduleActivity : AppCompatActivity() {
+class EditScheduleFragment : DialogFragment() {
+    private var _binding: FragmentEditScheduleBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: UserViewModel by activityViewModels()
+    
+    // SAME SAME RANI SIYA SA ADD SCHEDULE FRAGMENT
     private lateinit var etDate : EditText
     private lateinit var etStart : EditText
     private lateinit var etEnd : EditText
@@ -44,18 +56,36 @@ class AddScheduleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_schedule)
+        setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
+    }
 
-        val app = application as ArchivesApplication
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = FragmentEditScheduleBinding.inflate(inflater).also {
+        _binding = it
+    }.root
 
-        etTitle = findViewById(R.id.add_schedule_title)
-        etLocation = findViewById(R.id.add_schedule_location)
-        etDate = findViewById(R.id.add_schedule_date)
-        etStart = findViewById(R.id.et_start)
-        etEnd = findViewById(R.id.et_end)
-        val colorRadio = findViewById<RadioGroup>(R.id.add_schedule_color)
-        val toolBar = findViewById<MaterialToolbar>(R.id.add_schedule_toolbar)
-        val addBtn = findViewById<Button>(R.id.add_schedule_btn)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val app = requireActivity().application as ArchivesApplication
+
+        tilDate = view.findViewById(R.id.date_til)
+        tilStart = view.findViewById(R.id.til_start)
+        tilEnd = view.findViewById(R.id.til_end)
+        tilTitle = view.findViewById(R.id.edit_task_layout)
+        tilLocation = view.findViewById(R.id.edit_task_location_layout)
+
+        etTitle = view.findViewById(R.id.edit_schedule_title)
+        etLocation = view.findViewById(R.id.edit_schedule_location)
+        etDate = view.findViewById(R.id.edit_schedule_date)
+        etStart = view.findViewById(R.id.et_start)
+        etEnd = view.findViewById(R.id.et_end)
+        val colorRadio = view.findViewById<RadioGroup>(R.id.edit_schedule_color)
+        val toolBar = view.findViewById<MaterialToolbar>(R.id.edit_schedule_toolbar)
+        val editBtn = view.findViewById<Button>(R.id.edit_schedule_btn)
 
         timePicker =
             MaterialTimePicker.Builder()
@@ -70,14 +100,14 @@ class AddScheduleActivity : AppCompatActivity() {
             .build()
 
         toolBar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            dismiss()
         }
 
-        etTitle.addTextChangedListener {
+        binding.editScheduleTitle.addTextChangedListener {
             tilTitle.error = null
         }
 
-        etLocation.addTextChangedListener {
+        binding.editScheduleLocation.addTextChangedListener {
             tilLocation.error = null
         }
 
@@ -119,16 +149,17 @@ class AddScheduleActivity : AppCompatActivity() {
             }
         }
 
-        addBtn.setOnClickListener {
+        editBtn.setOnClickListener {
             if(areFieldsEmpty()) return@setOnClickListener
-
-            Toast.makeText(this, "The Fields Are Valid", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "The Fields Are Valid", Toast.LENGTH_LONG).show()
+            dismiss()
         }
     }
 
+
     private fun showDatePicker() {
         if (existingDatePicker == null) {
-            datePicker.show(supportFragmentManager, datePickerTag)
+            datePicker.show(parentFragmentManager, datePickerTag)
         }
 
         datePicker.addOnPositiveButtonClickListener { selection ->
@@ -153,7 +184,7 @@ class AddScheduleActivity : AppCompatActivity() {
 
     private fun showTimePicker() {
         if (existingTimePicker == null) {
-            timePicker.show(supportFragmentManager, timePickerTag)
+            timePicker.show(parentFragmentManager, timePickerTag)
         }
 
         timePicker.addOnPositiveButtonClickListener {
@@ -181,12 +212,12 @@ class AddScheduleActivity : AppCompatActivity() {
         var isEmpty = false
         val errorMsg = "This Field Is Required"
 
-        if(etTitle.isFieldEmptyOrNull()) {
+        if(binding.editScheduleTitle.isFieldEmptyOrNull()) {
             tilTitle.error = errorMsg
             isEmpty = true
         }
 
-        if(etLocation.isFieldEmptyOrNull()) {
+        if(binding.editScheduleDate.isFieldEmptyOrNull()) {
             tilLocation.error = errorMsg
             isEmpty = true
         }
@@ -209,5 +240,10 @@ class AddScheduleActivity : AppCompatActivity() {
         }
 
         return isEmpty
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

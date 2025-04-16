@@ -38,6 +38,7 @@ class TaskCompleteFragment : Fragment() {
             completeList,
             onClick = { task ->
                 Toast.makeText(requireContext(), "On click click: ${task.description}", Toast.LENGTH_SHORT).show()
+                TaskDetailViewFragment().show(parentFragmentManager, "FullScreenDialog")
             },
 
             onCheckChanged = { task, isChecked ->

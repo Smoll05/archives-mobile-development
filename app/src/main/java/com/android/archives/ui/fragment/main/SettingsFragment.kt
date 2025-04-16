@@ -1,19 +1,17 @@
 package com.android.archives.ui.fragment.main
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.android.archives.R
 import com.android.archives.databinding.FragmentSettingsBinding
-import com.android.archives.ui.activity.DeveloperActivity
-import com.android.archives.ui.activity.ProfileActivity
 import com.android.archives.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,8 +32,6 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
-
         val btnLogout = view.findViewById<Button>(R.id.btn_logout)
         val btnProfileEdit = view.findViewById<Button>(R.id.settings_edit_profile)
 
@@ -50,16 +46,19 @@ class SettingsFragment : Fragment() {
         }
 
         btnDeveloper.setOnClickListener {
-            activityLauncher.launch(Intent(requireContext(), DeveloperActivity::class.java))
+            findNavController().navigate(R.id.action_settingsFragment_to_developerFragment)
         }
 
         btnProfileEdit.setOnClickListener {
-            startActivity(Intent(requireContext(), ProfileActivity::class.java))
+            ProfileFragment().show(parentFragmentManager, "FullScreenDialog")
         }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        Log.d("Profile", "I am settings and is destroyed")
     }
 }

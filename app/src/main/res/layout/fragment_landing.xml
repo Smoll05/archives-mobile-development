@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:padding="24dp"
-    tools:context=".ui.activity.LoginActivity">
+    tools:context=".ui.activity.AuthActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

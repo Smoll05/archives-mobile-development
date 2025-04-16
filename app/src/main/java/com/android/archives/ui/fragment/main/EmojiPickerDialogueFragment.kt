@@ -1,6 +1,5 @@
 package com.android.archives.ui.fragment.main
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,20 +12,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
-    interface EmojiPickerListener {
-        fun onEmojiPicked(emoji: String)
+
+    companion object {
+        const val EMOJI_PICKER_RESULT_KEY = "emoji_picker_result"
+        const val EMOJI_PICKED_BUNDLE_KEY = "emoji"
     }
 
-    private var listener: EmojiPickerListener? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is EmojiPickerListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement EmojiPickerListener")
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,8 +36,11 @@ class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
         layoutParams.height = heightInPixels
         emojiPickerView.layoutParams = layoutParams
 
-        emojiPickerView.setOnEmojiPickedListener {emojiItem ->
-            listener?.onEmojiPicked(emojiItem.emoji)
+        emojiPickerView.setOnEmojiPickedListener { emojiItem ->
+            val result = Bundle().apply {
+                putString(EMOJI_PICKED_BUNDLE_KEY, emojiItem.emoji)
+            }
+            parentFragmentManager.setFragmentResult(EMOJI_PICKER_RESULT_KEY, result)
             dismiss()
         }
 
@@ -62,10 +56,5 @@ class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
             val behavior = BottomSheetBehavior.from(it)
             behavior.isDraggable = false
         }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
     }
 }

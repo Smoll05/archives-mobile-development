@@ -5,27 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.android.archives.databinding.FragmentDeveloperBinding
+import androidx.fragment.app.activityViewModels
+import com.android.archives.databinding.FragmentLoginBinding
+import com.android.archives.ui.viewmodel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class DeveloperFragment : Fragment() {
-    private var _binding: FragmentDeveloperBinding? = null
+@AndroidEntryPoint
+class EditUserDetailsFragment : Fragment() {
+    private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentDeveloperBinding.inflate(inflater).also {
+    ) = FragmentLoginBinding.inflate(inflater).also {
         _binding = it
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.developerToolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     override fun onDestroyView() {

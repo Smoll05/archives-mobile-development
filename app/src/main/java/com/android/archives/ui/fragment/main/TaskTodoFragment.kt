@@ -1,6 +1,5 @@
 package com.android.archives.ui.fragment.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
-import com.android.archives.ui.activity.TaskDetailViewActivity
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.utils.SpacingDecorator
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,12 +38,7 @@ class TaskTodoFragment : Fragment() {
             todoList,
             onClick = { task ->
                 Toast.makeText(requireContext(), "On click: ${task.description}", Toast.LENGTH_SHORT).show()
-
-                startActivity(
-                    Intent(requireContext(), TaskDetailViewActivity::class.java).apply {
-                        putExtra("task_id", task.taskId)
-                    }
-                )
+                TaskDetailViewFragment().show(parentFragmentManager, "FullScreenDialog")
             },
 
             onCheckChanged = { task, isChecked ->

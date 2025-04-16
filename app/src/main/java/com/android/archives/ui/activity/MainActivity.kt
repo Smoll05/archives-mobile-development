@@ -1,6 +1,7 @@
 package com.android.archives.ui.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -9,7 +10,6 @@ import com.android.archives.R
 import com.android.archives.data.event.UserEvent
 import com.android.archives.databinding.ActivityMainBinding
 import com.android.archives.ui.viewmodel.UserViewModel
-import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,10 +20,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 //        val bottomNav: NavigationBarView = findViewById(R.id.bottom_navigation)
-        binding.bottomNavigation.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
+//        binding.bottomNavigation.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
 //        bottomNav.setOnItemSelectedListener(navListener)
 
 //        supportFragmentManager.beginTransaction().replace(R.id.content_frame, HomeFragment()).commit()
@@ -32,11 +33,43 @@ class MainActivity : AppCompatActivity() {
         onEvent(UserEvent.LoadUser)
 
         val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.newsNavHostFragment) as NavHostFragment
+            .findFragmentById(R.id.navHostFragment) as NavHostFragment
 
         val navController = navHostFragment.navController
 
         binding.bottomNavigation.setupWithNavController(navController)
+
+//        navHostFragment.findNavController()
+//            .addOnDestinationChangedListener { _, destination, _ ->
+//                when(destination.id) {
+//                    R.id.settingsFragment, R.id.homeFragment,
+//                    R.id.scheduleFragment, R.id.mainCourseFragment ->
+//                        binding.bottomNavigation.visibility = View.VISIBLE
+//                    else -> binding.bottomNavigation.visibility = View.GONE
+//                }
+//            }
+
+//        navHostFragment.findNavController()
+//            .addOnDestinationChangedListener { _, destination, _ ->
+//                binding.root.doOnPreDraw {
+//                    when (destination.id) {
+//                        R.id.settingsFragment, R.id.homeFragment,
+//                        R.id.scheduleFragment, R.id.mainCourseFragment -> {
+//                            binding.bottomNavigation.visibility = View.VISIBLE
+//                        }
+//                        else -> {
+//                            binding.bottomNavigation.visibility = View.GONE
+//                        }
+//                    }
+//                }
+//            }
+
+//        val navHostFragment = supportFragmentManager
+//            .findFragmentById(R.id.newsNavHostFragment) as NavHostFragment
+//
+//        val navController = navHostFragment.navController
+//
+//        binding.bottomNavigationView.setupWithNavController(navController)
     }
 
 //    private val navListener = NavigationBarView.OnItemSelectedListener { item ->
@@ -62,4 +95,22 @@ class MainActivity : AppCompatActivity() {
 //        supportFragmentManager.beginTransaction().replace(R.id.content_frame, selectedFragment).commit()
 //        true
 //    }
+
+    fun setBottomNavigationVisibility(visibility: Int) {
+        val bottomNav = binding.bottomNavigation
+        if(visibility == View.VISIBLE) {
+            bottomNav.visibility = View.VISIBLE
+//            bottomNav.animate()
+//                .translationY(0f)
+//                .setDuration(200)
+//                .start()
+        } else {
+            bottomNav.visibility = View.GONE
+//            bottomNav.animate()
+//                .translationY(bottomNav.height.toFloat())
+//                .setDuration(200)
+//                .start()
+        }
+
+    }
 }

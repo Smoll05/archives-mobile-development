@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.android.archives.R
-import com.android.archives.ui.activity.LandingScreen
+import com.android.archives.ui.activity.AuthActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +34,7 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
             ).show()
             dismiss()
 
-            val intent = Intent(requireContext(), LandingScreen::class.java)
+            val intent = Intent(requireContext(), AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }

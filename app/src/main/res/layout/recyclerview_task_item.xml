@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="@drawable/shape_task_list_outline"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    tools:context=".ui.activity.MainActivity">
 
     <TextView
         android:id="@+id/task_item_icon"

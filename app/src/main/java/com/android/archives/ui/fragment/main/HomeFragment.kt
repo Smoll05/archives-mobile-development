@@ -1,13 +1,14 @@
 package com.android.archives.ui.fragment.main
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.android.archives.R
-import com.android.archives.ui.activity.AddTaskActivity
+import com.android.archives.databinding.FragmentHomeBinding
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.google.android.material.appbar.MaterialToolbar
@@ -18,8 +19,18 @@ import java.util.Calendar
 import java.util.Locale
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment() {
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val userViewModel: UserViewModel by activityViewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = FragmentHomeBinding.inflate(inflater).also {
+        _binding = it
+    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,9 +70,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         childFragmentManager.beginTransaction().replace(R.id.task_frame, TaskTodoFragment()).commit()
 
         btnAdd.setOnClickListener {
-            startActivity(
-                Intent(requireActivity(), AddTaskActivity::class.java)
-            )
+            AddTaskFragment().show(parentFragmentManager, "FullScreenDialog")
         }
 
         collectLatestOnViewLifecycle(userViewModel.state) { state ->

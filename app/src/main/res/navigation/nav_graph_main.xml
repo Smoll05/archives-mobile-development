@@ -13,11 +13,8 @@
             android:id="@+id/action_homeFragment_to_taskDetailViewFragment"
             app:destination="@id/taskDetailViewFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_editTaskFragment"
-            app:destination="@id/editTaskFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_addTaskFragment"
-            app:destination="@id/addTaskFragment" />
+            app:destination="@id/addTaskFragment"/>
     </fragment>
     <fragment
         android:id="@+id/editTaskFragment"
@@ -56,7 +53,11 @@
         android:label="SettingsFragment" >
         <action
             android:id="@+id/action_settingsFragment_to_developerFragment"
-            app:destination="@id/developerFragment" />
+            app:destination="@id/developerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/no_animation"/>
         <action
             android:id="@+id/action_settingsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -81,4 +82,28 @@
         android:name="com.android.archives.ui.fragment.main.DeveloperFragment"
         android:label="fragment_developer"
         tools:layout="@layout/fragment_developer" />
+    <fragment
+        android:id="@+id/taskTodoFragment"
+        android:name="com.android.archives.ui.fragment.main.TaskTodoFragment"
+        android:label="fragment_task_todo"
+        tools:layout="@layout/fragment_task_todo" >
+        <argument
+            android:name="task_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_taskTodoFragment_to_taskDetailViewFragment"
+            app:destination="@id/taskDetailViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskCompleteFragment"
+        android:name="com.android.archives.ui.fragment.main.TaskCompleteFragment"
+        android:label="fragment_task_complete"
+        tools:layout="@layout/fragment_task_complete" >
+        <argument
+            android:name="task_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_taskCompleteFragment_to_taskDetailViewFragment"
+            app:destination="@id/taskDetailViewFragment" />
+    </fragment>
 </navigation>
