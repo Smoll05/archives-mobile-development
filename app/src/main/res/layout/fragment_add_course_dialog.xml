@@ -7,17 +7,6 @@
     android:background="@color/background"
     tools:context=".ui.activity.MainActivity">
 
-    <EditText
-        android:id="@+id/etCourseName"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingLeft="30dp"
-        android:textColor="@color/black"
-        android:hint="Enter Course Name"
-        android:background="@drawable/edittext_bg" />
-        android:background="@color/background"
-        android:padding="16dp">
-
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

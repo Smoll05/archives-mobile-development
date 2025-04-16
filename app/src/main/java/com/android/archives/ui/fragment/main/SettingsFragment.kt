@@ -1,5 +1,8 @@
 package com.android.archives.ui.fragment.main
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -36,13 +40,47 @@ class SettingsFragment : Fragment() {
         val btnProfileEdit = view.findViewById<Button>(R.id.settings_edit_profile)
 
         val btnDeveloper = view.findViewById<LinearLayout>(R.id.settings_about)
+        val btnReportAProblem = view.findViewById<LinearLayout>(R.id.settings_report_problem)
+        val btnRequestAFeature = view.findViewById<LinearLayout>(R.id.settings_request_feature)
+        val btnEraseAllContent = view.findViewById<LinearLayout>(R.id.settings_erase)
+        val btnDeleteUserAccount = view.findViewById<LinearLayout>(R.id.settings_delete)
 
-        btnLogout.setOnClickListener {
-            val bottomSheet = LogOutDialogFragment()
-            bottomSheet.show(
-                parentFragmentManager,
-                "ModalBottomSheet"
-            )
+
+        // Boss peeps just ilisi lang ni using shared pref gihapon
+        btnEraseAllContent.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Erase All Content")
+                .setMessage("Are you sure you want to erase all app data? This action cannot be undone.")
+                .setPositiveButton("Yes") { _, _ ->
+                    val prefs = requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                    prefs.edit().clear().apply()
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
+        // Boss peeps just ilisi lang ni using shared pref gihapon
+        btnDeleteUserAccount.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Delete Account")
+                .setMessage("Are you sure you want to delete your account permanently?")
+                .setPositiveButton("Delete") { _, _ ->
+                    val prefs = requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE)
+                    prefs.edit().clear().apply()
+
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
+        btnReportAProblem.setOnClickListener{
+            val report = Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScCo0HRxxtpJAvBvmgJOSrorQLgMLMrR_iMmYrP3Anw2EegnA/viewform?usp=header"))
+            startActivity(report)
+        }
+
+        btnRequestAFeature.setOnClickListener{
+            val report = Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSdi18YdSY-gaGEl0Zm-qIAJDzWgFlAbFRHE9lRsRlQquUKceA/viewform?usp=header"))
+            startActivity(report)
         }
 
         btnDeveloper.setOnClickListener {
@@ -53,6 +91,13 @@ class SettingsFragment : Fragment() {
             ProfileFragment().show(parentFragmentManager, "FullScreenDialog")
         }
 
+        btnLogout.setOnClickListener {
+            val bottomSheet = LogOutDialogFragment()
+            bottomSheet.show(
+                parentFragmentManager,
+                "ModalBottomSheet"
+            )
+        }
     }
 
     override fun onDestroyView() {

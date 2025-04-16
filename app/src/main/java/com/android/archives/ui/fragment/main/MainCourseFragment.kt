@@ -16,6 +16,7 @@ import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 import com.android.archives.databinding.FragmentMainCourseBinding
 import com.android.archives.ui.adapter.FolderAdapter
+import com.android.archives.ui.fragment.AddCourseDialogFragment
 import com.android.archives.ui.fragment.main.FilesFragment.Companion.deleteFilesForCourse
 import com.android.archives.ui.viewmodel.MainCourseViewModel
 import dagger.hilt.android.AndroidEntryPoint

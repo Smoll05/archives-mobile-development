@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
@@ -84,14 +83,14 @@ class FilesFragment : DialogFragment() {
     private fun setupHeader(name: String, coverUri: String?, profileUri: String?) {
         view.findViewById<TextView>(R.id.CourseName).text = name
 
-        val coverImage = view.findViewById<ImageView>(R.id.coverPhoto)
-        val profileImage = view.findViewById<ImageView>(R.id.profilePhoto)
+//        val coverImage = view.findViewById<ImageView>(R.id.coverPhoto)
+//        val profileImage = view.findViewById<ImageView>(R.id.profilePhoto)
 
-        coverImage.setImageURI(coverUri?.let { Uri.parse(it) })
-        if (coverUri.isNullOrEmpty()) coverImage.setImageResource(R.drawable.gray_placeholder)
-
-        profileImage.setImageURI(profileUri?.let { Uri.parse(it) })
-        if (profileUri.isNullOrEmpty()) profileImage.setImageResource(R.drawable.gray_placeholder)
+//        coverImage.setImageURI(coverUri?.let { Uri.parse(it) })
+//        if (coverUri.isNullOrEmpty()) coverImage.setImageResource(R.drawable.gray_placeholder)
+//
+//        profileImage.setImageURI(profileUri?.let { Uri.parse(it) })
+//        if (profileUri.isNullOrEmpty()) profileImage.setImageResource(R.drawable.gray_placeholder)
     }
 
     private fun setupRecyclerView() {

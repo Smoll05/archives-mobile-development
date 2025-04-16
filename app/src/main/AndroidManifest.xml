@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".data.application.ArchivesApplication"
+        android:name=".application.ArchivesApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,27 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-            android:name=".ui.fragment.ReportAProblemFragment"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.ReportProblemActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.OnboardingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.AddScheduleActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.EditTaskActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.TaskDetailViewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.AddTaskActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activity.AuthActivity"
             android:exported="false" />
