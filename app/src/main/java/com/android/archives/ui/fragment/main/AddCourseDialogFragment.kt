@@ -1,4 +1,4 @@
-package com.android.archives.ui.fragment.main
+package com.android.archives.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import com.google.android.material.button.MaterialButton
 
 @AndroidEntryPoint
 class AddCourseDialogFragment(
@@ -28,26 +29,31 @@ class AddCourseDialogFragment(
         val view = inflater.inflate(R.layout.fragment_add_course_dialog, container, false)
 
         val courseNameInput = view.findViewById<EditText>(R.id.etCourseName)
-        val btnAdd = view.findViewById<Button>(R.id.btnAddCourse)
-        val btnCancel = view.findViewById<Button>(R.id.btnCancelCourse)
+        val btnAdd = view.findViewById<MaterialButton>(R.id.btnAddCourse)
+        val btnCancel = view.findViewById<MaterialButton>(R.id.btnCancelCourse)
 
         val colorOption1 = view.findViewById<ImageView>(R.id.colorOption1)
         val colorOption2 = view.findViewById<ImageView>(R.id.colorOption2)
         val colorOption3 = view.findViewById<ImageView>(R.id.colorOption3)
+        val colorOption4 = view.findViewById<ImageView>(R.id.colorOption4)
+        val colorOption5 = view.findViewById<ImageView>(R.id.colorOption5)
+        val colorOption6 = view.findViewById<ImageView>(R.id.colorOption6)
 
-        colorOption1.setOnClickListener {
-            selectedColorRes = R.drawable.ic_folder_red
-            highlightSelected(colorOption1, listOf(colorOption2, colorOption3))
-        }
+        val colorOptions = listOf(colorOption1, colorOption2, colorOption3, colorOption4, colorOption5, colorOption6)
+        val colorDrawables = listOf(
+            R.drawable.ic_folder_yellow,
+            R.drawable.ic_folder_orange,
+            R.drawable.ic_folder_red,
+            R.drawable.ic_folder_violet,
+            R.drawable.ic_folder_blue,
+            R.drawable.ic_folder_green
+        )
 
-        colorOption2.setOnClickListener {
-            selectedColorRes = R.drawable.ic_folder_blue
-            highlightSelected(colorOption2, listOf(colorOption1, colorOption3))
-        }
-
-        colorOption3.setOnClickListener {
-            selectedColorRes = R.drawable.ic_folder_green
-            highlightSelected(colorOption3, listOf(colorOption1, colorOption2))
+        colorOptions.forEachIndexed { index, imageView ->
+            imageView.setOnClickListener {
+                selectedColorRes = colorDrawables[index]
+                highlightSelected(imageView, colorOptions)
+            }
         }
 
         btnAdd.setOnClickListener {
@@ -56,7 +62,7 @@ class AddCourseDialogFragment(
                 val folder = FolderItem(
                     title = courseName,
                     name = courseName,
-//                    iconRes = selectedColorRes
+                    iconRes = selectedColorRes
                 )
                 onFolderAdded(folder)
                 dismiss()
@@ -72,8 +78,11 @@ class AddCourseDialogFragment(
         return view
     }
 
-    private fun highlightSelected(selected: ImageView, others: List<ImageView>) {
-        selected.setBackgroundResource(R.drawable.bg_selected_border)
-        others.forEach { it.setBackgroundResource(0) }
+    private fun highlightSelected(selected: ImageView, allOptions: List<ImageView>) {
+        allOptions.forEach { imageView ->
+            imageView.setBackgroundResource(
+                if (imageView == selected) R.drawable.bg_selected_border else 0
+            )
+        }
     }
 }
