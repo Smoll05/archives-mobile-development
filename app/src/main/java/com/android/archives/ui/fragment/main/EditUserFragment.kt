@@ -35,15 +35,17 @@ class EditUserFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.btnBack.setOnClickListener { dismiss() }
 
-        // Disable username field by default
         binding.etNewUsername.isEnabled = false
 
-        // Enable username field if checkbox is checked
         binding.cbEditUsername.setOnCheckedChangeListener { _, isChecked ->
             binding.etNewUsername.isEnabled = isChecked
         }
 
-        // Pre-fill current username
+        //anhi mo show field
+        binding.cbEditPassword.setOnCheckedChangeListener { _, isChecked ->
+            binding.passwordFieldsContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
+
         val currentUser = viewModel.state.value
         lifecycleScope.launch {
             currentUser?.let {
@@ -53,40 +55,54 @@ class EditUserFragment : DialogFragment() {
         }
 
         binding.btnSave.setOnClickListener {
+            val isUsernameEditing = binding.cbEditUsername.isChecked
+            val isPasswordEditing = binding.cbEditPassword.isChecked
+
+            val newUsername = binding.etNewUsername.text.toString().trim()
             val oldPassword = binding.etOldPassword.text.toString().trim()
             val newPassword = binding.etNewPassword.text.toString().trim()
-            val newUsername = binding.etNewUsername.text.toString().trim()
 
-            if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+            if (!isUsernameEditing && !isPasswordEditing) {
+                Toast.makeText(requireContext(), "Nothing to update.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (isPasswordEditing && (oldPassword.isEmpty() || newPassword.isEmpty())) {
                 Toast.makeText(requireContext(), "Old and New Password are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             lifecycleScope.launch {
-                val currentUser = viewModel.state.value
                 currentUser?.let {
                     val userFromDb = viewModel.getUserById(it.userId).first()
-                    val hashedOldPassword = PasswordEncryptor.hashPassword(oldPassword)
+                    var finalUsername = userFromDb.username
+                    var finalPassword = userFromDb.password
 
-                    if (userFromDb.password == hashedOldPassword) {
-                        val hashedNewPassword = PasswordEncryptor.hashPassword(newPassword)
-
-                        val finalUsername = if (binding.cbEditUsername.isChecked) newUsername else userFromDb.username
-
-                        val updatedUser = userFromDb.copy(
-                            username = finalUsername,
-                            password = hashedNewPassword
-                        )
-                        viewModel.saveUser(updatedUser)
-                        Toast.makeText(requireContext(), "User info updated.", Toast.LENGTH_SHORT).show()
-                        dismiss()
-                    } else {
-                        Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
+                    if (isUsernameEditing) {
+                        finalUsername = newUsername
                     }
+
+                    if (isPasswordEditing) {
+                        val hashedOldPassword = PasswordEncryptor.hashPassword(oldPassword)
+                        if (userFromDb.password != hashedOldPassword) {
+                            Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
+                            return@launch
+                        }
+                        finalPassword = PasswordEncryptor.hashPassword(newPassword)
+                    }
+
+                    val updatedUser = userFromDb.copy(
+                        username = finalUsername,
+                        password = finalPassword
+                    )
+                    viewModel.saveUser(updatedUser)
+                    Toast.makeText(requireContext(), "User info updated.", Toast.LENGTH_SHORT).show()
+                    dismiss()
                 }
             }
         }
     }
+
 
 
     override fun onDestroyView() {

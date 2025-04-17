@@ -54,35 +54,52 @@
                     android:enabled="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- New password field -->
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Checkbox to enable editing the password -->
+            <CheckBox
+                android:id="@+id/cbEditPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Password"
+                android:layout_marginTop="12dp" />
+
+            <!-- Wrap password fields in a container for easy show/hide -->
+            <LinearLayout
+                android:id="@+id/passwordFieldsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter New Password"
-                android:layout_marginTop="12dp">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNewPassword"
+                <!-- New password field -->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="50"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Enter New Password"
+                    android:layout_marginTop="12dp">
 
-            <!-- Old password field -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Old Password"
-                android:layout_marginTop="12dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNewPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="50"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etOldPassword"
+                <!-- Old password field -->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="50"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Enter Old Password"
+                    android:layout_marginTop="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOldPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLength="50"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -102,8 +119,7 @@
             android:layout_width="match_parent"
             android:backgroundTint="@color/lightbrown"
             android:layout_height="wrap_content"
-            android:text="save" />
-
+            android:text="Save" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBack"
