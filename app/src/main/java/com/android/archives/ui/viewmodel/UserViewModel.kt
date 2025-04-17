@@ -9,6 +9,7 @@ import com.android.archives.data.model.User
 import com.android.archives.ui.state.UserState
 import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -210,4 +211,15 @@ class UserViewModel @Inject constructor (
             pictureFilePath = null
         ) }
     }
+
+    fun getUserById(userId: Long): Flow<User> {
+        return dao.getUserWithId(userId)
+    }
+
+    fun saveUser(user: User) {
+        viewModelScope.launch {
+            dao.upsertUser(user)
+        }
+    }
+
 }
