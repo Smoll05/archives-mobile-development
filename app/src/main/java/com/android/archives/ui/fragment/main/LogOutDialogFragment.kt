@@ -9,12 +9,17 @@ import android.widget.Button
 import android.widget.Toast
 import com.android.archives.R
 import com.android.archives.ui.activity.AuthActivity
+import com.android.archives.utils.SharedPrefsHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogOutDialogFragment : BottomSheetDialogFragment() {
-    override fun onCreateView(
+    @Inject
+    lateinit var sharedPrefs : SharedPrefsHelper
+
+    override fun onCreateView (
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +39,7 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
             ).show()
             dismiss()
 
+            sharedPrefs.clearCurrentUser()
             val intent = Intent(requireContext(), AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

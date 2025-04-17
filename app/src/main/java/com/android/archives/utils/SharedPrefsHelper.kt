@@ -51,6 +51,12 @@ class SharedPrefsHelper @Inject constructor(
         return prefs.getLong(KEY_CURRENT_USER, -1L)
     }
 
+    fun clearCurrentUser() {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().remove(KEY_CURRENT_USER).apply()
+    }
+
+
     fun clearAllUserData() {
         val prefs = context.getSharedPreferences("uploaded_files", Context.MODE_PRIVATE)
         prefs.edit().clear().apply()

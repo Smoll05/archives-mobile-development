@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.archives.R
-import com.android.archives.data.event.UserEvent
 import com.android.archives.databinding.FragmentRegisterBinding
+import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.PasswordEncryptor
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,13 @@ class RegisterFragment : Fragment() {
 
         onEvent = userViewModel::onEvent
         onEvent(UserEvent.ShowForm)
+
+        binding.tfEmail.addTextChangedListener {
+            onEvent(
+                UserEvent.SetUserName(
+                it.toString()
+            ))
+        }
 
         binding.registrationToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -61,11 +69,6 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Save user data and clear all previous session data
-//            UserSession.clearAllUserData(this)
-//            UserSession.saveUser(this, username, password)
-
-            onEvent(UserEvent.SetUserName(username))
             onEvent(
                 UserEvent.SetPassword(
                 PasswordEncryptor.hashPassword(password)

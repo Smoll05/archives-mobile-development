@@ -1,16 +1,18 @@
 package com.android.archives.ui.activity
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.archives.R
-import com.android.archives.data.event.UserEvent
 import com.android.archives.databinding.ActivityMainBinding
+import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
+import com.android.archives.utils.collectLatestOnLifecycle
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNavigation.setupWithNavController(navController)
+
+        preloadProfileImage()
 
 //        navHostFragment.findNavController()
 //            .addOnDestinationChangedListener { _, destination, _ ->
@@ -96,21 +100,13 @@ class MainActivity : AppCompatActivity() {
 //        true
 //    }
 
-    fun setBottomNavigationVisibility(visibility: Int) {
-        val bottomNav = binding.bottomNavigation
-        if(visibility == View.VISIBLE) {
-            bottomNav.visibility = View.VISIBLE
-//            bottomNav.animate()
-//                .translationY(0f)
-//                .setDuration(200)
-//                .start()
-        } else {
-            bottomNav.visibility = View.GONE
-//            bottomNav.animate()
-//                .translationY(bottomNav.height.toFloat())
-//                .setDuration(200)
-//                .start()
-        }
+    private fun preloadProfileImage() {
+        collectLatestOnLifecycle(userViewModel.state) { state ->
+            val profileImage = state.pictureFilePath?.let { File(filesDir, it) }
 
+            Glide.with(this)
+                .load(profileImage)
+                .preload()
+        }
     }
 }

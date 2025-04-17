@@ -17,7 +17,7 @@ interface UserDao {
     suspend fun deleteUser(user: User)
 
     @Query("SELECT * FROM users WHERE username = :username AND password = :password")
-    fun getUserWithUsernameAndPassword(username: String, password: String): Flow<User>
+    suspend fun getUserWithUsernameAndPassword(username: String, password: String): User?
 
     @Query("SELECT * FROM users WHERE userId = :userId")
     fun getUserWithId(userId: Long): Flow<User>
