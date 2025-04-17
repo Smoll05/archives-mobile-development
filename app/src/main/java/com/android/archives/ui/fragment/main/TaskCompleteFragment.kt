@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
+import com.android.archives.databinding.FragmentTaskCompleteBinding
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.utils.SpacingDecorator
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,16 +20,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TaskCompleteFragment : Fragment() {
     lateinit var adapter: TaskRecyclerAdapter
+
+    private var _binding: FragmentTaskCompleteBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_task_complete, container, false)
+    ): View {
+        _binding = FragmentTaskCompleteBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         val app = requireActivity().application as ArchivesApplication
-        val taskEmptySign = view.findViewById<LinearLayout>(R.id.task_complete_empty)
+        val taskEmptySign = binding.taskCompleteEmpty
         val completeList : MutableList<Task> = app.taskList.filter {it.isComplete} .toMutableList()
-        val rvComplete = view.findViewById<RecyclerView>(R.id.task_complete_recycler_view)
+        val rvComplete = binding.taskCompleteRecyclerView
 
         rvComplete.addItemDecoration(
             SpacingDecorator(0, 0, 0, 24)
@@ -69,5 +75,10 @@ class TaskCompleteFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

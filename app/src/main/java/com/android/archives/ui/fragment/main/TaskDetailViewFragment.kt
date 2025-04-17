@@ -7,8 +7,6 @@ import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -17,7 +15,6 @@ import androidx.fragment.app.activityViewModels
 import com.android.archives.R
 import com.android.archives.databinding.FragmentTaskDetailViewBinding
 import com.android.archives.ui.viewmodel.UserViewModel
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,13 +48,13 @@ class TaskDetailViewFragment : DialogFragment() {
 //            }
 //        }
 
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.task_detail_toolbar)
-        val tvTitle = view.findViewById<TextView>(R.id.task_detail_title)
-        val tvDescription = view.findViewById<TextView>(R.id.task_detail_description)
+        val toolBar = binding.taskDetailToolbar
+        val tvTitle = binding.taskDetailTitle
+        val tvDescription = binding.taskDetailDescription
 
-        val btnEdit = view.findViewById<Button>(R.id.task_detail_edit)
-        val btnDelete = view.findViewById<Button>(R.id.task_detail_delete)
-        val tvMark = view.findViewById<TextView>(R.id.task_detail_mark)
+        val btnEdit = binding.taskDetailEdit
+        val btnDelete = binding.taskDetailDelete
+        val tvMark = binding.taskDetailMark
 
         toolBar.setNavigationOnClickListener {
             dismiss()

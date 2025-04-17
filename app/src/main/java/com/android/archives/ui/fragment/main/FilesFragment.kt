@@ -11,14 +11,12 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.archives.R
 import com.android.archives.data.model.Upload
 import com.android.archives.databinding.FragmentFilesBinding
 import com.android.archives.ui.adapter.FileListAdapter
@@ -28,8 +26,10 @@ import org.json.JSONObject
 import java.util.Locale
 
 class FilesFragment : DialogFragment() {
+
     private var _binding: FragmentFilesBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: UserViewModel by activityViewModels()
 
     private lateinit var fileAdapter: FileListAdapter
@@ -38,8 +38,6 @@ class FilesFragment : DialogFragment() {
 
     private lateinit var currentUser: String
     private lateinit var courseKey: String
-
-    private lateinit var view: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,14 +48,13 @@ class FilesFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentFilesBinding.inflate(inflater).also {
-        _binding = it
-    }.root
+    ): View {
+        _binding = FragmentFilesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        this.view = view
 
         val courseName = requireActivity().intent.getStringExtra("courseTitle") ?: "Course"
         val coverUri = requireActivity().intent.getStringExtra("coverImageUri")
@@ -70,7 +67,7 @@ class FilesFragment : DialogFragment() {
         setupHeader(courseName, coverUri, profileUri)
         setupRecyclerView()
         loadFilesFromStorage()
-        filterList("") // <- This ensures the adapter updates right after loading
+        filterList("") // Immediately update after loading
         setupAddButton()
         setupSearchBar()
         setupSwipeToDelete()
@@ -81,16 +78,14 @@ class FilesFragment : DialogFragment() {
     }
 
     private fun setupHeader(name: String, coverUri: String?, profileUri: String?) {
-        view.findViewById<TextView>(R.id.CourseName).text = name
+        binding.CourseName.text = name
 
-//        val coverImage = view.findViewById<ImageView>(R.id.coverPhoto)
-//        val profileImage = view.findViewById<ImageView>(R.id.profilePhoto)
-
-//        coverImage.setImageURI(coverUri?.let { Uri.parse(it) })
-//        if (coverUri.isNullOrEmpty()) coverImage.setImageResource(R.drawable.gray_placeholder)
-//
-//        profileImage.setImageURI(profileUri?.let { Uri.parse(it) })
-//        if (profileUri.isNullOrEmpty()) profileImage.setImageResource(R.drawable.gray_placeholder)
+        // You can uncomment and use these once image loading is desired:
+        // binding.coverPhoto.setImageURI(coverUri?.let { Uri.parse(it) })
+        // if (coverUri.isNullOrEmpty()) binding.coverPhoto.setImageResource(R.drawable.gray_placeholder)
+        //
+        // binding.profilePhoto.setImageURI(profileUri?.let { Uri.parse(it) })
+        // if (profileUri.isNullOrEmpty()) binding.profilePhoto.setImageResource(R.drawable.gray_placeholder)
     }
 
     private fun setupRecyclerView() {
@@ -124,7 +119,6 @@ class FilesFragment : DialogFragment() {
             prefs.edit().remove(courseKey).apply()
         }
     }
-
 
     private fun getFileName(uri: Uri): String {
         requireActivity().contentResolver.query(uri, null, null, null, null)?.use { cursor ->

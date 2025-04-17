@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -17,9 +14,7 @@ import com.android.archives.application.ArchivesApplication
 import com.android.archives.databinding.FragmentEditScheduleBinding
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.isFieldEmptyOrNull
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,21 +27,8 @@ class EditScheduleFragment : DialogFragment() {
     private var _binding: FragmentEditScheduleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: UserViewModel by activityViewModels()
-    
+
     // SAME SAME RANI SIYA SA ADD SCHEDULE FRAGMENT
-    private lateinit var etDate : EditText
-    private lateinit var etStart : EditText
-    private lateinit var etEnd : EditText
-    private lateinit var etTitle : EditText
-    private lateinit var etLocation : EditText
-
-
-    private lateinit var tilDate : TextInputLayout
-    private lateinit var tilStart : TextInputLayout
-    private lateinit var tilEnd : TextInputLayout
-    private lateinit var tilTitle : TextInputLayout
-    private lateinit var tilLocation : TextInputLayout
-
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var timePicker: MaterialTimePicker
     private var existingDatePicker: Fragment? = null
@@ -72,20 +54,20 @@ class EditScheduleFragment : DialogFragment() {
 
         val app = requireActivity().application as ArchivesApplication
 
-        tilDate = view.findViewById(R.id.date_til)
-        tilStart = view.findViewById(R.id.til_start)
-        tilEnd = view.findViewById(R.id.til_end)
-        tilTitle = view.findViewById(R.id.edit_task_layout)
-        tilLocation = view.findViewById(R.id.edit_task_location_layout)
+        val tilDate = binding.dateTil
+        val tilStart = binding.tilStart
+        val tilEnd = binding.tilEnd
+        val tilTitle = binding.editTaskLayout
+        val tilLocation = binding.editTaskLocationLayout
 
-        etTitle = view.findViewById(R.id.edit_schedule_title)
-        etLocation = view.findViewById(R.id.edit_schedule_location)
-        etDate = view.findViewById(R.id.edit_schedule_date)
-        etStart = view.findViewById(R.id.et_start)
-        etEnd = view.findViewById(R.id.et_end)
-        val colorRadio = view.findViewById<RadioGroup>(R.id.edit_schedule_color)
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.edit_schedule_toolbar)
-        val editBtn = view.findViewById<Button>(R.id.edit_schedule_btn)
+        val etTitle = binding.editScheduleTitle
+        val etLocation = binding.editScheduleLocation
+        val etDate = binding.editScheduleDate
+        val etStart = binding.etStart
+        val etEnd = binding.etEnd
+        val colorRadio = binding.editScheduleColor
+        val toolBar = binding.editScheduleToolbar
+        val editBtn = binding.editScheduleBtn
 
         timePicker =
             MaterialTimePicker.Builder()
@@ -124,7 +106,7 @@ class EditScheduleFragment : DialogFragment() {
         }
 
         colorRadio.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId) {
+            when (checkedId) {
                 R.id.schedule_white -> {
 
                 }
@@ -150,12 +132,11 @@ class EditScheduleFragment : DialogFragment() {
         }
 
         editBtn.setOnClickListener {
-            if(areFieldsEmpty()) return@setOnClickListener
+            if (areFieldsEmpty()) return@setOnClickListener
             Toast.makeText(context, "The Fields Are Valid", Toast.LENGTH_LONG).show()
             dismiss()
         }
     }
-
 
     private fun showDatePicker() {
         if (existingDatePicker == null) {
@@ -164,7 +145,6 @@ class EditScheduleFragment : DialogFragment() {
 
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedDate = convertMillisToDateString(selection)
-
         }
 
         datePicker.addOnNegativeButtonClickListener {
@@ -208,34 +188,34 @@ class EditScheduleFragment : DialogFragment() {
         return sdf.format(Date(millis))
     }
 
-    private fun areFieldsEmpty() : Boolean {
+    private fun areFieldsEmpty(): Boolean {
         var isEmpty = false
         val errorMsg = "This Field Is Required"
 
-        if(binding.editScheduleTitle.isFieldEmptyOrNull()) {
-            tilTitle.error = errorMsg
+        if (binding.editScheduleTitle.isFieldEmptyOrNull()) {
+            binding.editTaskLayout.error = errorMsg
             isEmpty = true
         }
 
-        if(binding.editScheduleDate.isFieldEmptyOrNull()) {
-            tilLocation.error = errorMsg
+        if (binding.editScheduleDate.isFieldEmptyOrNull()) {
+            binding.editTaskLocationLayout.error = errorMsg
             isEmpty = true
         }
 
-        if(etDate.isFieldEmptyOrNull()) {
-            tilDate.error = errorMsg
+        if (binding.editScheduleDate.isFieldEmptyOrNull()) {
+            binding.dateTil.error = errorMsg
             isEmpty = true
         } else {
-            tilDate.error = null
+            binding.dateTil.error = null
         }
 
-        if(etStart.isFieldEmptyOrNull()) {
-            tilStart.error = errorMsg
+        if (binding.etStart.isFieldEmptyOrNull()) {
+            binding.tilStart.error = errorMsg
             isEmpty = true
         }
 
-        if(etEnd.isFieldEmptyOrNull()) {
-            etEnd.error = errorMsg
+        if (binding.etEnd.isFieldEmptyOrNull()) {
+            binding.etEnd.error = errorMsg
             isEmpty = true
         }
 

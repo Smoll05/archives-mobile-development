@@ -37,16 +37,16 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnLogout = view.findViewById<Button>(R.id.btn_logout)
-        val btnProfileEdit = view.findViewById<Button>(R.id.settings_edit_profile)
+        val btnLogout = binding.btnLogout
+        val btnProfileEdit = binding.settingsEditProfile
 
-        val btnDeveloper = view.findViewById<LinearLayout>(R.id.settings_about)
-        val btnReportAProblem = view.findViewById<LinearLayout>(R.id.settings_report_problem)
-        val btnRequestAFeature = view.findViewById<LinearLayout>(R.id.settings_request_feature)
-        val btnEraseAllContent = view.findViewById<LinearLayout>(R.id.settings_erase)
-        val btnDeleteUserAccount = view.findViewById<LinearLayout>(R.id.settings_delete)
+        val btnDeveloper = binding.settingsAbout
+        val btnReportAProblem = binding.settingsReportProblem
+        val btnRequestAFeature = binding.settingsRequestFeature
+        val btnEraseAllContent = binding.settingsErase
+        val btnDeleteUserAccount = binding.settingsDelete
 
-        val btnEditUserFragment = view.findViewById<LinearLayout>(R.id.settings_edit_user)
+        val btnEditUserFragment = binding.settingsEditUser
 
 
 

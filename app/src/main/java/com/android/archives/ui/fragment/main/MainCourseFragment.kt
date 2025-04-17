@@ -42,7 +42,8 @@ class MainCourseFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        currentUser = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        currentUser = requireContext()
+            .getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
             .getString("currentUser", "") ?: ""
 
         if (viewModel.getFolders().isEmpty()) {
@@ -54,16 +55,11 @@ class MainCourseFragment : Fragment() {
         setupAddButtons()
         toggleEmptyState(viewModel.getFolders())
     }
-    private fun setupRecyclerView() {
+
+    private fun setupRecyclerView() = with(binding) {
         adapter = FolderAdapter(
             folderList = viewModel.getFolders().toMutableList(),
-            onItemClick = { folderItem ->
-//                val intent = Intent(requireContext(), FilesActivity::class.java).apply {
-//                    putExtra("courseTitle", folderItem.name)
-//                    putExtra("coverImageUri", folderItem.coverImageUri)
-//                    putExtra("profileImageUri", folderItem.profileImageUri)
-//                }
-//                startActivity(intent)
+            onItemClick = {
                 FilesFragment().show(parentFragmentManager, "FullScreenDialog")
             },
             onItemLongClick = { folderItem ->
@@ -78,8 +74,8 @@ class MainCourseFragment : Fragment() {
             }
         )
 
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerView.adapter = adapter
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.adapter = adapter
     }
 
     private fun deleteFolderAndFiles(folderItem: FolderItem) {
@@ -89,32 +85,12 @@ class MainCourseFragment : Fragment() {
         viewModel.setFolders(updatedList)
         adapter.updateList(updatedList)
         saveFoldersToStorage()
-
-        // Also delete all files associated with this folder
         deleteFilesForCourse(requireContext(), currentUser, folderItem.name)
-
         toggleEmptyState(updatedList)
     }
 
-
-    private fun deleteFilesForFolder(courseTitle: String) {
-        val prefsName = "files_${currentUser}_$courseTitle"
-        val prefs = requireContext().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-        val editor = prefs.edit()
-        editor.clear()
-        editor.apply()
-
-        // Optional: Actually remove the prefs file by writing nothing
-        requireContext().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-            .edit()
-            .remove("file_list") // Assuming your file data is stored under this key
-            .apply()
-    }
-
-
-
-    private fun setupSearchView() {
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun setupSearchView() = with(binding) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
                 adapter.filter.filter(newText)
@@ -123,7 +99,7 @@ class MainCourseFragment : Fragment() {
         })
 
         try {
-            val searchEditText = binding.searchView.findViewById<EditText>(
+            val searchEditText = searchView.findViewById<EditText>(
                 androidx.appcompat.R.id.search_src_text
             )
             searchEditText?.apply {
@@ -135,16 +111,14 @@ class MainCourseFragment : Fragment() {
         }
     }
 
-    private fun setupAddButtons() {
+    private fun setupAddButtons() = with(binding) {
         val showAddDialog = {
             val dialog = AddCourseDialogFragment { newFolder ->
-                // Check for duplicate folder names (case-insensitive)
                 val folderExists = viewModel.getFolders().any {
                     it.name.equals(newFolder.name, ignoreCase = true)
                 }
 
                 if (folderExists) {
-                    // Show simple alert dialog to notify user
                     AlertDialog.Builder(requireContext())
                         .setTitle("Duplicate Folder")
                         .setMessage("A folder with the name \"${newFolder.name}\" already exists. Please choose a different name.")
@@ -160,20 +134,20 @@ class MainCourseFragment : Fragment() {
             dialog.show(parentFragmentManager, "AddCourseDialog")
         }
 
-        binding.addButton.setOnClickListener { showAddDialog() }
-        binding.centerAddButton.setOnClickListener { showAddDialog() }
+        addButton.setOnClickListener { showAddDialog() }
+        centerAddButton.setOnClickListener { showAddDialog() }
     }
 
-
-    private fun toggleEmptyState(list: List<FolderItem>) {
+    private fun toggleEmptyState(list: List<FolderItem>) = with(binding) {
         val isEmpty = list.isEmpty()
-        binding.emptyStateLayout.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        binding.contentLayout.visibility = if (isEmpty) View.GONE else View.VISIBLE
-        binding.addButton.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        emptyStateLayout.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        contentLayout.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        addButton.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
 
     private fun saveFoldersToStorage() {
-        val prefs = requireContext().getSharedPreferences("course_folders_$currentUser", Context.MODE_PRIVATE)
+        val prefs = requireContext()
+            .getSharedPreferences("course_folders_$currentUser", Context.MODE_PRIVATE)
         val editor = prefs.edit()
         val jsonArray = JSONArray()
         viewModel.getFolders().forEach { folder ->
@@ -190,7 +164,8 @@ class MainCourseFragment : Fragment() {
     }
 
     private fun loadFoldersFromStorage() {
-        val prefs = requireContext().getSharedPreferences("course_folders_$currentUser", Context.MODE_PRIVATE)
+        val prefs = requireContext()
+            .getSharedPreferences("course_folders_$currentUser", Context.MODE_PRIVATE)
         val folderJson = prefs.getString("folders", null) ?: return
         val jsonArray = JSONArray(folderJson)
         for (i in 0 until jsonArray.length()) {

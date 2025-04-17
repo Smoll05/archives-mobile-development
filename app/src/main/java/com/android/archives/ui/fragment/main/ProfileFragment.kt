@@ -90,25 +90,24 @@ class ProfileFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.profile_toolbar)
+        val toolBar = binding.profileToolbar
+        val tvName = binding.profileName
+        tvBirthday = binding.profileBirthday
+        val tvProgram = binding.profileProgram
+        val tvSchool = binding.profileSchool
+        ivImage = binding.profileCardImg
 
-        val tvName = view.findViewById<TextView>(R.id.profile_name)
-        tvBirthday = view.findViewById(R.id.profile_birthday)
-        val tvProgram = view.findViewById<TextView>(R.id.profile_program)
-        val tvSchool = view.findViewById<TextView>(R.id.profile_school)
-        ivImage = view.findViewById(R.id.profile_card_img)
+        tilName = binding.layoutName
+        tilDate = binding.layoutBirthday
+        tilProgram = binding.layoutProgram
+        tilSchool = binding.layoutSchool
 
-        tilName = view.findViewById(R.id.layout_name)
-        tilDate = view.findViewById(R.id.layout_birthday)
-        tilProgram = view.findViewById(R.id.layout_program)
-        tilSchool = view.findViewById(R.id.layout_school)
+        etName = binding.editName
+        etDate = binding.editBirthday
+        etProgram = binding.editProgram
+        etSchool = binding.editSchool
 
-        etName = view.findViewById(R.id.edit_name)
-        etDate = view.findViewById(R.id.edit_birthday)
-        etProgram = view.findViewById(R.id.edit_program)
-        etSchool = view.findViewById(R.id.edit_school)
-
-        val btnSave = view.findViewById<Button>(R.id.profile_save_btn)
+        val btnSave = binding.profileSaveBtn
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -154,7 +153,7 @@ class ProfileFragment : DialogFragment() {
         }
 
         btnSave.setOnClickListener {
-            if(areFieldsEmpty()) return@setOnClickListener
+            if (areFieldsEmpty()) return@setOnClickListener
             Toast.makeText(context, "Fields Input Correct", Toast.LENGTH_SHORT).show()
         }
     }
@@ -335,7 +334,6 @@ class ProfileFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         val container = requireActivity().findViewById<View>(R.id.fullscreen_overlay_container)
         container.visibility = View.GONE
         _binding = null

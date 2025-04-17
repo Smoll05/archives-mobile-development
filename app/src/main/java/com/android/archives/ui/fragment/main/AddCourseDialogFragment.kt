@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
+import com.android.archives.databinding.FragmentAddCourseDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import com.google.android.material.button.MaterialButton
 
 @AndroidEntryPoint
 class AddCourseDialogFragment(
@@ -19,26 +17,24 @@ class AddCourseDialogFragment(
 ) : BottomSheetDialogFragment() {
 
     private var selectedColorRes: Int = R.drawable.ic_folder
+    private var _binding: FragmentAddCourseDialogBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_add_course_dialog, container, false)
+        _binding = FragmentAddCourseDialogBinding.inflate(inflater, container, false)
 
-        val courseNameInput = view.findViewById<EditText>(R.id.etCourseName)
-        val btnAdd = view.findViewById<MaterialButton>(R.id.btnAddCourse)
-        val btnCancel = view.findViewById<MaterialButton>(R.id.btnCancelCourse)
+        val courseNameInput = binding.etCourseName
+        val btnAdd = binding.btnAddCourse
+        val btnCancel = binding.btnCancelCourse
 
-        val colorOption1 = view.findViewById<ImageView>(R.id.colorOption1)
-        val colorOption2 = view.findViewById<ImageView>(R.id.colorOption2)
-        val colorOption3 = view.findViewById<ImageView>(R.id.colorOption3)
-        val colorOption4 = view.findViewById<ImageView>(R.id.colorOption4)
-        val colorOption5 = view.findViewById<ImageView>(R.id.colorOption5)
-        val colorOption6 = view.findViewById<ImageView>(R.id.colorOption6)
-
-        val colorOptions = listOf(colorOption1, colorOption2, colorOption3, colorOption4, colorOption5, colorOption6)
+        val colorOptions = listOf(
+            binding.colorOption1, binding.colorOption2, binding.colorOption3,
+            binding.colorOption4, binding.colorOption5, binding.colorOption6
+        )
         val colorDrawables = listOf(
             R.drawable.ic_folder_yellow,
             R.drawable.ic_folder_orange,
@@ -74,14 +70,19 @@ class AddCourseDialogFragment(
             dismiss()
         }
 
-        return view
+        return binding.root
     }
 
-    private fun highlightSelected(selected: ImageView, allOptions: List<ImageView>) {
-        allOptions.forEach { imageView ->
-            imageView.setBackgroundResource(
-                if (imageView == selected) R.drawable.bg_selected_border else 0
+    private fun highlightSelected(selected: View, allOptions: List<View>) {
+        allOptions.forEach { view ->
+            view.setBackgroundResource(
+                if (view == selected) R.drawable.bg_selected_border else 0
             )
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

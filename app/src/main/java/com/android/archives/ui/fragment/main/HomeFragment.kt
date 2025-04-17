@@ -4,15 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.android.archives.R
 import com.android.archives.databinding.FragmentHomeBinding
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.collectLatestOnViewLifecycle
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -28,53 +24,46 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentHomeBinding.inflate(inflater).also {
+    ) = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.home_toolbar)
-        val tabLayout = view.findViewById<TabLayout>(R.id.home_tablayout)
-        val btnAdd = view.findViewById<Button>(R.id.home_add_task)
-
         val currentDate = Calendar.getInstance().time
-
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
         val formattedDate = dateFormat.format(currentDate)
 
-        toolBar.subtitle = formattedDate
+        binding.homeToolbar.subtitle = formattedDate
 
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                lateinit var selectedFragment : Fragment
-                when (tab?.position) {
-                    0 -> {
-                        selectedFragment = TaskTodoFragment()
-                    }
-                    1 -> {
-                        selectedFragment = TaskCompleteFragment()
-                    }
+        binding.homeTablayout.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
+                val selectedFragment = when (tab?.position) {
+                    0 -> TaskTodoFragment()
+                    1 -> TaskCompleteFragment()
+                    else -> return
                 }
-
-                childFragmentManager.beginTransaction().replace(R.id.task_frame, selectedFragment).commit()
+                childFragmentManager.beginTransaction().replace(binding.taskFrame.id, selectedFragment).commit()
             }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) { }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
         })
 
-        childFragmentManager.beginTransaction().replace(R.id.task_frame, TaskTodoFragment()).commit()
+        childFragmentManager.beginTransaction().replace(binding.taskFrame.id, TaskTodoFragment()).commit()
 
-        btnAdd.setOnClickListener {
+        binding.homeAddTask.setOnClickListener {
             AddTaskFragment().show(parentFragmentManager, "FullScreenDialog")
         }
 
         collectLatestOnViewLifecycle(userViewModel.state) { state ->
-            toolBar.title = "Hello, ${state.fullName}"
+            binding.homeToolbar.title = "Hello, ${state.fullName}"
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

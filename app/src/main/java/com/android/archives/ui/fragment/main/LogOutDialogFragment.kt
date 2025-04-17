@@ -5,43 +5,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import com.android.archives.R
+import com.android.archives.databinding.FragmentLogOutDialogBinding
 import com.android.archives.ui.activity.AuthActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LogOutDialogFragment : BottomSheetDialogFragment() {
+
+    private var _binding: FragmentLogOutDialogBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val v: View = inflater.inflate(
-            R.layout.fragment_log_out_dialog,
-            container, false
-        )
+    ): View {
+        _binding = FragmentLogOutDialogBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val yesBtn = v.findViewById<Button>(R.id.btnYesLogout)
-        val cancelBtn = v.findViewById<Button>(R.id.btnCancel)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        yesBtn.setOnClickListener {
-            Toast.makeText(
-                activity,
-                "Logging Out", Toast.LENGTH_SHORT
-            ).show()
+        binding.btnYesLogout.setOnClickListener {
+            Toast.makeText(requireContext(), "Logging Out", Toast.LENGTH_SHORT).show()
             dismiss()
 
-            val intent = Intent(requireContext(), AuthActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            val intent = Intent(requireContext(), AuthActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
             startActivity(intent)
         }
 
-        cancelBtn.setOnClickListener {
+        binding.btnCancel.setOnClickListener {
             dismiss()
         }
-        return v
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

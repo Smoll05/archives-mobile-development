@@ -4,31 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.android.archives.R
 import com.android.archives.application.ArchivesApplication
 import com.android.archives.data.model.Task
+import com.android.archives.databinding.FragmentTaskTodoBinding
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.utils.SpacingDecorator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TaskTodoFragment : Fragment() {
+    private var _binding: FragmentTaskTodoBinding? = null
+    private val binding get() = _binding!!
     lateinit var adapter: TaskRecyclerAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_task_todo, container, false)
+    ): View {
+        _binding = FragmentTaskTodoBinding.inflate(inflater, container, false)
+        val view = binding.root
         val app = requireActivity().application as ArchivesApplication
 
-        val taskEmptySign = view.findViewById<LinearLayout>(R.id.task_todo_empty)
-        val todoList : MutableList<Task> = app.taskList.filter {!it.isComplete} .toMutableList()
-        val rvTask = view.findViewById<RecyclerView>(R.id.task_todo_recycler_view)
+        val taskEmptySign = binding.taskTodoEmpty
+        val rvTask = binding.taskTodoRecyclerView
+        val todoList: MutableList<Task> = app.taskList.filter { !it.isComplete }.toMutableList()
 
         rvTask.addItemDecoration(
             SpacingDecorator(0, 0, 0, 24)
@@ -60,15 +62,19 @@ class TaskTodoFragment : Fragment() {
         rvTask.adapter = adapter
         rvTask.layoutManager = LinearLayoutManager(requireContext())
 
-        if(todoList.isEmpty()) {
-            taskEmptySign.visibility = LinearLayout.VISIBLE
-            rvTask.visibility = RecyclerView.INVISIBLE
+        if (todoList.isEmpty()) {
+            taskEmptySign.visibility = View.VISIBLE
+            rvTask.visibility = View.INVISIBLE
         } else {
-            taskEmptySign.visibility = LinearLayout.INVISIBLE
-            rvTask.visibility = RecyclerView.VISIBLE
+            taskEmptySign.visibility = View.INVISIBLE
+            rvTask.visibility = View.VISIBLE
         }
 
-
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
