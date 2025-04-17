@@ -12,11 +12,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.android.archives.R
-import com.android.archives.application.ArchivesApplication
-import com.android.archives.data.model.Task
 import com.android.archives.databinding.FragmentAddTaskBinding
-import com.android.archives.ui.viewmodel.UserViewModel
-import com.android.archives.utils.getContent
+import com.android.archives.ui.event.TaskEvent
+import com.android.archives.ui.viewmodel.TaskViewModel
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputLayout
@@ -26,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddTaskFragment : DialogFragment() {
     private var _binding: FragmentAddTaskBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: UserViewModel by activityViewModels()
+    private val taskViewModel: TaskViewModel by activityViewModels()
 
     lateinit var etTaskTitle : EditText
     lateinit var etTaskDescription : EditText
@@ -62,8 +60,6 @@ class AddTaskFragment : DialogFragment() {
         errorEmoji = view.findViewById(R.id.error_emoji_btn)
         errorEmoji.visibility = TextView.INVISIBLE
 
-        val app = requireActivity().application as ArchivesApplication
-
         val toolBar = view.findViewById<MaterialToolbar>(R.id.add_task_dialog_toolbar)
 
         toolBar.setNavigationOnClickListener {
@@ -77,12 +73,13 @@ class AddTaskFragment : DialogFragment() {
         parentFragmentManager.setFragmentResultListener(
             EmojiPickerDialogueFragment.EMOJI_PICKER_RESULT_KEY,
             viewLifecycleOwner
-        ) { requestKey, bundle ->
+        ) { _, bundle ->
             val selectedEmoji = bundle.getString(EmojiPickerDialogueFragment.EMOJI_PICKED_BUNDLE_KEY)
             selectedEmoji?.let { emoji ->
                 btnEmoji.text = emoji
                 btnEmoji.textSize = 40f
                 errorEmoji.visibility = TextView.INVISIBLE
+                taskViewModel.onEvent(TaskEvent.SetEmoji(emoji))
             }
         }
 
@@ -90,24 +87,18 @@ class AddTaskFragment : DialogFragment() {
             if(areFieldsEmpty()) return@setOnClickListener
             Toast.makeText(context, "Fields Input Correct", Toast.LENGTH_SHORT).show()
 
-            app.taskList.add(
-                Task(
-                    99,
-                    etTaskTitle.getContent(),
-                    etTaskDescription.getContent(),
-                    btnEmoji.getContent(),
-                    false
-                )
-            )
+            taskViewModel.onEvent(TaskEvent.SaveTask)
 
             dismiss()
         }
 
         etTaskTitle.addTextChangedListener {
+            taskViewModel.onEvent(TaskEvent.SetTitle(it.toString()))
             tilTitle.error = null
         }
 
         etTaskDescription.addTextChangedListener {
+            taskViewModel.onEvent(TaskEvent.SetDescription(it.toString()))
             tilDesc.error = null
         }
     }

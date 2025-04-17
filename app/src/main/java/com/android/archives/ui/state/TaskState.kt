@@ -10,5 +10,7 @@ data class TaskState (
     val title: String = "",
     val description: String = "",
     val emojiIcon: String = "",
-    val isComplete: Boolean = false
+    val isComplete: Boolean = false,
+
+    val isLoading: Boolean = false
 )
