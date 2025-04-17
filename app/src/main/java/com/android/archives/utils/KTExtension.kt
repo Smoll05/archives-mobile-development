@@ -8,6 +8,8 @@ import android.text.style.CharacterStyle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -63,8 +65,32 @@ fun EditText.getContent() : String = this.text.toString().trim()
 fun Button.getContent() : String = this.text.toString().trim()
 
 
-// Fragment extension function to collect the latest state of a ViewModel
+// Activity and Fragment extension function to collect the latest state of a ViewModel
+fun <T> AppCompatActivity.collectLatestOnLifecycle(
+    flow: Flow<T>,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    collector: suspend (T) -> Unit
+) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(state) {
+            flow.collectLatest { collector(it) }
+        }
+    }
+}
+
 fun <T> Fragment.collectLatestOnViewLifecycle(
+    flow: Flow<T>,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    collector: suspend (T) -> Unit
+) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.repeatOnLifecycle(state) {
+            flow.collectLatest { collector(it) }
+        }
+    }
+}
+
+fun <T> DialogFragment.collectLatestOnViewLifecycle(
     flow: Flow<T>,
     state: Lifecycle.State = Lifecycle.State.STARTED,
     collector: suspend (T) -> Unit

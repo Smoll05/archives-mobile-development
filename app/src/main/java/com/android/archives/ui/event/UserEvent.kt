@@ -1,9 +1,6 @@
-package com.android.archives.data.event
-
-import com.android.archives.data.model.User
+package com.android.archives.ui.event
 
 sealed interface UserEvent {
-    data object SaveUser: UserEvent
     data object LoadUser: UserEvent
     data class SetUserName(val username: String): UserEvent
     data class SetPassword(val password: String): UserEvent
@@ -14,5 +11,5 @@ sealed interface UserEvent {
     data class SetPictureFilePath(val pictureFilePath: String): UserEvent
     data object ShowForm: UserEvent
     data object HideForm: UserEvent
-    data class DeleteUser(val user: User): UserEvent
+    data object DeleteUser: UserEvent
 }

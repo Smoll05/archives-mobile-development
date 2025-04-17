@@ -20,12 +20,16 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.android.archives.R
 import com.android.archives.databinding.FragmentProfileBinding
+import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.DateConverter
+import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.android.archives.utils.smoothTextChangeAnimation
+import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
@@ -33,14 +37,18 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ProfileFragment : DialogFragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: UserViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
+    private lateinit var onEvent: (UserEvent) -> Unit
 
     private lateinit var tilName: TextInputLayout
     private lateinit var tilDate: TextInputLayout
@@ -54,6 +62,10 @@ class ProfileFragment : DialogFragment() {
 
     private lateinit var tvBirthday: TextView
     private lateinit var ivImage: ImageView
+
+    private var selectedDate by Delegates.notNull<Long>()
+    private lateinit var pathFileLocation: String
+    private var selectedUri: Uri? = null
 
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var cachedDestinationUr: Uri
@@ -72,6 +84,8 @@ class ProfileFragment : DialogFragment() {
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
+        onEvent = userViewModel::onEvent
+
         binding.profileToolbar.setNavigationOnClickListener {
             dismiss()
         }
@@ -89,6 +103,9 @@ class ProfileFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        userViewModel.loadStateFromCurrentUser()
+        loadProfile()
 
         val toolBar = view.findViewById<MaterialToolbar>(R.id.profile_toolbar)
 
@@ -121,17 +138,23 @@ class ProfileFragment : DialogFragment() {
             }
 
         etName.addTextChangedListener {
-            tvName.smoothTextChangeAnimation(it.toString())
+            val name = it.toString()
+            tvName.smoothTextChangeAnimation(name)
+            onEvent(UserEvent.SetUserName(name))
             tilName.error = null
         }
 
         etProgram.addTextChangedListener {
-            tvProgram.smoothTextChangeAnimation(it.toString())
+            val program = it.toString()
+            tvProgram.smoothTextChangeAnimation(program)
+            onEvent(UserEvent.SetProgram(program))
             tilProgram.error = null
         }
 
         etSchool.addTextChangedListener {
-            tvSchool.smoothTextChangeAnimation(it.toString())
+            val school = it.toString()
+            tvSchool.smoothTextChangeAnimation(school)
+            onEvent(UserEvent.SetSchool(school))
             tilSchool.error = null
         }
 
@@ -155,7 +178,16 @@ class ProfileFragment : DialogFragment() {
 
         btnSave.setOnClickListener {
             if(areFieldsEmpty()) return@setOnClickListener
-            Toast.makeText(context, "Fields Input Correct", Toast.LENGTH_SHORT).show()
+
+            selectedUri?.let { uri -> savePhotoToInternalStorage(uri) }
+
+            lifecycleScope.launch {
+                if(userViewModel.updateUser()) {
+                    Log.d("Profile", "Updated User")
+                    Toast.makeText(requireContext(), "Updated user profile", Toast.LENGTH_SHORT).show()
+                }
+                dismiss()
+            }
         }
     }
 
@@ -166,8 +198,9 @@ class ProfileFragment : DialogFragment() {
 
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedDate = DateConverter.convertMillisToDateString(selection)
-            etDate.setText(selectedDate)
-            tvBirthday.smoothTextChangeAnimation(selectedDate)
+            binding.editBirthday.setText(selectedDate)
+            binding.profileBirthday.text = selectedDate
+            onEvent(UserEvent.SetBirthday(selection))
         }
 
         datePicker.addOnNegativeButtonClickListener {
@@ -185,45 +218,15 @@ class ProfileFragment : DialogFragment() {
         existingPicker = datePicker
     }
 
-//    @Deprecated("Deprecated in Java")
-//    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-//            val resultUri = UCrop.getOutput(data!!)
-//            resultUri?.let {
-//                ivImage.setImageURI(it)
-//            }
-//        } else if (resultCode == UCrop.RESULT_ERROR) {
-//            val cropError = UCrop.getError(data!!)
-//            Log.e("Crop Error", "Cropping Image Failed: $cropError")
-//        }
-//    }
-
-
-//    private fun startUCrop(sourceUri: Uri) {
-//        val destinationUri = Uri.fromFile(File(cacheDir, "profile_picture_${System.currentTimeMillis()}.png"))
-//
-//        val options = UCrop.Options().apply {
-//            setToolbarTitle("Crop Image")
-//            setFreeStyleCropEnabled(false)
-//            setAspectRatioOptions(0, com.yalantis.ucrop.model.AspectRatio("4:5", 4f, 5f))
-//            setShowCropGrid(true)
-//        }
-//
-//        UCrop.of(sourceUri, destinationUri)
-//            .withAspectRatio(4f, 5f)
-//            .withOptions(options)
-//            .start(this)
-//    }
-
-    private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val cropImageLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val resultUri = data?.let { UCrop.getOutput(it) }
-            resultUri?.let {
-                ivImage.setImageURI(it)
-                savePhotoToInternalStorage(it) // Save the cropped image
+            resultUri?.let { uri ->
+                ivImage.setImageURI(uri)
+                selectedUri = uri
             }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(result.data!!)
@@ -271,6 +274,22 @@ class ProfileFragment : DialogFragment() {
                     Log.e("SaveImage", "Failed to delete temporary cropped image.")
                 }
 
+                collectLatestOnViewLifecycle(userViewModel.state) { state ->
+                    val picture = state.pictureFilePath?.let { File(requireContext().filesDir, it) }
+
+                    if(picture?.exists() == true) {
+                        if (picture.delete()) {
+                            Log.d("PictureFile", "Deleted previous image successfully")
+                        } else {
+                            Log.d("PictureFile", "Failed to deleted previous image")
+                        }
+                    } else {
+                        Log.d("PictureFile", "File does not exist")
+                    }
+                }
+
+                onEvent(UserEvent.SetPictureFilePath(file.absolutePath))
+
                 Log.d("SaveImage", "Saved image path: ${file.absolutePath}")
             }
             bitmap.recycle()
@@ -280,29 +299,6 @@ class ProfileFragment : DialogFragment() {
             false
         }
     }
-
-//    private fun savePhotoToInternalStorage(uri: Uri): Boolean {
-//        return try {
-//            val inputStream = requireContext().contentResolver.openInputStream(uri)
-//            val bitmap = BitmapFactory.decodeStream(inputStream)
-//
-//            val filename = "profile_${System.currentTimeMillis()}.png"
-//
-//
-//            openFileOutput("$filename.jpg", MODE_PRIVATE).use { stream ->
-//                if(!bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)) {
-//                    throw IOException("Couldn't save bitmap.")
-//                }
-//
-//                Log.d("SaveImage", "Saved image path: ${stream.absolutePath}")
-//            }
-//
-//            true
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            false
-//        }
-//    }
 
     private fun areFieldsEmpty() : Boolean {
         var isEmpty = false
@@ -339,7 +335,66 @@ class ProfileFragment : DialogFragment() {
         val container = requireActivity().findViewById<View>(R.id.fullscreen_overlay_container)
         container.visibility = View.GONE
         _binding = null
+    }
 
-        Log.d("Profile", "I am destroyed")
+    private fun loadProfile() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val state = userViewModel.state.first()
+            selectedDate = state.birthday
+
+            val fullName = state.fullName
+            val birthday = DateConverter.convertMillisToDateString(state.birthday)
+            val program = state.program
+            val school = state.school
+
+            binding.profileName.text = fullName
+            binding.profileBirthday.text = birthday
+            binding.profileProgram.text = program
+            binding.profileSchool.text = school
+
+            val imgFile = state.pictureFilePath?.let { File(it) }
+
+            if (imgFile != null) {
+                if (imgFile.exists()) {
+                    Glide.with(requireContext())
+                        .load(imgFile)
+                        .into(binding.profileCardImg)
+                }
+            }
+
+            binding.editName.setText(fullName)
+            binding.editBirthday.setText(birthday)
+            binding.editProgram.setText(program)
+            binding.editSchool.setText(school)
+        }
+//
+//        collectLatestOnViewLifecycle(userViewModel.state) { state ->
+//            selectedDate = state.birthday
+//
+//            val fullName = state.fullName
+//            val birthday = DateConverter.convertMillisToDateString(state.birthday)
+//            val program = state.program
+//            val school = state.school
+//
+//            binding.profileName.text = fullName
+//            binding.profileBirthday.text = birthday
+//            binding.profileProgram.text = program
+//            binding.profileSchool.text = school
+//
+//            val imgFile = state.pictureFilePath?.let { File(it) }
+//
+//            if (imgFile != null) {
+//                if (imgFile.exists()) {
+//                    Glide.with(this)
+//                        .load(imgFile)
+//                        .into(binding.profileCardImg)
+//                }
+//            }
+//
+//            binding.editName.setText(fullName)
+//            binding.editBirthday.setText(birthday)
+//            binding.editProgram.setText(program)
+//            binding.editSchool.setText(school)
+//        }
     }
 }

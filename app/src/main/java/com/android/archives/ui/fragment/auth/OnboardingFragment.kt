@@ -15,13 +15,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.android.archives.data.event.UserEvent
 import com.android.archives.databinding.FragmentOnboardingBinding
 import com.android.archives.ui.activity.MainActivity
+import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.DateConverter
-import com.android.archives.utils.getContent
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.android.archives.utils.smoothTextChangeAnimation
 import com.google.android.material.datepicker.CalendarConstraints
@@ -29,6 +29,7 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 
@@ -43,6 +44,7 @@ class OnboardingFragment : Fragment() {
     private var existingPicker: Fragment? = null
     private val pickerTag = "DATE PICKER"
     private lateinit var cachedDestinationUr: Uri
+    private var selectedUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,17 +65,23 @@ class OnboardingFragment : Fragment() {
         }
 
         binding.editName.addTextChangedListener {
-            binding.tvName.smoothTextChangeAnimation(it.toString())
+            val name = it.toString()
+            binding.tvName.smoothTextChangeAnimation(name)
+            onEvent(UserEvent.SetFullName(name))
             binding.tilName.error = null
         }
 
         binding.editProgram.addTextChangedListener {
-            binding.tvProgram.smoothTextChangeAnimation(it.toString())
+            val program = it.toString()
+            binding.tvProgram.smoothTextChangeAnimation(program)
+            onEvent(UserEvent.SetProgram(program))
             binding.tilProgram.error = null
         }
 
         binding.editSchool.addTextChangedListener {
-            binding.tvSchool.smoothTextChangeAnimation(it.toString())
+            val school = it.toString()
+            binding.tvSchool.smoothTextChangeAnimation(school)
+            onEvent(UserEvent.SetSchool(school))
             binding.tilSchool.error = null
         }
 
@@ -102,18 +110,18 @@ class OnboardingFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             if(areFieldsEmpty()) return@setOnClickListener
 
-            onEvent(UserEvent.SetFullName(binding.editName.getContent()))
-            onEvent(UserEvent.SetProgram(binding.editProgram.getContent()))
-            onEvent(UserEvent.SetSchool(binding.editSchool.getContent()))
+            selectedUri?.let { uri -> savePhotoToInternalStorage(uri) }
 
-            // SAVE USER TO DATABASE
-            onEvent(UserEvent.SaveUser)
+            lifecycleScope.launch {
+                val success = userViewModel.registerUser()
 
-            val intent = Intent(requireContext(), MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                if (success) {
+                    val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    startActivity(intent)
+                }
             }
-            startActivity(intent)
-
         }
     }
 
@@ -157,9 +165,9 @@ class OnboardingFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val resultUri = data?.let { UCrop.getOutput(it) }
-            resultUri?.let {
-                binding.ivProfileImage.setImageURI(it)
-                savePhotoToInternalStorage(it) // Save the cropped image
+            resultUri?.let { uri ->
+                binding.ivProfileImage.setImageURI(uri)
+                selectedUri  = uri
             }
         } else if (result.resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(result.data!!)

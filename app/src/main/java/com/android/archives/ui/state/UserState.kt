@@ -1,7 +1,9 @@
 package com.android.archives.ui.state
 
+import com.android.archives.data.model.User
+
 data class UserState (
-    val userId: Long = -1L,
+    val currentUser: User? = null,
     val username: String = "",
     val password: String = "",
     val fullName: String = "",
@@ -9,5 +11,5 @@ data class UserState (
     val program: String = "",
     val school: String = "",
     val pictureFilePath: String? = null,
-    val isAddingUser: Boolean = false
+    val isAddingUser: Boolean = false,
 )

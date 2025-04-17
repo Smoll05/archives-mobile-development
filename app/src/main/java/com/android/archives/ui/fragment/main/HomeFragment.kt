@@ -74,7 +74,11 @@ class HomeFragment : Fragment() {
         }
 
         collectLatestOnViewLifecycle(userViewModel.state) { state ->
-            toolBar.title = "Hello, ${state.fullName}"
+            val user = state.currentUser
+
+            if(user != null) {
+                toolBar.title = "Hello, ${user.fullName}"
+            }
         }
     }
 }

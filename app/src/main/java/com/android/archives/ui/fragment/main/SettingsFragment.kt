@@ -17,13 +17,17 @@ import androidx.navigation.fragment.findNavController
 import com.android.archives.R
 import com.android.archives.databinding.FragmentSettingsBinding
 import com.android.archives.ui.viewmodel.UserViewModel
+import com.android.archives.utils.DateConverter
+import com.android.archives.utils.collectLatestOnViewLifecycle
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: UserViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +40,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadProfile()
         val btnLogout = view.findViewById<Button>(R.id.btn_logout)
         val btnProfileEdit = view.findViewById<Button>(R.id.settings_edit_profile)
 
@@ -105,5 +110,30 @@ class SettingsFragment : Fragment() {
         _binding = null
 
         Log.d("Profile", "I am settings and is destroyed")
+    }
+
+    private fun loadProfile() {
+        collectLatestOnViewLifecycle(userViewModel.state) { state ->
+            val user = state.currentUser
+
+            if(user != null) {
+                binding.profileName.text = user.fullName
+                binding.profileBirthday.text = DateConverter.convertMillisToDateString(
+                    user.birthday
+                )
+                binding.profileProgram.text = user.program
+                binding.profileSchool.text = user.school
+
+                val imgFile = user.pictureFilePath?.let { File(it) }
+
+                if (imgFile != null) {
+                    if (imgFile.exists()) {
+                        Glide.with(this)
+                            .load(imgFile)
+                            .into(binding.profileCardImg)
+                    }
+                }
+            }
+        }
     }
 }
