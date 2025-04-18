@@ -131,4 +131,11 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
         }
         return name
     }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
+
 }

@@ -125,6 +125,13 @@ class AddTaskFragment : DialogFragment() {
 
         return isEmpty
     }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

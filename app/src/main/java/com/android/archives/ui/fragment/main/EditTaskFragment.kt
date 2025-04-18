@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import com.android.archives.R
 import com.android.archives.data.model.Task
 import com.android.archives.databinding.FragmentEditTaskBinding
 import com.android.archives.ui.event.TaskEvent
@@ -43,6 +44,12 @@ class EditTaskFragment : DialogFragment() {
                 task = argTask
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
     }
 
     override fun onCreateView(
