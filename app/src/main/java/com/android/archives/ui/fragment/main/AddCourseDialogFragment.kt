@@ -49,6 +49,7 @@ class AddCourseDialogFragment(
             R.drawable.ic_folder_green
         )
 
+
         colorOptions.forEachIndexed { index, imageView ->
             imageView.setOnClickListener {
                 selectedColorRes = colorDrawables[index]

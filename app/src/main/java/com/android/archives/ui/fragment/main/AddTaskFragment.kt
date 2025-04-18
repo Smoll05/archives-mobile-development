@@ -47,6 +47,12 @@ class AddTaskFragment : DialogFragment() {
     ) = FragmentAddTaskBinding.inflate(inflater).also {
         _binding = it
     }.root
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
