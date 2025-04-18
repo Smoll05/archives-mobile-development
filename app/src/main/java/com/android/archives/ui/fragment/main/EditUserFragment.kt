@@ -1,6 +1,8 @@
 package com.android.archives.ui.fragment.main
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,17 +37,20 @@ class EditUserFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.btnBack.setOnClickListener { dismiss() }
 
+        // Disable username input by default
         binding.etNewUsername.isEnabled = false
 
+        // Enable/disable username field based on checkbox
         binding.cbEditUsername.setOnCheckedChangeListener { _, isChecked ->
             binding.etNewUsername.isEnabled = isChecked
         }
 
-        //anhi mo show field
+        // Show/hide password fields based on checkbox
         binding.cbEditPassword.setOnCheckedChangeListener { _, isChecked ->
             binding.passwordFieldsContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
+        // Show current username
         val currentUser = viewModel.state.value
         lifecycleScope.launch {
             currentUser?.let {
@@ -54,6 +59,22 @@ class EditUserFragment : DialogFragment() {
             }
         }
 
+        // Listen to new password input and check strength
+        binding.etNewPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            // This function runs when user types in new password
+            override fun afterTextChanged(s: Editable?) {
+                val password = s.toString()
+                val strength = getPasswordStrength(password)
+                binding.tvPasswordStrength.text = strength.first
+                binding.tvPasswordStrength.setTextColor(strength.second)
+            }
+        })
+
+        // Save button logic
         binding.btnSave.setOnClickListener {
             val isUsernameEditing = binding.cbEditUsername.isChecked
             val isPasswordEditing = binding.cbEditPassword.isChecked
@@ -103,6 +124,16 @@ class EditUserFragment : DialogFragment() {
         }
     }
 
+    // Function to determine password strength (Weak, Medium, Strong)
+    private fun getPasswordStrength(password: String): Pair<String, Int> {
+        val length = password.length
+        if (length < 6) return Pair("Weak", android.graphics.Color.RED)
+        val strongRegex = Regex("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=!]).{8,}")
+        if (strongRegex.matches(password)) return Pair("Strong", android.graphics.Color.GREEN)
+        val mediumRegex = Regex("(?=.*[A-Za-z])(?=.*\\d).{6,}")
+        if (mediumRegex.matches(password)) return Pair("Medium", android.graphics.Color.parseColor("#FFA500")) // Orange
+        return Pair("Weak", android.graphics.Color.RED)
+    }
 
 
     override fun onDestroyView() {
