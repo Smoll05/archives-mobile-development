@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.android.archives.R
 import com.android.archives.databinding.FragmentLogOutDialogBinding
 import com.android.archives.ui.activity.AuthActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -24,6 +25,12 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentLogOutDialogBinding.inflate(inflater, container, false)
         return binding.root
+    }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_right);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

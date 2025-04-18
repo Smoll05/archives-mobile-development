@@ -8,6 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.activity.MainActivity">
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -355,6 +356,7 @@
 
         </ScrollView>
 
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_schedule_btn"
             style="@style/MaterialButton.Primary"
@@ -367,5 +369,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
+
 
 </LinearLayout>

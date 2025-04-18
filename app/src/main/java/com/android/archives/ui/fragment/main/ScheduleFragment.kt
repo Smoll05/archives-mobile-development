@@ -54,6 +54,7 @@ class ScheduleFragment : Fragment(), ScheduleWeekViewAdapter.OnEditScheduleClick
         }
     }
 
+
     override fun onEditScheduleClick() {
         val dialog = EditScheduleFragment()
         dialog.show(parentFragmentManager, "FullScreenDialog")

@@ -55,7 +55,12 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
             binding.uploadText.text = "File selected: $fullName"
         }
     }
+    override fun onStart() {
+        super.onStart()
 
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnFileAddedListener) {

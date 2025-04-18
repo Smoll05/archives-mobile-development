@@ -72,6 +72,12 @@ class AddCourseDialogFragment(
 
         return binding.root
     }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
 
     private fun highlightSelected(selected: View, allOptions: List<View>) {
         allOptions.forEach { view ->

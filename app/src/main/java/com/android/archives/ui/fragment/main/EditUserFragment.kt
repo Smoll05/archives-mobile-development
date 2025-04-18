@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.android.archives.R
 import com.android.archives.databinding.FragmentEditUserBinding
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.PasswordEncryptor
@@ -30,6 +31,12 @@ class EditUserFragment : DialogFragment() {
     ): View {
         _binding = FragmentEditUserBinding.inflate(inflater, container, false)
         return binding.root
+    }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

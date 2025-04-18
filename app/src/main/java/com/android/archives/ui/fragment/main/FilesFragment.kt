@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.archives.R
 import com.android.archives.data.model.Upload
 import com.android.archives.databinding.FragmentFilesBinding
 import com.android.archives.ui.adapter.FileListAdapter
@@ -43,7 +44,12 @@ class FilesFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
     }
+    override fun onStart() {
+        super.onStart()
 
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

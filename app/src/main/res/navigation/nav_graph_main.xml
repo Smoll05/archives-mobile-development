@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+ <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_main.xml"
@@ -14,7 +14,11 @@
             app:destination="@id/taskDetailViewFragment" />
         <action
             android:id="@+id/action_homeFragment_to_addTaskFragment"
-            app:destination="@id/addTaskFragment"/>
+            app:destination="@id/addTaskFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/no_animation" />
     </fragment>
     <fragment
         android:id="@+id/editTaskFragment"
@@ -26,6 +30,7 @@
         android:name="com.android.archives.ui.fragment.main.AddTaskFragment"
         android:label="fragment_add_task"
         tools:layout="@layout/fragment_add_task" />
+
     <fragment
         android:id="@+id/taskDetailViewFragment"
         android:name="com.android.archives.ui.fragment.main.TaskDetailViewFragment"
@@ -37,7 +42,12 @@
         android:label="MainCourseFragment" >
         <action
             android:id="@+id/action_mainCourseFragment_to_filesFragment"
-            app:destination="@id/filesFragment" />
+            app:destination="@id/filesFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/no_animation" />
+
     </fragment>
     <fragment
         android:id="@+id/scheduleFragment"
@@ -45,7 +55,12 @@
         android:label="ScheduleFragment" >
         <action
             android:id="@+id/action_scheduleFragment_to_addScheduleFragment"
-            app:destination="@id/addScheduleFragment" />
+            app:destination="@id/addScheduleFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/no_animation" />
+
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -60,7 +75,13 @@
             app:popExitAnim="@anim/no_animation"/>
         <action
             android:id="@+id/action_settingsFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/no_animation" />
+
+
     </fragment>
     <fragment
         android:id="@+id/filesFragment"
@@ -92,7 +113,11 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_taskTodoFragment_to_taskDetailViewFragment"
-            app:destination="@id/taskDetailViewFragment" />
+            app:destination="@id/taskDetailViewFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/no_animation"/>
     </fragment>
     <fragment
         android:id="@+id/taskCompleteFragment"
@@ -104,6 +129,10 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_taskCompleteFragment_to_taskDetailViewFragment"
-            app:destination="@id/taskDetailViewFragment" />
+            app:destination="@id/taskDetailViewFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/no_animation"/>
     </fragment>
 </navigation>

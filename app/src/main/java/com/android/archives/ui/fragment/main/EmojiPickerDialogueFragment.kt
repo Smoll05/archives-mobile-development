@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.emoji2.emojipicker.EmojiPickerView
+import com.android.archives.R
 import com.android.archives.databinding.FragmentEmojiPickerDialogueBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -27,6 +28,12 @@ class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
     ): View {
         _binding = FragmentEmojiPickerDialogueBinding.inflate(inflater, container, false)
         return binding.root
+    }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_right);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
