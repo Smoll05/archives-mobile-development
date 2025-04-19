@@ -184,6 +184,12 @@ class AddScheduleFragment : DialogFragment() {
             dismiss()
         }
     }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
 
 
     private fun showDatePicker() {

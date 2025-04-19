@@ -98,7 +98,7 @@ class ProfileFragment : DialogFragment() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_right);
+            R.style.dialog_animation_enter_up);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

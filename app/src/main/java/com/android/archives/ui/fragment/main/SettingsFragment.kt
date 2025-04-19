@@ -88,6 +88,7 @@ class SettingsFragment : Fragment() {
             startActivity(report)
         }
 
+
         btnDeveloper.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_developerFragment)
         }

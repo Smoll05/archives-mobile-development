@@ -81,6 +81,12 @@ class EditScheduleFragment @Inject constructor(
             }
         }
     }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
