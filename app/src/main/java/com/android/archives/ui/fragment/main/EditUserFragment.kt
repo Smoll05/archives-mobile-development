@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EditUserFragment(): DialogFragment() {
+class EditUserFragment: DialogFragment() {
     private var _binding: FragmentEditUserBinding? = null
     private val binding get() = _binding!!
     private val userViewModel: UserViewModel by activityViewModels()

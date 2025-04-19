@@ -55,24 +55,9 @@ class TaskViewModel @Inject constructor (
                         isLoading = true
                     ) }
 
-//                    val current = state.value
-//                    val currentTask = current.currentTask ?: return@launch
-//
-//                    val currentTaskId = currentTask.taskId
-//                    val title = current.title
-//                    val description = current.description
-//                    val emoji = current.emojiIcon
-
-//                    val task = Task(
-//                        taskId = currentTaskId,
-//                        title = title,
-//                        description = description,
-//                        emojiIcon = emoji,
-//                        userId = sharedPrefs.getCurrentUser()
-//                    )
-
                     val task = event.task
                     val current = state.value
+
                     task.title = current.title
                     task.description = current.description
                     task.emojiIcon = current.emojiIcon

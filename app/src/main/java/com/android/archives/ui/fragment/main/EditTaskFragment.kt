@@ -27,13 +27,6 @@ class EditTaskFragment : DialogFragment() {
     private val taskViewModel: TaskViewModel by activityViewModels()
     lateinit var task : Task
 
-//    lateinit var etTaskTitle : EditText
-//    lateinit var etTaskDescription : EditText
-//    lateinit var btnEmoji : Button
-//    lateinit var tilTitle : TextInputLayout
-//    lateinit var tilDesc : TextInputLayout
-//    lateinit var errorEmoji : TextView
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +42,7 @@ class EditTaskFragment : DialogFragment() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
     override fun onCreateView(
@@ -62,6 +55,8 @@ class EditTaskFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loadTask()
 
         binding.editTaskTitle.setText(task.title)
         binding.editTaskDesc.setText(task.description)
@@ -138,6 +133,12 @@ class EditTaskFragment : DialogFragment() {
         }
 
         return isEmpty
+    }
+
+    private fun loadTask() {
+        taskViewModel.onEvent(TaskEvent.SetTitle(task.title))
+        taskViewModel.onEvent(TaskEvent.SetDescription(task.description))
+        taskViewModel.onEvent(TaskEvent.SetEmoji(task.emojiIcon))
     }
 
     override fun onDestroyView() {

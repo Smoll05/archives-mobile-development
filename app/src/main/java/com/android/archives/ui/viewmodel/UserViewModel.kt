@@ -146,7 +146,7 @@ class UserViewModel @Inject constructor (
 
         val userId = current.currentUser?.userId
         val username = current.username
-        val password = current.password
+        val password = PasswordEncryptor.hashPassword(current.password)
         val fullName = current.fullName
         val birthday = current.birthday
         val program = current.program
