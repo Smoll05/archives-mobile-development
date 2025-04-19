@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -75,9 +76,20 @@ class TaskDetailViewFragment : DialogFragment() {
         }
 
         btnDelete.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
+            val tintedIcon = AppCompatResources.getDrawable(
+                requireContext(),
+                R.drawable.ic_contract_delete_24px
+            )?.apply {
+                setTint(ContextCompat.getColor(requireContext(), R.color.error)) // Use your desired color
+            }
+
+            MaterialAlertDialogBuilder(
+                requireContext(),
+                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+            )
                 .setTitle("Delete Task")
                 .setMessage("Are you sure you want to delete this task?")
+                .setIcon(tintedIcon)
                 .setNeutralButton("Cancel") { _, _ -> }
                 .setNegativeButton("Delete") { _, _ ->
                     taskViewModel.onEvent(TaskEvent.DeleteTask(task))

@@ -16,7 +16,7 @@ import com.android.archives.data.model.User
         Schedule::class,
         Task::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class ArchivesDatabase : RoomDatabase() {

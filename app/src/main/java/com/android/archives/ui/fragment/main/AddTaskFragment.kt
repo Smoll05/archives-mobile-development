@@ -85,7 +85,7 @@ class AddTaskFragment : DialogFragment() {
 
         btnAdd.setOnClickListener {
             if(areFieldsEmpty()) return@setOnClickListener
-            Toast.makeText(context, "Fields Input Correct", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Task Successfully Added", Toast.LENGTH_SHORT).show()
 
             taskViewModel.onEvent(TaskEvent.SaveTask)
 
