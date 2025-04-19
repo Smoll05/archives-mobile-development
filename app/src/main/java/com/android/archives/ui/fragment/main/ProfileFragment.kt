@@ -203,14 +203,6 @@ class ProfileFragment : DialogFragment() {
             onEvent(UserEvent.SetBirthday(selection))
         }
 
-        datePicker.addOnNegativeButtonClickListener {
-            // Handle negative button click (optional)
-        }
-
-        datePicker.addOnCancelListener {
-            // Handle cancel event (optional)
-        }
-
         datePicker.addOnDismissListener {
             existingPicker = null
         }
@@ -367,34 +359,5 @@ class ProfileFragment : DialogFragment() {
             binding.editProgram.setText(program)
             binding.editSchool.setText(school)
         }
-//
-//        collectLatestOnViewLifecycle(userViewModel.state) { state ->
-//            selectedDate = state.birthday
-//
-//            val fullName = state.fullName
-//            val birthday = DateConverter.convertMillisToDateString(state.birthday)
-//            val program = state.program
-//            val school = state.school
-//
-//            binding.profileName.text = fullName
-//            binding.profileBirthday.text = birthday
-//            binding.profileProgram.text = program
-//            binding.profileSchool.text = school
-//
-//            val imgFile = state.pictureFilePath?.let { File(it) }
-//
-//            if (imgFile != null) {
-//                if (imgFile.exists()) {
-//                    Glide.with(this)
-//                        .load(imgFile)
-//                        .into(binding.profileCardImg)
-//                }
-//            }
-//
-//            binding.editName.setText(fullName)
-//            binding.editBirthday.setText(birthday)
-//            binding.editProgram.setText(program)
-//            binding.editSchool.setText(school)
-//        }
     }
 }

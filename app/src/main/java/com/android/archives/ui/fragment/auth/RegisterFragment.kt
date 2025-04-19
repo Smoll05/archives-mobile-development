@@ -13,7 +13,6 @@ import com.android.archives.R
 import com.android.archives.databinding.FragmentRegisterBinding
 import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
-import com.android.archives.utils.PasswordEncryptor
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,10 +37,11 @@ class RegisterFragment : Fragment() {
         onEvent(UserEvent.ShowForm)
 
         binding.tfEmail.addTextChangedListener {
-            onEvent(
-                UserEvent.SetUserName(
-                it.toString()
-            ))
+            onEvent(UserEvent.SetUserName(it.toString().trim()))
+        }
+
+        binding.tfPassword.addTextChangedListener {
+            onEvent(UserEvent.SetPassword(it.toString().trim()))
         }
 
         binding.registrationToolbar.setNavigationOnClickListener {
@@ -68,11 +68,6 @@ class RegisterFragment : Fragment() {
                 binding.tilConfirmPassword.error = "Passwords do not match"
                 return@setOnClickListener
             }
-
-            onEvent(
-                UserEvent.SetPassword(
-                PasswordEncryptor.hashPassword(password)
-            ))
 
             findNavController().navigate(R.id.action_registerFragment_to_onboardingFragment)
         }

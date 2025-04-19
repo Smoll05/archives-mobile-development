@@ -2,7 +2,6 @@ package com.android.archives.ui.fragment.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,12 +57,10 @@ class LoginFragment : Fragment() {
                     binding.etPassword.getContent())
 
                 if (success) {
-                    Log.d("Login", "Login success")
                     startActivity(
                         Intent(requireContext(), MainActivity::class.java)
                     )
                 } else {
-                    Log.d("Login", "Login failed")
                     Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
                 }
             }

@@ -17,7 +17,6 @@ import java.io.File
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val userViewModel: UserViewModel by viewModels()
-    private lateinit var onEvent: (UserEvent) -> Unit
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,14 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val bottomNav: NavigationBarView = findViewById(R.id.bottom_navigation)
-//        binding.bottomNavigation.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
-//        bottomNav.setOnItemSelectedListener(navListener)
-
-//        supportFragmentManager.beginTransaction().replace(R.id.content_frame, HomeFragment()).commit()
-
-        onEvent = userViewModel::onEvent
-        onEvent(UserEvent.LoadUser)
+        userViewModel.onEvent(UserEvent.LoadUser)
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.navHostFragment) as NavHostFragment

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.archives.R
@@ -26,12 +25,10 @@ class LandingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonLogin.setOnClickListener {
-            Toast.makeText(requireContext(), "Proceeding", Toast.LENGTH_LONG).show()
             findNavController().navigate(R.id.action_landingFragment_to_loginFragment)
         }
 
         binding.buttonRegister.setOnClickListener {
-            Toast.makeText(requireContext(), "Proceeding", Toast.LENGTH_LONG).show()
             findNavController().navigate(R.id.action_landingFragment_to_registerFragment)
         }
     }

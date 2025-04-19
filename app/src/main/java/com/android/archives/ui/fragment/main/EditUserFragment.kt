@@ -1,25 +1,29 @@
 package com.android.archives.ui.fragment.main
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.android.archives.databinding.FragmentEditUserBinding
+import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.PasswordEncryptor
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class EditUserFragment : DialogFragment() {
+@AndroidEntryPoint
+class EditUserFragment(): DialogFragment() {
     private var _binding: FragmentEditUserBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: UserViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
+
+    private lateinit var dbPassword : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +39,12 @@ class EditUserFragment : DialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.btnBack.setOnClickListener { dismiss() }
+        binding.updateAccountToolbar.setNavigationOnClickListener {
+            dismiss()
+        }
+
+        userViewModel.loadStateFromCurrentUser()
+        loadUserInputs()
 
         // Disable username input by default
         binding.etNewUsername.isEnabled = false
@@ -50,29 +59,32 @@ class EditUserFragment : DialogFragment() {
             binding.passwordFieldsContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
-        // Show current username
-        val currentUser = viewModel.state.value
-        lifecycleScope.launch {
-            currentUser?.let {
-                val userFromDb = viewModel.getUserById(it.userId).first()
-                binding.etNewUsername.setText(userFromDb.username)
-            }
+        // Listen to new password input and check strength
+//        binding.etNewPassword.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//
+//            // This function runs when user types in new password
+//            override fun afterTextChanged(s: Editable?) {
+//                val password = s.toString()
+//                val strength = getPasswordStrength(password)
+//                binding.tvPasswordStrength.text = strength.first
+//                binding.tvPasswordStrength.setTextColor(strength.second)
+//            }
+//        })
+
+        binding.etNewUsername.addTextChangedListener { input ->
+            userViewModel.onEvent(UserEvent.SetUserName(input.toString().trim()))
         }
 
-        // Listen to new password input and check strength
-        binding.etNewPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            // This function runs when user types in new password
-            override fun afterTextChanged(s: Editable?) {
-                val password = s.toString()
-                val strength = getPasswordStrength(password)
-                binding.tvPasswordStrength.text = strength.first
-                binding.tvPasswordStrength.setTextColor(strength.second)
-            }
-        })
+        binding.etNewPassword.addTextChangedListener { input ->
+            val password = input.toString().trim()
+            userViewModel.onEvent(UserEvent.SetPassword(password))
+            val strength = getPasswordStrength(password)
+            binding.tvPasswordStrength.text = strength.first
+            binding.tvPasswordStrength.setTextColor(strength.second)
+        }
 
         // Save button logic
         binding.btnSave.setOnClickListener {
@@ -93,34 +105,47 @@ class EditUserFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            lifecycleScope.launch {
-                currentUser?.let {
-                    val userFromDb = viewModel.getUserById(it.userId).first()
-                    var finalUsername = userFromDb.username
-                    var finalPassword = userFromDb.password
-
-                    if (isUsernameEditing) {
-                        finalUsername = newUsername
-                    }
-
-                    if (isPasswordEditing) {
-                        val hashedOldPassword = PasswordEncryptor.hashPassword(oldPassword)
-                        if (userFromDb.password != hashedOldPassword) {
-                            Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
-                            return@launch
-                        }
-                        finalPassword = PasswordEncryptor.hashPassword(newPassword)
-                    }
-
-                    val updatedUser = userFromDb.copy(
-                        username = finalUsername,
-                        password = finalPassword
-                    )
-                    viewModel.saveUser(updatedUser)
-                    Toast.makeText(requireContext(), "User info updated.", Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
+            if(isPasswordEditing && (PasswordEncryptor.hashPassword(oldPassword) != dbPassword)) {
+                Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            lifecycleScope.launch {
+                if(userViewModel.updateUser()) {
+                    Toast.makeText(requireContext(), "User info updated", Toast.LENGTH_SHORT).show()
+                }
+                dismiss()
+            }
+
+//            lifecycleScope.launch {
+//                currentUser?.let {
+//                    val userFromDb = viewModel.getUserById(it.userId).first()
+//                    var finalUsername = userFromDb.username
+//                    var finalPassword = userFromDb.password
+//
+//                    if (isUsernameEditing) {
+//                        finalUsername = newUsername
+//                    }
+//
+//                    if (isPasswordEditing) {
+//                        val hashedOldPassword = PasswordEncryptor.hashPassword(oldPassword)
+//                        if (userFromDb.password != hashedOldPassword) {
+//                            Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
+//                            return@launch
+//                        }
+//                        finalPassword = PasswordEncryptor.hashPassword(newPassword)
+//                    }
+//
+//                    val updatedUser = userFromDb.copy(
+//                        username = finalUsername,
+//                        password = finalPassword
+//                    )
+//
+//                    userViewModel.updateUser()
+//                    Toast.makeText(requireContext(), "User info updated.", Toast.LENGTH_SHORT).show()
+//                    dismiss()
+//                }
+//            }
         }
     }
 
@@ -139,5 +164,13 @@ class EditUserFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun loadUserInputs() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val state = userViewModel.state.first()
+            dbPassword = state.password
+            binding.etNewUsername.setText(state.username)
+        }
     }
 }

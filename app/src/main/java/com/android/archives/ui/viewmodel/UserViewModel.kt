@@ -107,13 +107,15 @@ class UserViewModel @Inject constructor (
     }
 
     suspend fun registerUser() : Boolean {
-        val username = state.value.username
-        val password = state.value.password
-        val fullName = state.value.fullName
-        val birthday = state.value.birthday
-        val program = state.value.program
-        val school = state.value.school
-        val pictureFilePath = state.value.pictureFilePath
+        val current = state.value
+
+        val username = current.username
+        val password = PasswordEncryptor.hashPassword(current.password)
+        val fullName = current.fullName
+        val birthday = current.birthday
+        val program = current.program
+        val school = current.school
+        val pictureFilePath = current.pictureFilePath
 
         if(username.isBlank() || password.isBlank() || fullName.isBlank() ||
             birthday == 0L || program.isBlank() || school.isBlank()) {
@@ -140,14 +142,16 @@ class UserViewModel @Inject constructor (
     }
 
     suspend fun updateUser() : Boolean {
-        val userId = state.value.currentUser?.userId
-        val username = state.value.username
-        val password = state.value.password
-        val fullName = state.value.fullName
-        val birthday = state.value.birthday
-        val program = state.value.program
-        val school = state.value.school
-        val pictureFilePath = state.value.pictureFilePath
+        val current = state.value
+
+        val userId = current.currentUser?.userId
+        val username = current.username
+        val password = current.password
+        val fullName = current.fullName
+        val birthday = current.birthday
+        val program = current.program
+        val school = current.school
+        val pictureFilePath = current.pictureFilePath
 
         if(username.isBlank() || password.isBlank() || fullName.isBlank() ||
             birthday == 0L || program.isBlank() || school.isBlank()) {

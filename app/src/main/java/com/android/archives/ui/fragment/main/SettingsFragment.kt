@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.findFragment
 import androidx.navigation.fragment.findNavController
 import com.android.archives.R
 import com.android.archives.databinding.FragmentSettingsBinding
@@ -52,8 +51,6 @@ class SettingsFragment : Fragment() {
         val btnDeleteUserAccount = view.findViewById<LinearLayout>(R.id.settings_delete)
 
         val btnEditUserFragment = view.findViewById<LinearLayout>(R.id.settings_edit_user)
-
-
 
         btnEditUserFragment.setOnClickListener {
             val editUserFragment = EditUserFragment()

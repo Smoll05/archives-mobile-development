@@ -63,17 +63,6 @@ class EditTaskFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val btnAdd = view.findViewById<Button>(R.id.add_task_button)
-//        etTaskTitle = view.findViewById(R.id.add_task_title)
-//        etTaskDescription = view.findViewById(R.id.add_task_desc)
-//        btnEmoji = view.findViewById(R.id.add_task_emoji_button)
-//
-//        tilTitle = view.findViewById(R.id.add_task_layout)
-//        tilDesc = view.findViewById(R.id.add_task_desc_layout)
-//
-//        errorEmoji = view.findViewById(R.id.error_emoji_btn)
-//        errorEmoji.visibility = TextView.INVISIBLE
-
         binding.editTaskTitle.setText(task.title)
         binding.editTaskDesc.setText(task.description)
         binding.editTaskEmojiButton.text = task.emojiIcon
