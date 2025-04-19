@@ -35,9 +35,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.home_toolbar)
-        val tabLayout = view.findViewById<TabLayout>(R.id.home_tablayout)
-        val btnAdd = view.findViewById<Button>(R.id.home_add_task)
+        val toolBar = binding.homeToolbar
+        val tabLayout = binding.homeTablayout
+        val btnAdd = binding.homeAddTask
 
         val currentDate = Calendar.getInstance().time
 

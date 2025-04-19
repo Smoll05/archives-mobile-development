@@ -23,6 +23,7 @@ class DeveloperFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Use View Binding to access developerToolbar
         binding.developerToolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

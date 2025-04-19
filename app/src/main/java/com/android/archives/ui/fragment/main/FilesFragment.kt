@@ -87,7 +87,7 @@ class FilesFragment : DialogFragment() {
     }
 
     private fun setupHeader(name: String, coverUri: String?, profileUri: String?) {
-        view.findViewById<TextView>(R.id.CourseName).text = name
+        binding.CourseName.text = name
 
 //        val coverImage = view.findViewById<ImageView>(R.id.coverPhoto)
 //        val profileImage = view.findViewById<ImageView>(R.id.profilePhoto)

@@ -10,6 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
+import com.android.archives.databinding.FragmentTaskDetailViewBinding
+import com.android.archives.databinding.FragmentTaskTodoBinding
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.viewmodel.TaskViewModel
@@ -19,6 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TaskTodoFragment : Fragment() {
+    private var _binding: FragmentTaskTodoBinding? = null
+    private val binding get() = _binding!!
     lateinit var adapter: TaskRecyclerAdapter
     private val taskViewModel: TaskViewModel by activityViewModels()
 
@@ -28,8 +32,8 @@ class TaskTodoFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_task_todo, container, false)
 
-        val taskEmptySign = view.findViewById<LinearLayout>(R.id.task_todo_empty)
-        val rvTask = view.findViewById<RecyclerView>(R.id.task_todo_recycler_view)
+        val taskEmptySign = binding.taskTodoEmpty
+        val rvTask = binding.taskTodoRecyclerView
 
         rvTask.addItemDecoration (
             SpacingDecorator(0, 0, 0, 24)

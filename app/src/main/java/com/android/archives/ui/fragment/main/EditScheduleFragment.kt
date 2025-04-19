@@ -101,20 +101,20 @@ class EditScheduleFragment @Inject constructor(
 
         loadTask()
 
-        tilDate = view.findViewById(R.id.date_til)
-        tilStart = view.findViewById(R.id.til_start)
-        tilEnd = view.findViewById(R.id.til_end)
-        tilTitle = view.findViewById(R.id.edit_task_layout)
-        tilLocation = view.findViewById(R.id.edit_task_location_layout)
+        val tilDate = binding.dateTil
+        val tilStart = binding.tilStart
+        val tilEnd = binding.tilEnd
+        val tilTitle = binding.editTaskLayout
+        val tilLocation = binding.editTaskLocationLayout
 
-        etTitle = view.findViewById(R.id.edit_schedule_title)
-        etLocation = view.findViewById(R.id.edit_schedule_location)
-        etDate = view.findViewById(R.id.edit_schedule_date)
-        etStart = view.findViewById(R.id.et_start)
-        etEnd = view.findViewById(R.id.et_end)
-        val colorRadio = view.findViewById<RadioGroup>(R.id.edit_schedule_color)
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.edit_schedule_toolbar)
-        val editBtn = view.findViewById<Button>(R.id.edit_schedule_btn)
+        val etTitle = binding.editScheduleTitle
+        val etLocation = binding.editScheduleLocation
+        val etDate = binding.editScheduleDate
+        val etStart = binding.etStart
+        val etEnd = binding.etEnd
+        val colorRadio = binding.editScheduleColor
+        val toolBar = binding.editScheduleToolbar
+        val editBtn = binding.editScheduleBtn
 
         binding.editScheduleTitle.setText(schedule.title)
         binding.editScheduleLocation.setText(schedule.location)

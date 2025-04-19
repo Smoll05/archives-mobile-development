@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.android.archives.R
+import com.android.archives.databinding.FragmentHomeBinding
+import com.android.archives.databinding.FragmentLogOutDialogBinding
 import com.android.archives.ui.activity.AuthActivity
 import com.android.archives.utils.SharedPrefsHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -16,6 +18,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogOutDialogFragment : BottomSheetDialogFragment() {
+    private var _binding: FragmentLogOutDialogBinding? = null
+    private val binding get() = _binding!!
     @Inject
     lateinit var sharedPrefs : SharedPrefsHelper
 
@@ -29,8 +33,9 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
             container, false
         )
 
-        val yesBtn = v.findViewById<Button>(R.id.btnYesLogout)
-        val cancelBtn = v.findViewById<Button>(R.id.btnCancel)
+        val yesBtn = binding.btnYesLogout
+        val cancelBtn = binding.btnCancel
+
 
         yesBtn.setOnClickListener {
             Toast.makeText(
