@@ -30,12 +30,13 @@ class TaskTodoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_task_todo, container, false)
+        _binding = FragmentTaskTodoBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         val taskEmptySign = binding.taskTodoEmpty
         val rvTask = binding.taskTodoRecyclerView
 
-        rvTask.addItemDecoration (
+        rvTask.addItemDecoration(
             SpacingDecorator(0, 0, 0, 24)
         )
 
@@ -44,7 +45,6 @@ class TaskTodoFragment : Fragment() {
                 taskViewModel.onEvent(TaskEvent.LoadTask(task))
                 TaskDetailViewFragment().show(parentFragmentManager, "FullScreenDialog")
             },
-
             onCheckChanged = { task, isChecked ->
                 task.isComplete = isChecked
                 taskViewModel.onEvent(TaskEvent.SetCompletion(task, isChecked))
@@ -62,29 +62,23 @@ class TaskTodoFragment : Fragment() {
                 rvTask.isEnabled = true
             }
 
-//            if (state.isLoading) {
-//                progressBar.visibility = View.VISIBLE
-//                rvTask.visibility = View.INVISIBLE
-//                taskEmptySign.visibility = View.INVISIBLE
-//                return@collectLatestOnViewLifecycle
-//            } else {
-//                progressBar.visibility = View.GONE
-//            }
-
             val todoList = state.todoTask
-
             adapter.differ.submitList(todoList)
 
-            if(todoList.isEmpty()) {
-                taskEmptySign.visibility = LinearLayout.VISIBLE
-                rvTask.visibility = RecyclerView.INVISIBLE
+            if (todoList.isEmpty()) {
+                taskEmptySign.visibility = View.VISIBLE
+                rvTask.visibility = View.INVISIBLE
             } else {
-                taskEmptySign.visibility = LinearLayout.INVISIBLE
-                rvTask.visibility = RecyclerView.VISIBLE
+                taskEmptySign.visibility = View.INVISIBLE
+                rvTask.visibility = View.VISIBLE
             }
         }
 
-
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

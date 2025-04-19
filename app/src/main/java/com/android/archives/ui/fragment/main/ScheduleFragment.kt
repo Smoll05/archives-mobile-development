@@ -28,7 +28,8 @@ class ScheduleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_schedule, container, false)
+        _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         adapter = ScheduleWeekViewAdapter { schedule ->
             val editScheduleFragment = EditScheduleFragment()
@@ -40,13 +41,13 @@ class ScheduleFragment : Fragment() {
             editScheduleFragment.show(parentFragmentManager, "FullScreenDialog")
         }
 
-        val toolBar = binding.scheduleToolbar // Access the toolbar using the binding
-        weekView = binding.weekView // Access the weekView using the binding
+        val toolBar = binding.scheduleToolbar
+        weekView = binding.weekView
 
         weekView.adapter = adapter
 
         collectLatestOnViewLifecycle(scheduleViewModel.state) { state ->
-            if(state.isLoading) {
+            if (state.isLoading) {
                 weekView.isEnabled = false
                 Log.d("Schedule", "Not Getting Schedules")
                 return@collectLatestOnViewLifecycle
@@ -58,7 +59,7 @@ class ScheduleFragment : Fragment() {
         }
 
         toolBar.setOnMenuItemClickListener { menu ->
-            when(menu.itemId) {
+            when (menu.itemId) {
                 R.id.add_schedule -> {
                     AddScheduleFragment().show(parentFragmentManager, "FullScreenDialog")
                     true
@@ -66,6 +67,12 @@ class ScheduleFragment : Fragment() {
                 else -> false
             }
         }
+
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

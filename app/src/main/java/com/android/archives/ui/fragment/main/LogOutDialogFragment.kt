@@ -20,22 +20,21 @@ import javax.inject.Inject
 class LogOutDialogFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentLogOutDialogBinding? = null
     private val binding get() = _binding!!
-    @Inject
-    lateinit var sharedPrefs : SharedPrefsHelper
 
-    override fun onCreateView (
+    @Inject
+    lateinit var sharedPrefs: SharedPrefsHelper
+
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v: View = inflater.inflate(
-            R.layout.fragment_log_out_dialog,
-            container, false
-        )
+        // Properly initialize the binding
+        _binding = FragmentLogOutDialogBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         val yesBtn = binding.btnYesLogout
         val cancelBtn = binding.btnCancel
-
 
         yesBtn.setOnClickListener {
             Toast.makeText(
@@ -53,6 +52,12 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
         cancelBtn.setOnClickListener {
             dismiss()
         }
-        return v
+
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Avoid memory leaks by clearing the binding reference
     }
 }

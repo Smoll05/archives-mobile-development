@@ -31,7 +31,8 @@ class TaskCompleteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_task_complete, container, false)
+        _binding = FragmentTaskCompleteBinding.inflate(inflater, container, false) // Properly initialize binding
+        val view = binding.root
 
         val taskEmptySign = binding.taskCompleteEmpty
         val rvComplete = binding.taskCompleteRecyclerView
@@ -63,11 +64,11 @@ class TaskCompleteFragment : Fragment() {
                 rvComplete.isEnabled = true
             }
 
-            val todoList = state.completeTask
+            val completeList = state.completeTask // Ensure this is the correct list to display
 
-            adapter.differ.submitList(todoList)
+            adapter.differ.submitList(completeList)
 
-            if(todoList.isEmpty()) {
+            if (completeList.isEmpty()) {
                 taskEmptySign.visibility = LinearLayout.VISIBLE
                 rvComplete.visibility = RecyclerView.INVISIBLE
             } else {
@@ -79,4 +80,8 @@ class TaskCompleteFragment : Fragment() {
         return view
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
