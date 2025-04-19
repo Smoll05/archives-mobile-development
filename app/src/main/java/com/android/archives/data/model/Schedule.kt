@@ -1,11 +1,14 @@
 package com.android.archives.data.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Calendar
+import com.android.archives.constants.ScheduleColorType
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
     tableName = "schedules",
     foreignKeys = [ForeignKey(
@@ -21,8 +24,11 @@ data class Schedule (
     val scheduleId: Long = 0L,
     var title: String,
     var location: String? = null,
-    var color: Int,
-    var startTime: Calendar,
-    var endTime: Calendar,
+    var colorType: ScheduleColorType,
+    var date: Long,
+    var startTimeHour: Int,
+    var startTimeMin: Int,
+    var endTimeHour: Int,
+    var endTimeMin: Int,
     val userId: Long = 0L
-)
+) : Parcelable

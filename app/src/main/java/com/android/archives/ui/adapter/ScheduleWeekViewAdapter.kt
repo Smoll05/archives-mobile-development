@@ -13,34 +13,20 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.LifecycleOwner
 import com.alamkanak.weekview.WeekView
 import com.alamkanak.weekview.WeekViewEntity
 import com.android.archives.R
+import com.android.archives.constants.ScheduleColorType
 import com.android.archives.data.model.Schedule
-import com.android.archives.ui.viewmodel.ScheduleViewModel
+import com.android.archives.utils.DateConverter
 
-class ScheduleWeekViewAdapter(
-    private val viewModel: ScheduleViewModel,
-    private val lifecycleOwner: LifecycleOwner,
-    private val editScheduleClickListener: OnEditScheduleClickListener
+class ScheduleWeekViewAdapter (
+    private val onClick: (Schedule) -> Unit
 ) : WeekView.SimpleAdapter<Schedule>() {
-    private var currentEvents: List<Schedule> = emptyList()
-
-    init {
-        viewModel.events.observe(lifecycleOwner) { newEvents ->
-            submitList(newEvents)
-        }
-    }
-
-    interface OnEditScheduleClickListener {
-        fun onEditScheduleClick()
-    }
-
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreateEntity(item: Schedule): WeekViewEntity {
-        val backgroundColor = getScheduleColor(context, item.color)
+        val backgroundColor = getScheduleColor(context, item.colorType)
         val textColor = Color.BLACK
 
         val titleSpan = TypefaceSpan(ResourcesCompat.getFont(context, R.font.inter)?.let {
@@ -57,24 +43,38 @@ class ScheduleWeekViewAdapter(
         }
 
         val subtitle = SpannableStringBuilder(item.location).apply {
-            val subtitleSpan = RelativeSizeSpan(0.8f) // 0.8f makes it 80% of the normal size
+            val subtitleSpan = RelativeSizeSpan(0.8f)
             setSpan(subtitleSpan, 0, item.location?.length ?: 0, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
+        val startTime = DateConverter.combineDateAndTime(
+            item.date,
+            item.startTimeHour,
+            item.startTimeMin,
+        )
+
+        val endTime = DateConverter.combineDateAndTime(
+            item.date,
+            item.endTimeHour,
+            item.endTimeMin,
+        )
+
+        Log.d("Schedule", "Chicken Jockey")
 
         return WeekViewEntity.Event.Builder(item)
             .setId(item.scheduleId)
             .setTitle(title)
-            .setStartTime(item.startTime)
-            .setEndTime(item.endTime)
+            .setStartTime(startTime)
+            .setEndTime(endTime)
             .setSubtitle(subtitle)
             .setStyle(style)
             .build()
     }
 
     override fun onEventClick(data: Schedule, bounds: RectF) {
-        Log.d("CalendarListener", "You have clicked {${data.title}")
-        editScheduleClickListener.onEditScheduleClick()
+//        Log.d("CalendarListener", "You have clicked {${data.title}")
+//        editScheduleClickListener.onEditScheduleClick()
+        onClick(data)
     }
 
 //    override fun onLoadMore(startDate: LocalDate, endDate: LocalDate): List<CalendarEvent> {
@@ -85,16 +85,7 @@ class ScheduleWeekViewAdapter(
 //        }
 //    }
 
-    private fun getScheduleColor(context: Context, colorInt: Int): Int {
-        return when (colorInt) {
-            1 -> ContextCompat.getColor(context, R.color.white)
-            2 -> ContextCompat.getColor(context, R.color.yellow)
-            3 -> ContextCompat.getColor(context, R.color.orange)
-            4 -> ContextCompat.getColor(context, R.color.red)
-            5 -> ContextCompat.getColor(context, R.color.purple)
-            6 -> ContextCompat.getColor(context, R.color.blue)
-            7 -> ContextCompat.getColor(context, R.color.green)
-            else -> ContextCompat.getColor(context, R.color.white)
-        }
+    private fun getScheduleColor(context: Context, colorType: ScheduleColorType): Int {
+        return ContextCompat.getColor(context, colorType.colorResId)
     }
 }

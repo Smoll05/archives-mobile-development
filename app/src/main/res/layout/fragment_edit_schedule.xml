@@ -23,7 +23,8 @@
             app:titleCentered="true"
             app:titleTextAppearance="@style/App.ToolBar.MiniTitle"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:title="Edit Schedule">
+            app:title="Edit Schedule"
+            app:menu="@menu/toolbar_edit_schedule_menu">
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -1,54 +1,132 @@
 package com.android.archives.ui.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.android.archives.data.dao.ScheduleDao
 import com.android.archives.data.model.Schedule
-import java.util.Calendar
+import com.android.archives.ui.event.ScheduleEvent
+import com.android.archives.ui.state.ScheduleState
+import com.android.archives.utils.SharedPrefsHelper
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
-    private val _events = MutableLiveData<List<Schedule>>()
-    val events: LiveData<List<Schedule>> = _events
+@HiltViewModel
+class ScheduleViewModel @Inject constructor (
+    private val sharedPrefs: SharedPrefsHelper,
+    private val dao: ScheduleDao,
+) : ViewModel() {
+    private val _state = MutableStateFlow(ScheduleState())
+    val state = _state.asStateFlow()
 
     init {
-        loadEvents()
+        viewModelScope.launch {
+            dao.getSchedules(
+                sharedPrefs.getCurrentUser()
+            ).collectLatest { schedules ->
+                _state.update {
+                    it.copy(
+                        scheduleList = schedules,
+                        isLoading = false
+                    )
+                }
+            }
+        }
     }
 
-    private fun loadEvents() {
-        _events.value = listOf(
-            createCalendarEvent(1, "Morning Meeting", "GLE", 4,2025, Calendar.APRIL, 14, 9, 0, 10, 0),
-            createCalendarEvent(2, "Lunch Break", "NGE", 5, 2025, Calendar.APRIL, 14, 12, 30, 13, 30),
-            createCalendarEvent(3, "Design Review", "Malabuyoc", 0, 2025, Calendar.APRIL, 15, 14, 0, 15, 0)
-        )
-    }
+    fun onEvent(event: ScheduleEvent) {
+        when(event) {
+            is ScheduleEvent.DeleteSchedule -> {
+                viewModelScope.launch {
+                    dao.deleteSchedule(event.schedule)
+                }
+            }
+            is ScheduleEvent.EditSchedule -> {
+                viewModelScope.launch {
+                    val schedule = event.schedule
+                    val current = state.value
 
-    fun createCalendarEvent(
-        id: Long,
-        title: String,
-        location: String,
-        color: Int,
-        year: Int,
-        month: Int,
-        day: Int,
-        startHour: Int,
-        startMinute: Int,
-        endHour: Int,
-        endMinute: Int
-    ): Schedule {
-        val start = Calendar.getInstance().apply {
-            set(year, month, day, startHour, startMinute)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+                    val updatedSchedule = schedule.copy(
+                        title = current.title,
+                        location = current.location,
+                        colorType = current.colorType,
+                        date = current.date,
+                        startTimeHour = current.startHour,
+                        startTimeMin = current.startMin,
+                        endTimeHour = current.endHour,
+                        endTimeMin = current.endMin
+                    )
+
+                    dao.upsertSchedule(updatedSchedule)
+                }
+            }
+            is ScheduleEvent.LoadSchedule -> {
+
+            }
+            ScheduleEvent.SaveSchedule -> {
+                val current = state.value
+
+                val schedule = Schedule(
+                    title = current.title,
+                    location = current.location,
+                    colorType = current.colorType,
+                    date = current.date,
+                    startTimeHour = current.startHour,
+                    startTimeMin = current.startMin,
+                    endTimeHour = current.endHour,
+                    endTimeMin = current.endMin,
+                    userId = sharedPrefs.getCurrentUser()
+                )
+
+                viewModelScope.launch {
+                    dao.upsertSchedule(schedule)
+                }
+            }
+            is ScheduleEvent.SetDate -> {
+                _state.update { it.copy(
+                    date = event.dateInMillis
+                )}
+            }
+            is ScheduleEvent.SetLocation -> {
+                _state.update { it.copy(
+                    location = event.location
+                )}
+            }
+            is ScheduleEvent.SetTimeEndHour -> {
+                _state.update { it.copy(
+                    endHour = event.endHour
+                )}
+            }
+            is ScheduleEvent.SetTimeEndMin -> {
+                _state.update { it.copy(
+                    endMin = event.endMin
+                )}
+            }
+            is ScheduleEvent.SetTimeStartHour -> {
+                _state.update { it.copy(
+                    startHour = event.startHour
+                )}
+            }
+            is ScheduleEvent.SetTimeStartMin -> {
+                _state.update { it.copy(
+                    startMin = event.startMin
+                )}
+            }
+            is ScheduleEvent.SetTitle -> {
+                _state.update { it.copy(
+                    title = event.title
+                )}
+            }
+            is ScheduleEvent.SetColorType -> {
+                _state.update { it.copy(
+                    colorType = event.colorType
+                )}
+            }
         }
-
-        val end = Calendar.getInstance().apply {
-            set(year, month, day, endHour, endMinute)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        return Schedule(id, title, location, color, start, end)
     }
 }
 

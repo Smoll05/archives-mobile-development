@@ -24,7 +24,7 @@
             android:minHeight="?attr/actionBarSize"
             app:titleTextAppearance="@style/App.ToolBar.Title"
             app:title="Schedule"
-            app:menu="@menu/tool_bar_schedule_menu">
+            app:menu="@menu/toolbar_schedule_menu">
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
