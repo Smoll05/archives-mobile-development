@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.data.model.Upload
+import com.android.archives.databinding.FragmentLoginBinding
 
 class FileRecyclerAdapter(
     private val files: MutableList<Upload>,
@@ -16,6 +17,8 @@ class FileRecyclerAdapter(
         val fileName: TextView = view.findViewById(R.id.fileName)
         val fileIcon: ImageView = view.findViewById(R.id.fileIcon)
     }
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
         val view = LayoutInflater.from(parent.context)

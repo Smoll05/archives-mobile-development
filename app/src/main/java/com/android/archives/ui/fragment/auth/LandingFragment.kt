@@ -17,9 +17,10 @@ class LandingFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentLandingBinding.inflate(inflater).also {
-        _binding = it
-    }.root
+    ): View {
+        _binding = FragmentLandingBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

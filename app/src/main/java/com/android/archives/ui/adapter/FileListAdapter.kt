@@ -1,13 +1,11 @@
 package com.android.archives.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.data.model.Upload
+import com.android.archives.databinding.ListviewFileItemBinding
 
 class FileListAdapter(
     private val onFileClick: (Upload) -> Unit
@@ -22,8 +20,8 @@ class FileListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.listview_file_item, parent, false)
-        return FileViewHolder(view)
+        val binding = ListviewFileItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return FileViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
@@ -34,14 +32,13 @@ class FileListAdapter(
 
     override fun getItemCount(): Int = files.size
 
-    inner class FileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val fileIcon: ImageView = itemView.findViewById(R.id.fileIcon)
-        private val fileName: TextView = itemView.findViewById(R.id.fileName)
+    inner class FileViewHolder(private val binding: ListviewFileItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(file: Upload) {
-            fileName.text = file.name
+            binding.fileName.text = file.name
             val extension = file.name.substringAfterLast('.', "").lowercase()
-            fileIcon.setImageResource(getIconForFileType(extension))
+            binding.fileIcon.setImageResource(getIconForFileType(extension))
         }
 
         private fun getIconForFileType(extension: String): Int {

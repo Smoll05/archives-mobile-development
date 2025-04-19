@@ -80,9 +80,26 @@
             app:exitAnim="@anim/no_animation"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/no_animation" />
+        <action
+            android:id="@+id/action_settingsFragment_to_edit"
+            />
+        <action
+            android:id="@+id/action_settingsFragment_to_editUserFragment"
+            app:destination="@id/editUserFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/no_animation"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/no_animation" />
 
 
     </fragment>
+
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="com.android.archives.ui.fragment.main.EditUserFragment"
+        android:label="EditUserFragment"
+        tools:layout="@layout/fragment_edit_user"
+        />
     <fragment
         android:id="@+id/filesFragment"
         android:name="com.android.archives.ui.fragment.main.FilesFragment"

@@ -29,9 +29,10 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentLoginBinding.inflate(inflater).also {
-        _binding = it
-    }.root
+    ): View {
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,12 +50,13 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnLogin.setOnClickListener {
-            if(areFieldsEmpty()) return@setOnClickListener
+            if (areFieldsEmpty()) return@setOnClickListener
 
             lifecycleScope.launch {
                 val success = userViewModel.getUserWithUsernameAndPassword(
                     binding.etUsername.getContent(),
-                    binding.etPassword.getContent())
+                    binding.etPassword.getContent()
+                )
 
                 if (success) {
                     startActivity(
@@ -64,7 +66,6 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 
@@ -73,16 +74,16 @@ class LoginFragment : Fragment() {
         _binding = null
     }
 
-    private fun areFieldsEmpty() : Boolean {
+    private fun areFieldsEmpty(): Boolean {
         var isEmpty = false
         val errorMsg = "This Field Is Required"
 
-        if(binding.etUsername.isFieldEmptyOrNull()) {
+        if (binding.etUsername.isFieldEmptyOrNull()) {
             binding.tilUsername.error = errorMsg
             isEmpty = true
         }
 
-        if(binding.etPassword.isFieldEmptyOrNull()) {
+        if (binding.etPassword.isFieldEmptyOrNull()) {
             binding.tilPassword.error = errorMsg
             isEmpty = true
         }

@@ -1,15 +1,12 @@
 package com.android.archives.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.android.archives.R
 import com.android.archives.data.model.FolderItem
+import com.android.archives.databinding.ItemFolderBinding
 
 class FolderAdapter(
     private var folderList: List<FolderItem>,
@@ -19,26 +16,21 @@ class FolderAdapter(
 
     private var filteredList: List<FolderItem> = folderList
 
-    inner class FolderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val folderIcon: ImageView = itemView.findViewById(R.id.folderIcon)
-        val folderName: TextView = itemView.findViewById(R.id.folderName)
-
+    inner class FolderViewHolder(val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FolderItem) {
-            folderIcon.setImageResource(item.iconRes)
-            folderName.text = item.name
-            itemView.setOnClickListener { onItemClick(item) }
-            itemView.setOnLongClickListener {
+            binding.folderIcon.setImageResource(item.iconRes)
+            binding.folderName.text = item.name
+            binding.root.setOnClickListener { onItemClick(item) }
+            binding.root.setOnLongClickListener {
                 onItemLongClick(item)
                 true
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_folder, parent, false)
-        return FolderViewHolder(view)
+        val binding = ItemFolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return FolderViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
