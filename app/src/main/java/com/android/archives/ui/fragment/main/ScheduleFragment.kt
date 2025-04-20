@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.alamkanak.weekview.WeekView
 import com.android.archives.R
+import com.android.archives.databinding.FragmentScheduleBinding
 import com.android.archives.ui.adapter.ScheduleWeekViewAdapter
 import com.android.archives.ui.viewmodel.ScheduleViewModel
 import com.android.archives.utils.collectLatestOnViewLifecycle
@@ -20,12 +21,15 @@ class ScheduleFragment : Fragment() {
     lateinit var adapter: ScheduleWeekViewAdapter
     private val scheduleViewModel: ScheduleViewModel by activityViewModels()
     private lateinit var weekView: WeekView
+    private var _binding: FragmentScheduleBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_schedule, container, false)
+        _binding = FragmentScheduleBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         adapter = ScheduleWeekViewAdapter { schedule ->
             val editScheduleFragment = EditScheduleFragment()
@@ -37,14 +41,13 @@ class ScheduleFragment : Fragment() {
             editScheduleFragment.show(parentFragmentManager, "FullScreenDialog")
         }
 
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.schedule_toolbar)
-
-        weekView = view.findViewById(R.id.weekView)
+        val toolBar = binding.scheduleToolbar
+        weekView = binding.weekView
 
         weekView.adapter = adapter
 
         collectLatestOnViewLifecycle(scheduleViewModel.state) { state ->
-            if(state.isLoading) {
+            if (state.isLoading) {
                 weekView.isEnabled = false
                 Log.d("Schedule", "Not Getting Schedules")
                 return@collectLatestOnViewLifecycle
@@ -56,7 +59,7 @@ class ScheduleFragment : Fragment() {
         }
 
         toolBar.setOnMenuItemClickListener { menu ->
-            when(menu.itemId) {
+            when (menu.itemId) {
                 R.id.add_schedule -> {
                     AddScheduleFragment().show(parentFragmentManager, "FullScreenDialog")
                     true
@@ -64,6 +67,12 @@ class ScheduleFragment : Fragment() {
                 else -> false
             }
         }
+
         return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

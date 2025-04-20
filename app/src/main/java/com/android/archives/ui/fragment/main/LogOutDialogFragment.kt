@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.android.archives.R
+import com.android.archives.databinding.FragmentHomeBinding
+import com.android.archives.databinding.FragmentLogOutDialogBinding
 import com.android.archives.ui.activity.AuthActivity
 import com.android.archives.utils.SharedPrefsHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -16,21 +18,23 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LogOutDialogFragment : BottomSheetDialogFragment() {
-    @Inject
-    lateinit var sharedPrefs : SharedPrefsHelper
+    private var _binding: FragmentLogOutDialogBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView (
+    @Inject
+    lateinit var sharedPrefs: SharedPrefsHelper
+
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v: View = inflater.inflate(
-            R.layout.fragment_log_out_dialog,
-            container, false
-        )
+        // Properly initialize the binding
+        _binding = FragmentLogOutDialogBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        val yesBtn = v.findViewById<Button>(R.id.btnYesLogout)
-        val cancelBtn = v.findViewById<Button>(R.id.btnCancel)
+        val yesBtn = binding.btnYesLogout
+        val cancelBtn = binding.btnCancel
 
         yesBtn.setOnClickListener {
             Toast.makeText(
@@ -48,6 +52,12 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
         cancelBtn.setOnClickListener {
             dismiss()
         }
-        return v
+
+        return view
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null // Avoid memory leaks by clearing the binding reference
     }
 }

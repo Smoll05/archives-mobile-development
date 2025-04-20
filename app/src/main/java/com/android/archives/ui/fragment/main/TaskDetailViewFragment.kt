@@ -59,12 +59,12 @@ class TaskDetailViewFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadTask()
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.task_detail_toolbar)
-        val tvTitle = view.findViewById<TextView>(R.id.task_detail_title)
-        val tvDescription = view.findViewById<TextView>(R.id.task_detail_description)
+        val toolBar = binding.taskDetailToolbar
+        val tvTitle = binding.taskDetailTitle
+        val tvDescription = binding.taskDetailDescription
 
-        val btnEdit = view.findViewById<Button>(R.id.task_detail_edit)
-        val btnDelete = view.findViewById<Button>(R.id.task_detail_delete)
+        val btnEdit = binding.taskDetailEdit
+        val btnDelete = binding.taskDetailDelete
 
         binding.taskDetailMark.text = spannableString
 

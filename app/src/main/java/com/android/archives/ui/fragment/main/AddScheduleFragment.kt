@@ -33,19 +33,6 @@ class AddScheduleFragment : DialogFragment() {
 
     private val scheduleViewModel: ScheduleViewModel by activityViewModels()
 
-    private lateinit var etDate : EditText
-    private lateinit var etStart : EditText
-    private lateinit var etEnd : EditText
-    private lateinit var etTitle : EditText
-    private lateinit var etLocation : EditText
-
-
-    private lateinit var tilDate : TextInputLayout
-    private lateinit var tilStart : TextInputLayout
-    private lateinit var tilEnd : TextInputLayout
-    private lateinit var tilTitle : TextInputLayout
-    private lateinit var tilLocation : TextInputLayout
-
     private lateinit var datePicker: MaterialDatePicker<Long>
     private var existingDatePicker: Fragment? = null
     private var existingStartTimePicker: Fragment? = null
@@ -56,10 +43,10 @@ class AddScheduleFragment : DialogFragment() {
     private var isStartPickerShowing = false
     private var isEndPickerShowing = false
 
-    private var startTimeHour : Int = 0
-    private var startTimeMin : Int = 0
-    private var endTimeHour : Int = 0
-    private var endTimeMin : Int = 0
+    private var startTimeHour: Int = 0
+    private var startTimeMin: Int = 0
+    private var endTimeHour: Int = 0
+    private var endTimeMin: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,29 +57,29 @@ class AddScheduleFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentAddScheduleBinding.inflate(inflater).also {
+    ) = FragmentAddScheduleBinding.inflate(inflater, container, false).also {
         _binding = it
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tilDate = view.findViewById(R.id.date_til)
-        tilStart = view.findViewById(R.id.til_start)
-        tilEnd = view.findViewById(R.id.til_end)
-        tilTitle = view.findViewById(R.id.add_task_layout)
-        tilLocation = view.findViewById(R.id.add_task_location_layout)
+        // Initialize Views using binding
+        val toolBar = binding.addScheduleToolbar
+        val addBtn = binding.addScheduleBtn
 
-        etTitle = view.findViewById(R.id.add_schedule_title)
-        etLocation = view.findViewById(R.id.add_schedule_location)
-        etDate = view.findViewById(R.id.add_schedule_date)
-        etStart = view.findViewById(R.id.et_start)
-        etEnd = view.findViewById(R.id.et_end)
+        val colorRadio = binding.addScheduleColor
+        val etDate = binding.addScheduleDate
+        val etStart = binding.etStart
+        val etEnd = binding.etEnd
+        val etTitle = binding.addScheduleTitle
+        val etLocation = binding.addScheduleLocation
 
-
-        val colorRadio = view.findViewById<RadioGroup>(R.id.add_schedule_color)
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.add_schedule_toolbar)
-        val addBtn = view.findViewById<Button>(R.id.add_schedule_btn)
+        val tilDate = binding.dateTil
+        val tilStart = binding.tilStart
+        val tilEnd = binding.tilEnd
+        val tilTitle = binding.addTaskLayout
+        val tilLocation = binding.addTaskLocationLayout
 
         datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select Schedule Date")
@@ -102,12 +89,13 @@ class AddScheduleFragment : DialogFragment() {
             dismiss()
         }
 
-        binding.addScheduleTitle.addTextChangedListener {
+        // TextChanged listeners
+        etTitle.addTextChangedListener {
             scheduleViewModel.onEvent(ScheduleEvent.SetTitle(it.toString()))
             tilTitle.error = null
         }
 
-        binding.addScheduleLocation.addTextChangedListener {
+        etLocation.addTextChangedListener {
             scheduleViewModel.onEvent(ScheduleEvent.SetLocation(it.toString()))
             tilLocation.error = null
         }
@@ -124,6 +112,7 @@ class AddScheduleFragment : DialogFragment() {
             tilEnd.error = null
         }
 
+        // Date, Start and End click listeners
         etDate.setOnClickListener {
             showDatePicker()
         }
@@ -136,61 +125,35 @@ class AddScheduleFragment : DialogFragment() {
             showEndTimePicker()
         }
 
+        // Color radio group listener
         colorRadio.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId) {
-                R.id.schedule_white -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_WHITE)
-                    )
-                }
-                R.id.schedule_yellow -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_YELLOW)
-                    )
-                }
-                R.id.schedule_orange -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_ORANGE)
-                    )
-                }
-                R.id.schedule_red -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_RED)
-                    )
-                }
-                R.id.schedule_purple -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_PURPLE)
-                    )
-                }
-                R.id.schedule_blue -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_BLUE)
-                    )
-                }
-                R.id.schedule_green -> {
-                    scheduleViewModel.onEvent(
-                        ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_GREEN)
-                    )
-                }
+            when (checkedId) {
+                R.id.schedule_white -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_WHITE))
+                R.id.schedule_yellow -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_YELLOW))
+                R.id.schedule_orange -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_ORANGE))
+                R.id.schedule_red -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_RED))
+                R.id.schedule_purple -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_PURPLE))
+                R.id.schedule_blue -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_BLUE))
+                R.id.schedule_green -> scheduleViewModel.onEvent(ScheduleEvent.SetColorType(ScheduleColorType.SCHEDULE_GREEN))
             }
         }
 
         addBtn.setOnClickListener {
-            if(areFieldsEmpty()) return@setOnClickListener
-            if(inputsAreInvalid()) return@setOnClickListener
+            if (areFieldsEmpty()) return@setOnClickListener
+            if (inputsAreInvalid()) return@setOnClickListener
 
             scheduleViewModel.onEvent(ScheduleEvent.SaveSchedule)
             dismiss()
         }
     }
+
     override fun onStart() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up
+        )
     }
-
 
     private fun showDatePicker() {
         if (existingDatePicker == null) {
@@ -198,7 +161,7 @@ class AddScheduleFragment : DialogFragment() {
         }
 
         datePicker.addOnPositiveButtonClickListener { selection ->
-            etDate.setText(DateConverter.convertMillisToDateString(selection))
+            binding.addScheduleDate.setText(DateConverter.convertMillisToDateString(selection))
             scheduleViewModel.onEvent(ScheduleEvent.SetDate(selection))
         }
 
@@ -210,7 +173,7 @@ class AddScheduleFragment : DialogFragment() {
     }
 
     private fun showStartTimePicker() {
-        if(isStartPickerShowing) return
+        if (isStartPickerShowing) return
 
         val startTimePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
@@ -241,7 +204,7 @@ class AddScheduleFragment : DialogFragment() {
     }
 
     private fun showEndTimePicker() {
-        if(isEndPickerShowing) return
+        if (isEndPickerShowing) return
 
         val endTimePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
@@ -272,60 +235,47 @@ class AddScheduleFragment : DialogFragment() {
         }
     }
 
-
-    private fun areFieldsEmpty() : Boolean {
+    private fun areFieldsEmpty(): Boolean {
         var isEmpty = false
         val errorMsg = "This Field Is Required"
 
-        if(binding.addScheduleTitle.isFieldEmptyOrNull()) {
-            tilTitle.error = errorMsg
+        if (binding.addScheduleTitle.isFieldEmptyOrNull()) {
+            binding.addTaskLayout.error = errorMsg
             isEmpty = true
         }
 
-        if(binding.addScheduleDate.isFieldEmptyOrNull()) {
-            tilLocation.error = errorMsg
+        if (binding.addScheduleDate.isFieldEmptyOrNull()) {
+            binding.dateTil.error = errorMsg
             isEmpty = true
         }
 
-        if(etDate.isFieldEmptyOrNull()) {
-            tilDate.error = errorMsg
-            isEmpty = true
-        } else {
-            tilDate.error = null
-        }
-
-        if(etStart.isFieldEmptyOrNull()) {
-            tilStart.error = errorMsg
+        if (binding.etStart.isFieldEmptyOrNull()) {
+            binding.tilStart.error = errorMsg
             isEmpty = true
         }
 
-        if(etEnd.isFieldEmptyOrNull()) {
-            tilEnd.error = errorMsg
+        if (binding.etEnd.isFieldEmptyOrNull()) {
+            binding.tilEnd.error = errorMsg
             isEmpty = true
         }
 
         return isEmpty
     }
 
-    private fun inputsAreInvalid() : Boolean {
+    private fun inputsAreInvalid(): Boolean {
         var isInvalid = false
 
-        if(startTimeHour > endTimeHour) {
+        if (startTimeHour > endTimeHour) {
             showInvalidTimeDialog()
             isInvalid = true
-        } else if(startTimeHour == endTimeHour) {
-            if(startTimeMin >= endTimeMin) {
+        } else if (startTimeHour == endTimeHour) {
+            if (startTimeMin >= endTimeMin) {
                 showInvalidTimeDialog()
                 isInvalid = true
             }
         }
 
         return isInvalid
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showInvalidTimeDialog() {
@@ -338,5 +288,10 @@ class AddScheduleFragment : DialogFragment() {
             .setIcon(R.drawable.ic_delete_history_24px)
             .setNegativeButton("OK") { _, _ -> }
             .show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

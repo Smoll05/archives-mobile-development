@@ -8,15 +8,11 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.DialogFragment
 import com.android.archives.R
+import com.android.archives.databinding.FragmentAddFileDialogueBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,14 +23,10 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
         fun onFileAdded(fileName: String, uri: Uri)
     }
 
-    private var listener: OnFileAddedListener? = null
+    private var _binding: FragmentAddFileDialogueBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var uploadBox: FrameLayout
-    private lateinit var plusIcon: ImageView
-    private lateinit var uploadText: TextView
-    private lateinit var titleInput: EditText
-    private lateinit var removeButton: ImageButton
-    private lateinit var uploadButton: Button
+    private var listener: OnFileAddedListener? = null
 
     private var selectedUri: Uri? = null
 
@@ -43,8 +35,8 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
     ) { uri: Uri? ->
         uri?.let {
             selectedUri = it
-            plusIcon.visibility = View.GONE
-            removeButton.visibility = View.VISIBLE
+            binding.plusIcon.visibility = View.GONE
+            binding.removeButton.visibility = View.VISIBLE
 
             val contentResolver = requireContext().contentResolver
             val type = contentResolver.getType(it)
@@ -59,8 +51,8 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
 
             val fileName = getFileNameFromUri(it)?.substringBeforeLast('.') ?: "Untitled"
             val fullName = fileName + extension
-            titleInput.setText(fullName)
-            uploadText.text = "File selected: $fullName"
+            binding.titleInput.setText(fullName)
+            binding.uploadText.text = "File selected: $fullName"
         }
     }
 
@@ -77,28 +69,22 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_add_file_dialogue, container, false)
+        // Inflate the binding
+        _binding = FragmentAddFileDialogueBinding.inflate(inflater, container, false)
 
-        uploadBox = view.findViewById(R.id.uploadBox)
-        plusIcon = view.findViewById(R.id.plusIcon)
-        uploadText = view.findViewById(R.id.uploadText)
-        titleInput = view.findViewById(R.id.titleInput)
-        removeButton = view.findViewById(R.id.removeButton)
-        uploadButton = view.findViewById(R.id.uploadButton)
-
-        uploadBox.setOnClickListener {
+        binding.uploadBox.setOnClickListener {
             filePickerLauncher.launch("*/*")
         }
 
-        removeButton.setOnClickListener {
+        binding.removeButton.setOnClickListener {
             selectedUri = null
-            uploadText.text = "Click here to upload file"
-            plusIcon.visibility = View.VISIBLE
-            removeButton.visibility = View.GONE
+            binding.uploadText.text = "Click here to upload file"
+            binding.plusIcon.visibility = View.VISIBLE
+            binding.removeButton.visibility = View.GONE
         }
 
-        uploadButton.setOnClickListener {
-            val title = titleInput.text.toString()
+        binding.uploadButton.setOnClickListener {
+            val title = binding.titleInput.text.toString()
             if (selectedUri != null && title.isNotBlank()) {
                 listener?.onFileAdded(title, selectedUri!!)
                 Toast.makeText(requireContext(), "File uploaded!", Toast.LENGTH_SHORT).show()
@@ -112,7 +98,7 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
             }
         }
 
-        return view
+        return binding.root
     }
 
     override fun onDetach() {
@@ -131,11 +117,9 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
         }
         return name
     }
+
     override fun onStart() {
         super.onStart()
-
-        dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+        dialog?.window?.setWindowAnimations(R.style.dialog_animation_enter_up)
     }
-
 }

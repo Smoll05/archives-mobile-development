@@ -93,7 +93,6 @@ class ProfileFragment : DialogFragment() {
         return binding.root
     }
 
-    // DIRI ANG ANIMATION : SUGOD & END
     override fun onStart() {
         super.onStart()
 

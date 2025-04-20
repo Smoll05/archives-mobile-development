@@ -9,6 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.android.archives.R
 import com.android.archives.databinding.FragmentEditUserBinding
 import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
@@ -95,24 +96,52 @@ class EditUserFragment: DialogFragment() {
             val oldPassword = binding.etOldPassword.text.toString().trim()
             val newPassword = binding.etNewPassword.text.toString().trim()
 
+            // Nothing selected to update
             if (!isUsernameEditing && !isPasswordEditing) {
                 Toast.makeText(requireContext(), "Nothing to update.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (isPasswordEditing && (oldPassword.isEmpty() || newPassword.isEmpty())) {
-                Toast.makeText(requireContext(), "Old and New Password are required", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            // Validate password update
+            if (isPasswordEditing) {
+                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                    Toast.makeText(requireContext(), "Old and New Password are required", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val strength = getPasswordStrength(newPassword)
+                if (strength.first == "Weak Password") {
+                    Toast.makeText(requireContext(), "Create a much stronger password", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                if (PasswordEncryptor.hashPassword(oldPassword) != dbPassword) {
+                    Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                userViewModel.onEvent(UserEvent.SetPassword(newPassword))
             }
 
-            if(isPasswordEditing && (PasswordEncryptor.hashPassword(oldPassword) != dbPassword)) {
-                Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            // Apply username update if selected
+            if (isUsernameEditing) {
+                if (newUsername.isEmpty()) {
+                    Toast.makeText(requireContext(), "Username cannot be empty", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                userViewModel.onEvent(UserEvent.SetUserName(newUsername))
             }
 
+            // Proceed with update
             lifecycleScope.launch {
-                if(userViewModel.updateUser()) {
+                if (userViewModel.updateUser()) {
                     Toast.makeText(requireContext(), "User info updated", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to update user info",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 dismiss()
             }
@@ -152,12 +181,19 @@ class EditUserFragment: DialogFragment() {
     // Function to determine password strength (Weak, Medium, Strong)
     private fun getPasswordStrength(password: String): Pair<String, Int> {
         val length = password.length
-        if (length < 6) return Pair("Weak", android.graphics.Color.RED)
+        if (length < 6) return Pair("Weak Password", android.graphics.Color.RED)
         val strongRegex = Regex("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=!]).{8,}")
-        if (strongRegex.matches(password)) return Pair("Strong", android.graphics.Color.GREEN)
+        if (strongRegex.matches(password)) return Pair("Strong Password", android.graphics.Color.GREEN)
         val mediumRegex = Regex("(?=.*[A-Za-z])(?=.*\\d).{6,}")
-        if (mediumRegex.matches(password)) return Pair("Medium", android.graphics.Color.parseColor("#FFA500")) // Orange
-        return Pair("Weak", android.graphics.Color.RED)
+        if (mediumRegex.matches(password)) return Pair("Moderate Password", android.graphics.Color.parseColor("#FFA500")) // Orange
+        return Pair("Weak Password", android.graphics.Color.RED)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up);
     }
 
 

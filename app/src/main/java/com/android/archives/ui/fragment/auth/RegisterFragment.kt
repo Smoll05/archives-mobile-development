@@ -48,6 +48,13 @@ class RegisterFragment : Fragment() {
             findNavController().navigateUp()
             onEvent(UserEvent.HideForm)
         }
+        binding.tfPassword.addTextChangedListener { input ->
+            val password = input.toString().trim()
+            userViewModel.onEvent(UserEvent.SetPassword(password))
+            val strength = getPasswordStrength(password)
+            binding.tvPasswordStrength.text = strength.first
+            binding.tvPasswordStrength.setTextColor(strength.second)
+        }
 
         binding.btnRegister.setOnClickListener {
             val username = binding.tfEmail.text.toString().trim()
@@ -59,8 +66,10 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if (password.length < 6) {
-                binding.tilPassword.error = "Password must be at least 6 characters"
+            val strength = getPasswordStrength(password)
+            if (strength.first == "Weak Password") {
+                binding.tilPassword.error = "Please choose a stronger password"
+                Toast.makeText(requireContext(), "Create a much stronger password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -71,6 +80,16 @@ class RegisterFragment : Fragment() {
 
             findNavController().navigate(R.id.action_registerFragment_to_onboardingFragment)
         }
+    }
+
+    private fun getPasswordStrength(password: String): Pair<String, Int> {
+        val length = password.length
+        if (length < 6) return Pair("Weak Password", android.graphics.Color.RED)
+        val strongRegex = Regex("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=!]).{8,}")
+        if (strongRegex.matches(password)) return Pair("Strong Password", android.graphics.Color.GREEN)
+        val mediumRegex = Regex("(?=.*[A-Za-z])(?=.*\\d).{6,}")
+        if (mediumRegex.matches(password)) return Pair("Moderate Password", android.graphics.Color.parseColor("#FFA500")) // Orange
+        return Pair("Weak Password", android.graphics.Color.RED)
     }
 
     override fun onDestroyView() {

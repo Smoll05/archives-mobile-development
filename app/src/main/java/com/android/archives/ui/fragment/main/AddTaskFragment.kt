@@ -26,13 +26,6 @@ class AddTaskFragment : DialogFragment() {
     private val binding get() = _binding!!
     private val taskViewModel: TaskViewModel by activityViewModels()
 
-    lateinit var etTaskTitle : EditText
-    lateinit var etTaskDescription : EditText
-    lateinit var btnEmoji : Button
-    lateinit var tilTitle : TextInputLayout
-    lateinit var tilDesc : TextInputLayout
-    lateinit var errorEmoji : TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
@@ -49,18 +42,18 @@ class AddTaskFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnAdd = view.findViewById<Button>(R.id.add_task_button)
-        etTaskTitle = view.findViewById(R.id.add_task_title)
-        etTaskDescription = view.findViewById(R.id.add_task_desc)
-        btnEmoji = view.findViewById(R.id.add_task_emoji_button)
+        // Use View Binding to initialize views
+        val btnAdd = binding.addTaskButton
+        val etTaskTitle = binding.addTaskTitle
+        val etTaskDescription = binding.addTaskDesc
+        val btnEmoji = binding.addTaskEmojiButton
+        val tilTitle = binding.addTaskLayout
+        val tilDesc = binding.addTaskDescLayout
+        val errorEmoji = binding.errorEmojiBtn
+        val toolBar = binding.addTaskDialogToolbar
 
-        tilTitle = view.findViewById(R.id.add_task_layout)
-        tilDesc = view.findViewById(R.id.add_task_desc_layout)
-
-        errorEmoji = view.findViewById(R.id.error_emoji_btn)
+        // Initialize views
         errorEmoji.visibility = TextView.INVISIBLE
-
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.add_task_dialog_toolbar)
 
         toolBar.setNavigationOnClickListener {
             dismiss()
@@ -84,7 +77,7 @@ class AddTaskFragment : DialogFragment() {
         }
 
         btnAdd.setOnClickListener {
-            if(areFieldsEmpty()) return@setOnClickListener
+            if (areFieldsEmpty()) return@setOnClickListener
             Toast.makeText(context, "Task Successfully Added", Toast.LENGTH_SHORT).show()
 
             taskViewModel.onEvent(TaskEvent.SaveTask)
@@ -92,6 +85,7 @@ class AddTaskFragment : DialogFragment() {
             dismiss()
         }
 
+        // Add text listeners
         etTaskTitle.addTextChangedListener {
             taskViewModel.onEvent(TaskEvent.SetTitle(it.toString()))
             tilTitle.error = null
@@ -103,35 +97,36 @@ class AddTaskFragment : DialogFragment() {
         }
     }
 
-    private fun areFieldsEmpty() : Boolean {
+    private fun areFieldsEmpty(): Boolean {
         var isEmpty = false
-
         val errorMsg = "This Field Is Required"
 
-        if(etTaskTitle.isFieldEmptyOrNull()) {
-            tilTitle.error = errorMsg
+        // Check fields for emptiness using View Binding
+        if (binding.addTaskTitle.isFieldEmptyOrNull()) {
+            binding.addTaskLayout.error = errorMsg
             isEmpty = true
         }
 
-        if(etTaskDescription.isFieldEmptyOrNull()) {
-            tilDesc.error = errorMsg
+        if (binding.addTaskDesc.isFieldEmptyOrNull()) {
+            binding.addTaskDescLayout.error = errorMsg
             isEmpty = true
         }
 
-        if(btnEmoji.text.isNullOrEmpty()) {
-            errorEmoji.visibility = TextView.VISIBLE
+        if (binding.addTaskEmojiButton.text.isNullOrEmpty()) {
+            binding.errorEmojiBtn.visibility = TextView.VISIBLE
             isEmpty = true
         }
 
         return isEmpty
     }
+
     override fun onStart() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up
+        )
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

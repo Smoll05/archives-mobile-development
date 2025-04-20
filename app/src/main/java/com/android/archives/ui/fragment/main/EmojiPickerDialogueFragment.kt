@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.emoji2.emojipicker.EmojiPickerView
 import com.android.archives.R
+import com.android.archives.databinding.FragmentEmojiPickerDialogueBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
+
+    private var _binding: FragmentEmojiPickerDialogueBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val EMOJI_PICKER_RESULT_KEY = "emoji_picker_result"
@@ -21,15 +25,19 @@ class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_emoji_picker_dialogue, container, false)
+    ): View {
+        _binding = FragmentEmojiPickerDialogueBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val emojiPickerView = view.findViewById<EmojiPickerView>(R.id.emoji_picker_layout)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val emojiPickerView = binding.emojiPickerLayout
         emojiPickerView.emojiGridColumns = 8
 
         val displayMetrics = resources.displayMetrics
         val screenHeight = displayMetrics.heightPixels
-
         val heightInPixels = (screenHeight * 0.7).toInt()
 
         val layoutParams = emojiPickerView.layoutParams
@@ -44,23 +52,20 @@ class EmojiPickerDialogueFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        return view
-    }
-    override fun onStart() {
-        super.onStart()
-
-        dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-
         bottomSheet?.let {
             val behavior = BottomSheetBehavior.from(it)
             behavior.isDraggable = false
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setWindowAnimations(R.style.dialog_animation_enter_up)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

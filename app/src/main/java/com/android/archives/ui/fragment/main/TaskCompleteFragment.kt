@@ -10,6 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
+import com.android.archives.databinding.FragmentSettingsBinding
+import com.android.archives.databinding.FragmentTaskCompleteBinding
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.viewmodel.TaskViewModel
@@ -19,6 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TaskCompleteFragment : Fragment() {
+
+    private var _binding: FragmentTaskCompleteBinding? = null
+    private val binding get() = _binding!!
     lateinit var adapter: TaskRecyclerAdapter
     private val taskViewModel: TaskViewModel by activityViewModels()
 
@@ -26,10 +31,11 @@ class TaskCompleteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_task_complete, container, false)
+        _binding = FragmentTaskCompleteBinding.inflate(inflater, container, false) // Properly initialize binding
+        val view = binding.root
 
-        val taskEmptySign = view.findViewById<LinearLayout>(R.id.task_complete_empty)
-        val rvComplete = view.findViewById<RecyclerView>(R.id.task_complete_recycler_view)
+        val taskEmptySign = binding.taskCompleteEmpty
+        val rvComplete = binding.taskCompleteRecyclerView
 
         rvComplete.addItemDecoration(
             SpacingDecorator(0, 0, 0, 24)
@@ -58,11 +64,11 @@ class TaskCompleteFragment : Fragment() {
                 rvComplete.isEnabled = true
             }
 
-            val todoList = state.completeTask
+            val completeList = state.completeTask // Ensure this is the correct list to display
 
-            adapter.differ.submitList(todoList)
+            adapter.differ.submitList(completeList)
 
-            if(todoList.isEmpty()) {
+            if (completeList.isEmpty()) {
                 taskEmptySign.visibility = LinearLayout.VISIBLE
                 rvComplete.visibility = RecyclerView.INVISIBLE
             } else {
@@ -74,4 +80,8 @@ class TaskCompleteFragment : Fragment() {
         return view
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
