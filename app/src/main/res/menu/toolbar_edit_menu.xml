@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/delete_schedule"
+        android:id="@+id/delete_entity"
         android:icon="@drawable/ic_delete_24px"
         app:iconTint="@color/error"
         android:title="Add Schedule"

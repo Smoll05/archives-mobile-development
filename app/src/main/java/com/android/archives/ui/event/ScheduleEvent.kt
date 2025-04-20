@@ -4,7 +4,6 @@ import com.android.archives.constants.ScheduleColorType
 import com.android.archives.data.model.Schedule
 
 sealed interface ScheduleEvent {
-    data class LoadSchedule(val schedule: Schedule) : ScheduleEvent
     data object SaveSchedule : ScheduleEvent
     data class EditSchedule(val schedule: Schedule): ScheduleEvent
     data class DeleteSchedule(val schedule: Schedule) : ScheduleEvent

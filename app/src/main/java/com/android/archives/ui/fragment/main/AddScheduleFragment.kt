@@ -48,10 +48,7 @@ class AddScheduleFragment : DialogFragment() {
 
     private lateinit var datePicker: MaterialDatePicker<Long>
     private var existingDatePicker: Fragment? = null
-    private var existingStartTimePicker: Fragment? = null
-    private var existingEndTimePicker: Fragment? = null
     private val datePickerTag = "DATE PICKER"
-    private val timePickerTag = "TIME PICKER"
 
     private var isStartPickerShowing = false
     private var isEndPickerShowing = false
@@ -188,7 +185,7 @@ class AddScheduleFragment : DialogFragment() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
 

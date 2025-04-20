@@ -7,33 +7,40 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 
 class FolderAdapter(
-    private var folderList: List<FolderItem>,
     private val onItemClick: (FolderItem) -> Unit,
-    private val onItemLongClick: (FolderItem) -> Unit
 ) : RecyclerView.Adapter<FolderAdapter.FolderViewHolder>(), Filterable {
 
-    private var filteredList: List<FolderItem> = folderList
+    private var fullList: List<FolderItem> = listOf()
 
     inner class FolderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val folderIcon: ImageView = itemView.findViewById(R.id.folderIcon)
-        val folderName: TextView = itemView.findViewById(R.id.folderName)
+        private val folderIcon: ImageView = itemView.findViewById(R.id.folderIcon)
+        private val folderName: TextView = itemView.findViewById(R.id.folderName)
 
         fun bind(item: FolderItem) {
             folderIcon.setImageResource(item.iconRes)
             folderName.text = item.name
             itemView.setOnClickListener { onItemClick(item) }
-            itemView.setOnLongClickListener {
-                onItemLongClick(item)
-                true
-            }
+        }
+    }
+
+    private val differCallback = object : DiffUtil.ItemCallback<FolderItem>() {
+        override fun areItemsTheSame(oldItem: FolderItem, newItem: FolderItem): Boolean {
+            return oldItem.folderId == newItem.folderId
         }
 
+        override fun areContentsTheSame(oldItem: FolderItem, newItem: FolderItem): Boolean {
+            return oldItem == newItem
+        }
     }
+
+    val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolderViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -42,41 +49,43 @@ class FolderAdapter(
     }
 
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
-        holder.bind(filteredList[position])
+        holder.bind(differ.currentList[position])
     }
 
-    override fun getItemCount(): Int = filteredList.size
+    override fun getItemCount(): Int = differ.currentList.size
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
-                filteredList = if (charSearch.isEmpty()) {
-                    folderList
+                val charSearch = constraint?.toString() ?: ""
+                val filtered = if (charSearch.isEmpty()) {
+                    fullList
                 } else {
-                    folderList.filter {
+                    fullList.filter {
                         it.name.contains(charSearch, ignoreCase = true)
                     }
                 }
+
                 val filterResults = FilterResults()
-                filterResults.values = filteredList
+                filterResults.values = filtered
                 return filterResults
             }
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filteredList = results?.values as List<FolderItem>
-                notifyDataSetChanged()
+                val filtered = results?.values as? List<FolderItem> ?: emptyList()
+                differ.submitList(filtered)
             }
         }
     }
 
-    fun updateList(newList: List<FolderItem>) {
-        folderList = newList
-        filteredList = newList
-        notifyDataSetChanged()
+    fun submitList(newList: List<FolderItem>) {
+        fullList = newList
+        differ.submitList(newList)
     }
 
-    val currentList: List<FolderItem>
-        get() = filteredList
+    fun clearFilter() {
+        differ.submitList(fullList)
+    }
+
 }

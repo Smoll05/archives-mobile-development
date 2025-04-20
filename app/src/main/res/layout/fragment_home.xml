@@ -38,104 +38,6 @@
         android:paddingHorizontal="24dp">
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/libre_baskerville_regular"
-            android:text="Today's Schedule"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/relativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardSchedule1"
-                style="@style/HomeDateMaterialCard"
-                app:cardBackgroundColor="@color/blue"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginVertical="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/titleText1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/libre_baskerville_regular"
-                        android:text="Study Mobile Development"
-                        android:textColor="@android:color/black"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/timeText1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:text="8:00AM - 10:00AM"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardButton2"
-                style="@style/HomeDateMaterialCard"
-                android:backgroundTint="@color/red"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginVertical="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/titleText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/libre_baskerville_regular"
-                        android:text="Study Linear Algebra"
-                        android:textColor="@android:color/black"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/timeText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter"
-                        android:text="10:30AM - 12:00PM"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-        </LinearLayout>
-
-        <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,38 +46,36 @@
             android:text="Kanban Board"
             android:textColor="@color/black"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/relativeLayout"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/home_add_task"
             style="@style/KanbanBoardAddTaskButton"
             android:layout_width="wrap_content"
-            android:layout_marginTop="12dp"
             android:text="Add Task"
             app:icon="@drawable/ic_add_24px"
-            app:layout_constraintEnd_toEndOf="@+id/relativeLayout"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+            app:layout_constraintBottom_toBottomOf="@+id/textView4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView4"
             app:strokeColor="@color/black"
             app:strokeWidth="1dp" />
-
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/home_tablayout"
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/shape_tab_layout_background"
-            app:tabIndicator="@drawable/shape_tab_indicator"
             app:layout_constraintBottom_toTopOf="@id/task_frame"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:tabIndicator="@drawable/shape_tab_indicator"
             app:tabIndicatorAnimationDuration="@integer/material_motion_duration_long_2"
+            app:tabIndicatorColor="@color/lightbrown"
             app:tabIndicatorFullWidth="true"
             app:tabTextColor="@color/black"
-            app:tabIndicatorColor="@color/lightbrown"
             tools:layout_editor_absoluteX="24dp">
 
             <com.google.android.material.tabs.TabItem

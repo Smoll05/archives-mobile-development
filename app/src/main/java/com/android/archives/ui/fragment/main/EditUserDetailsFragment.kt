@@ -2,7 +2,6 @@ package com.android.archives.ui.fragment.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,10 +22,6 @@ class EditUserDetailsFragment : Fragment() {
     ) = FragmentLoginBinding.inflate(inflater).also {
         _binding = it
     }.root
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

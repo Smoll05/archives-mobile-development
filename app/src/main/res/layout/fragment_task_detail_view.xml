@@ -27,7 +27,7 @@
                 android:id="@+id/task_detail_mark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Mark As Complete"
+                android:text="Mark As Complete"
                 android:textStyle="bold"
                 android:layout_gravity="end" />
 

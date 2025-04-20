@@ -10,8 +10,8 @@ import android.widget.Toast
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
 import com.google.android.material.button.MaterialButton
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AddCourseDialogFragment(
@@ -59,7 +59,6 @@ class AddCourseDialogFragment(
             val courseName = courseNameInput.text.toString().trim()
             if (courseName.isNotEmpty()) {
                 val folder = FolderItem(
-                    title = courseName,
                     name = courseName,
                     iconRes = selectedColorRes
                 )
@@ -80,7 +79,7 @@ class AddCourseDialogFragment(
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
 

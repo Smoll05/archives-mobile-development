@@ -2,6 +2,8 @@ package com.android.archives.di
 
 import android.content.Context
 import androidx.room.Room
+import com.android.archives.data.dao.FileDao
+import com.android.archives.data.dao.FolderDao
 import com.android.archives.data.dao.ScheduleDao
 import com.android.archives.data.dao.TaskDao
 import com.android.archives.data.dao.UserDao
@@ -40,6 +42,14 @@ object AppModule {
     @Provides
     @Singleton
     fun provideScheduleDao(database: ArchivesDatabase) : ScheduleDao = database.scheduleDao
+
+    @Provides
+    @Singleton
+    fun provideFolderDao(database: ArchivesDatabase) : FolderDao = database.folderDao
+
+    @Provides
+    @Singleton
+    fun provideFileDao(database: ArchivesDatabase) : FileDao = database.fileDao
 
     @Provides
     @Singleton

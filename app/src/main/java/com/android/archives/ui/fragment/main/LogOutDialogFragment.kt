@@ -23,7 +23,7 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val v: View = inflater.inflate(
             R.layout.fragment_log_out_dialog,
             container, false

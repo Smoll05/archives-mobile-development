@@ -16,10 +16,10 @@ class TaskRecyclerAdapter (
     private val onCheckChanged: (Task, Boolean) -> Unit
 ) : RecyclerView.Adapter<TaskRecyclerAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val icon = view.findViewById<TextView>(R.id.task_item_icon)
-        val title = view.findViewById<TextView>(R.id.task_item_title)
-        val desc = view.findViewById<TextView>(R.id.task_item_desc)
-        val checkbox = view.findViewById<CheckBox>(R.id.task_item_cb)
+        val icon: TextView = view.findViewById(R.id.task_item_icon)
+        val title: TextView = view.findViewById(R.id.task_item_title)
+        val desc: TextView = view.findViewById(R.id.task_item_desc)
+        val checkbox: CheckBox = view.findViewById(R.id.task_item_cb)
     }
 
     private val differCallback = object : DiffUtil.ItemCallback<Task>() {
@@ -35,7 +35,8 @@ class TaskRecyclerAdapter (
     val differ = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_task_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.recyclerview_task_item, parent, false)
         return TaskViewHolder(view)
     }
 

@@ -132,10 +132,8 @@ class UserViewModel @Inject constructor (
             pictureFilePath = pictureFilePath
         )
 
-        viewModelScope.launch {
-            val userId = dao.upsertUser(user)
-            sharedPrefs.setCurrentUser(userId)
-        }
+        val userId = dao.upsertUser(user)
+        sharedPrefs.setCurrentUser(userId)
 
         emptyCurrentState()
         return true

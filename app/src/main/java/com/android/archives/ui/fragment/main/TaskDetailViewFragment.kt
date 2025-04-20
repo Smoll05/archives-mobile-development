@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
@@ -32,7 +31,7 @@ class TaskDetailViewFragment : DialogFragment() {
     private val binding get() = _binding!!
     private val taskViewModel: TaskViewModel by activityViewModels()
     private lateinit var task: Task
-    private val spannableString = SpannableString("Mark As Complete")
+    private var spannableString = SpannableString("Mark As Complete")
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +46,12 @@ class TaskDetailViewFragment : DialogFragment() {
     ) = FragmentTaskDetailViewBinding.inflate(inflater).also {
         _binding = it
     }.root
+
     override fun onStart() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
 
@@ -60,13 +60,9 @@ class TaskDetailViewFragment : DialogFragment() {
 
         loadTask()
         val toolBar = view.findViewById<MaterialToolbar>(R.id.task_detail_toolbar)
-        val tvTitle = view.findViewById<TextView>(R.id.task_detail_title)
-        val tvDescription = view.findViewById<TextView>(R.id.task_detail_description)
 
         val btnEdit = view.findViewById<Button>(R.id.task_detail_edit)
         val btnDelete = view.findViewById<Button>(R.id.task_detail_delete)
-
-        binding.taskDetailMark.text = spannableString
 
         toolBar.setNavigationOnClickListener {
             dismiss()
@@ -87,7 +83,7 @@ class TaskDetailViewFragment : DialogFragment() {
                 requireContext(),
                 R.drawable.ic_contract_delete_24px
             )?.apply {
-                setTint(ContextCompat.getColor(requireContext(), R.color.error)) // Use your desired color
+                setTint(ContextCompat.getColor(requireContext(), R.color.error))
             }
 
             MaterialAlertDialogBuilder(
@@ -112,14 +108,12 @@ class TaskDetailViewFragment : DialogFragment() {
 
         binding.taskDetailMark.setOnClickListener {
             if (task.isComplete) {
-                taskViewModel.onEvent(TaskEvent.SetCompletion(task, false))
+                taskViewModel.onEvent(TaskEvent.SetTaskCompletion(task, false))
                 unMarkTaskComplete()
             } else {
-                taskViewModel.onEvent(TaskEvent.SetCompletion(task, true))
+                taskViewModel.onEvent(TaskEvent.SetTaskCompletion(task, true))
                 markTaskComplete()
             }
-
-            binding.taskDetailMark.text = spannableString
         }
     }
 

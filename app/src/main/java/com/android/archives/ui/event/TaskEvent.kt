@@ -10,5 +10,6 @@ sealed interface TaskEvent {
     data class SetTitle(val title: String) : TaskEvent
     data class SetDescription(val description: String) : TaskEvent
     data class SetEmoji(val emojiIcon: String) : TaskEvent
-    data class SetCompletion(val task: Task, val isComplete: Boolean) : TaskEvent
+    data class SetCompletion(val isComplete: Boolean) : TaskEvent
+    data class SetTaskCompletion(val task: Task, val isComplete: Boolean) : TaskEvent
 }

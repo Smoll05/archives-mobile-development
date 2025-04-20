@@ -56,9 +56,7 @@ class EditScheduleFragment @Inject constructor(
 
     private lateinit var datePicker: MaterialDatePicker<Long>
     private var existingDatePicker: Fragment? = null
-    private var existingTimePicker: Fragment? = null
     private val datePickerTag = "DATE PICKER"
-    private val timePickerTag = "TIME PICKER"
 
     private var isStartPickerShowing = false
     private var isEndPickerShowing = false
@@ -85,7 +83,7 @@ class EditScheduleFragment @Inject constructor(
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
     override fun onCreateView(
@@ -210,7 +208,7 @@ class EditScheduleFragment @Inject constructor(
 
         binding.editScheduleToolbar.setOnMenuItemClickListener { menu ->
             when(menu.itemId) {
-                R.id.delete_schedule -> {
+                R.id.delete_entity -> {
                     showDeleteScheduleDialog { shouldDelete ->
                         if(shouldDelete) {
                             scheduleViewModel.onEvent(ScheduleEvent.DeleteSchedule(schedule))

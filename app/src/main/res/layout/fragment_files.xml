@@ -1,113 +1,105 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="16dp"
+    android:orientation="vertical"
     tools:context=".ui.activity.MainActivity">
 
-    <!-- Cover Image -->
-
-    <!-- Profile Image -->
-
-    <!-- Course Title -->
-
-    <!-- Add Button -->
-    <TextView
-        android:id="@+id/CourseName"
-        android:layout_width="312dp"
-        android:layout_height="68dp"
-        android:fontFamily="@font/libre_baskerville_bold"
-        android:text="Course Name"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <LinearLayout
-        android:id="@+id/buttonContainer"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        app:layout_constraintHorizontal_bias="0.99"
-        app:layout_constraintTop_toBottomOf="@id/CourseName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:paddingHorizontal="10dp"
+        android:paddingTop="12dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAdd"
-            style="@style/MaterialButton.SecondaryContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:minWidth="48dp"
-            android:text="Add" />
-    </LinearLayout>
-
-    <!-- Search Bar -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchBarContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Search Files"
-        app:endIconDrawable="@drawable/ic_search_24px"
-        app:endIconMode="custom"
-        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/searchBar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_file"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textColor="#000000" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:minHeight="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/App.ToolBar.MiniTitle"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:menu="@menu/toolbar_edit_menu">
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fileRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/searchBarContainer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="24dp">
 
-    <!-- Empty Text -->
-    <TextView
-        android:id="@+id/noFilesText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No files available"
-        android:textSize="16sp"
-        android:textColor="#666666"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="@id/fileRecyclerView"
-        app:layout_constraintBottom_toBottomOf="@id/fileRecyclerView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/CourseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/libre_baskerville_bold"
+            android:text="Course Name"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBACK"
-        style="@style/MaterialButton.SecondaryContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:minWidth="48dp"
-        android:text="Back"
-        android:backgroundTint="@color/gray"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonContainer"
-        app:layout_constraintEnd_toStartOf="@+id/buttonContainer"
-        app:layout_constraintHorizontal_bias="0.941"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonContainer"
-        app:layout_constraintVertical_bias="0.0" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Search Bar -->
+
+        <!-- RecyclerView -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_file"
+            style="@style/KanbanBoardAddTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Add File"
+            app:icon="@drawable/ic_add_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/CourseName"
+            app:layout_constraintTop_toBottomOf="@+id/CourseName"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/search_view_background"
+            android:queryHint="Search"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_file" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fileRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="6dp"
+            android:paddingTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchView" />
+
+        <!-- Empty Text -->
+        <TextView
+            android:id="@+id/noFilesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No files available"
+            android:textColor="#666666"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/fileRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fileRecyclerView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

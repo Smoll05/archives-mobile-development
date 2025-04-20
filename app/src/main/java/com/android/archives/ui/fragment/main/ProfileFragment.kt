@@ -30,7 +30,6 @@ import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.android.archives.utils.isFieldEmptyOrNull
 import com.android.archives.utils.smoothTextChangeAnimation
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -98,7 +97,7 @@ class ProfileFragment : DialogFragment() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,8 +105,6 @@ class ProfileFragment : DialogFragment() {
 
         userViewModel.loadStateFromCurrentUser()
         loadProfile()
-
-        val toolBar = view.findViewById<MaterialToolbar>(R.id.profile_toolbar)
 
         val tvName = view.findViewById<TextView>(R.id.profile_name)
         tvBirthday = view.findViewById(R.id.profile_birthday)

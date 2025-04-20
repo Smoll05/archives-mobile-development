@@ -52,6 +52,7 @@ class TaskViewModel @Inject constructor (
             is TaskEvent.EditTask -> {
                 viewModelScope.launch {
                     _state.update { it.copy(
+                        currentTask = event.task,
                         isLoading = true
                     ) }
 
@@ -98,17 +99,9 @@ class TaskViewModel @Inject constructor (
                 }
             }
             is TaskEvent.SetCompletion -> {
-                viewModelScope.launch {
-                    _state.update {
-                        it.copy(
-                            isLoading = true
-                        )
-                    }
-
-                    val task = event.task
-                    task.isComplete = event.isComplete
-                    dao.upsertTask(task)
-                }
+                _state.update { it.copy(
+                    isComplete = event.isComplete
+                ) }
             }
             is TaskEvent.SetDescription -> {
                 _state.update { it.copy(
@@ -124,6 +117,19 @@ class TaskViewModel @Inject constructor (
                 _state.update { it.copy(
                     title = event.title
                 ) }
+            }
+            is TaskEvent.SetTaskCompletion -> {
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+
+                    val task = event.task
+                    task.isComplete = event.isComplete
+                    dao.upsertTask(task)
+                }
             }
         }
     }
