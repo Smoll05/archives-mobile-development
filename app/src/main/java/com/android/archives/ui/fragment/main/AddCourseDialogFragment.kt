@@ -26,7 +26,7 @@ class AddCourseDialogFragment(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the binding
         _binding = FragmentAddCourseDialogBinding.inflate(inflater, container, false)
 
