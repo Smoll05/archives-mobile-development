@@ -32,7 +32,7 @@ class TaskDetailViewFragment : DialogFragment() {
     private val binding get() = _binding!!
     private val taskViewModel: TaskViewModel by activityViewModels()
     private lateinit var task: Task
-    private val spannableString = SpannableString("Mark As Complete")
+    private var spannableString = SpannableString("Mark As Complete")
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +47,12 @@ class TaskDetailViewFragment : DialogFragment() {
     ) = FragmentTaskDetailViewBinding.inflate(inflater).also {
         _binding = it
     }.root
+
     override fun onStart() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
 
@@ -65,8 +66,6 @@ class TaskDetailViewFragment : DialogFragment() {
 
         val btnEdit = binding.taskDetailEdit
         val btnDelete = binding.taskDetailDelete
-
-        binding.taskDetailMark.text = spannableString
 
         toolBar.setNavigationOnClickListener {
             dismiss()
@@ -87,7 +86,7 @@ class TaskDetailViewFragment : DialogFragment() {
                 requireContext(),
                 R.drawable.ic_contract_delete_24px
             )?.apply {
-                setTint(ContextCompat.getColor(requireContext(), R.color.error)) // Use your desired color
+                setTint(ContextCompat.getColor(requireContext(), R.color.error))
             }
 
             MaterialAlertDialogBuilder(
@@ -112,14 +111,12 @@ class TaskDetailViewFragment : DialogFragment() {
 
         binding.taskDetailMark.setOnClickListener {
             if (task.isComplete) {
-                taskViewModel.onEvent(TaskEvent.SetCompletion(task, false))
+                taskViewModel.onEvent(TaskEvent.SetTaskCompletion(task, false))
                 unMarkTaskComplete()
             } else {
-                taskViewModel.onEvent(TaskEvent.SetCompletion(task, true))
+                taskViewModel.onEvent(TaskEvent.SetTaskCompletion(task, true))
                 markTaskComplete()
             }
-
-            binding.taskDetailMark.text = spannableString
         }
     }
 

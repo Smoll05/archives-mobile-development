@@ -1,35 +1,16 @@
 package com.android.archives.data.model
 
-import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Entity(tableName = "folders")
+@Parcelize
 data class FolderItem(
-    val title: String,
-    val name: String,
-    val iconRes: Int = 0,
-    val coverImageUri: String? = null,
-    val profileImageUri: String? = null
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString()
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(title)
-        parcel.writeString(name)
-        parcel.writeInt(iconRes)
-        parcel.writeString(coverImageUri)
-        parcel.writeString(profileImageUri)
-    }
-
-    override fun describeContents(): Int = 0
-
-    companion object CREATOR : Parcelable.Creator<FolderItem> {
-        override fun createFromParcel(parcel: Parcel): FolderItem = FolderItem(parcel)
-        override fun newArray(size: Int): Array<FolderItem?> = arrayOfNulls(size)
-    }
-}
+    @PrimaryKey(autoGenerate = true)
+    val folderId: Long = 0L,
+    var name: String,
+    var iconRes: Int = 0,
+    var userId: Long = 0L
+) : Parcelable

@@ -79,14 +79,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    ksp("com.google.dagger:hilt-compiler:2.48.1")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     // Navigation Components
-    implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
+    implementation(libs.androidx.navigation.fragment.ktx.v221)
+    implementation(libs.androidx.navigation.ui.ktx.v221)
 
     // Glide (For Image Loading)
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    ksp("com.github.bumptech.glide:compiler:4.16.0")
+    implementation(libs.glide)
+    ksp(libs.compiler)
 }

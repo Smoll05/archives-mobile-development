@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter"
         android:hint="Object Oriented Programming"
-        android:textColor="@android:color/black"
+        android:textColor="@color/black"
         android:textSize="18sp" />
 
 </LinearLayout>

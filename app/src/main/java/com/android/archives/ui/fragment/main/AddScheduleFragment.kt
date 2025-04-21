@@ -33,6 +33,19 @@ class AddScheduleFragment : DialogFragment() {
 
     private val scheduleViewModel: ScheduleViewModel by activityViewModels()
 
+    private lateinit var etDate : EditText
+    private lateinit var etStart : EditText
+    private lateinit var etEnd : EditText
+    private lateinit var etTitle : EditText
+    private lateinit var etLocation : EditText
+
+
+    private lateinit var tilDate : TextInputLayout
+    private lateinit var tilStart : TextInputLayout
+    private lateinit var tilEnd : TextInputLayout
+    private lateinit var tilTitle : TextInputLayout
+    private lateinit var tilLocation : TextInputLayout
+
     private lateinit var datePicker: MaterialDatePicker<Long>
     private var existingDatePicker: Fragment? = null
     private var existingStartTimePicker: Fragment? = null

@@ -16,7 +16,6 @@ import com.android.archives.data.model.Task
 import com.android.archives.databinding.FragmentEditTaskBinding
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.viewmodel.TaskViewModel
-import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.android.archives.utils.isFieldEmptyOrNull
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -102,13 +101,7 @@ class EditTaskFragment : DialogFragment() {
 
             taskViewModel.onEvent(TaskEvent.EditTask(task))
 
-            collectLatestOnViewLifecycle(taskViewModel.state) { state ->
-                if(state.isLoading) {
-                    return@collectLatestOnViewLifecycle
-                } else {
-                    dismiss()
-                }
-            }
+            dismiss()
         }
     }
 
@@ -139,6 +132,7 @@ class EditTaskFragment : DialogFragment() {
         taskViewModel.onEvent(TaskEvent.SetTitle(task.title))
         taskViewModel.onEvent(TaskEvent.SetDescription(task.description))
         taskViewModel.onEvent(TaskEvent.SetEmoji(task.emojiIcon))
+        taskViewModel.onEvent(TaskEvent.SetCompletion(task.isComplete))
     }
 
     override fun onDestroyView() {

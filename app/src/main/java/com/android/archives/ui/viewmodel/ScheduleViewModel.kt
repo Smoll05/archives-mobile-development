@@ -64,9 +64,6 @@ class ScheduleViewModel @Inject constructor (
                     dao.upsertSchedule(updatedSchedule)
                 }
             }
-            is ScheduleEvent.LoadSchedule -> {
-
-            }
             ScheduleEvent.SaveSchedule -> {
                 val current = state.value
 

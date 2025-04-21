@@ -1,55 +1,81 @@
 package com.android.archives.ui.fragment.main
 
-import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.provider.OpenableColumns
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.webkit.MimeTypeMap
+import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.archives.R
-import com.android.archives.data.model.Upload
+import com.android.archives.data.model.File
+import com.android.archives.data.model.FolderItem
 import com.android.archives.databinding.FragmentFilesBinding
-import com.android.archives.ui.adapter.FileListAdapter
-import com.android.archives.ui.viewmodel.UserViewModel
-import org.json.JSONArray
-import org.json.JSONObject
-import java.util.Locale
+import com.android.archives.ui.adapter.FileRecyclerAdapter
+import com.android.archives.ui.event.FileEvent
+import com.android.archives.ui.event.FolderEvent
+import com.android.archives.ui.viewmodel.FileViewModel
+import com.android.archives.ui.viewmodel.FolderViewModel
+import com.android.archives.utils.FileHelper
+import com.android.archives.utils.collectLatestOnViewLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.FileOutputStream
+import java.io.IOException
 
+@AndroidEntryPoint
 class FilesFragment : DialogFragment() {
     private var _binding: FragmentFilesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: UserViewModel by activityViewModels()
 
-    private lateinit var fileAdapter: FileListAdapter
-    private val files = mutableListOf<Upload>()
-    private val filteredFiles = mutableListOf<Upload>()
+    private val folderViewModel : FolderViewModel by activityViewModels()
+    private val fileViewModel: FileViewModel by activityViewModels()
 
-    private lateinit var currentUser: String
-    private lateinit var courseKey: String
+    private lateinit var fileAdapter: FileRecyclerAdapter
 
-    private lateinit var view: View
+    private lateinit var folder: FolderItem
 
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
+
+        arguments?.let { arg ->
+            arg.getParcelable("folder", FolderItem::class.java)?.let { argFolder ->
+                folder = argFolder
+            }
+        }
     }
+
     override fun onStart() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
     override fun onCreateView(
@@ -63,154 +89,205 @@ class FilesFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.view = view
-
-        val courseName = requireActivity().intent.getStringExtra("courseTitle") ?: "Course"
-        val coverUri = requireActivity().intent.getStringExtra("coverImageUri")
-        val profileUri = requireActivity().intent.getStringExtra("profileImageUri")
-
-        courseKey = courseName.replace(" ", "_")
-        currentUser = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-            .getString("currentUser", "") ?: ""
-
-        setupHeader(courseName, coverUri, profileUri)
+        setupHeader(folder.name)
+        setupSearchView()
         setupRecyclerView()
-        loadFilesFromStorage()
-        filterList("") // <- This ensures the adapter updates right after loading
         setupAddButton()
-        setupSearchBar()
         setupSwipeToDelete()
 
-        binding.btnBACK.setOnClickListener {
+        binding.toolbarFile.setNavigationOnClickListener {
             dismiss()
+        }
+
+        binding.toolbarFile.setOnMenuItemClickListener { menu ->
+            when(menu.itemId) {
+                R.id.delete_entity -> {
+                    val tintedIcon = AppCompatResources.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_delete_24px
+                    )?.apply {
+                        setTint(ContextCompat.getColor(requireContext(), R.color.error)) // Use your desired color
+                    }
+
+                    MaterialAlertDialogBuilder(
+                        requireContext(),
+                        com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+                    )
+                        .setTitle("Delete Course Folder")
+                        .setMessage("Are you sure you want to delete this folder? This will also delete all the files.")
+                        .setIcon(tintedIcon)
+                        .setNeutralButton("Cancel") { _, _ -> }
+                        .setNegativeButton("Delete") { _, _ ->
+                            val fileList = fileViewModel.state.value.fileList
+                            fileViewModel.deleteAllFiles(fileList)
+                            folderViewModel.onEvent(FolderEvent.DeleteFolder(folder))
+                            dismiss()
+                        }
+                        .show()
+                        .apply {
+                            getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                                ContextCompat.getColor(context, R.color.error)
+                            )
+                        }
+                    true
+                }
+                else -> false
+            }
         }
     }
 
-    private fun setupHeader(name: String, coverUri: String?, profileUri: String?) {
+    private fun setupHeader(name: String) {
         binding.CourseName.text = name
-
-//        val coverImage = view.findViewById<ImageView>(R.id.coverPhoto)
-//        val profileImage = view.findViewById<ImageView>(R.id.profilePhoto)
-
-//        coverImage.setImageURI(coverUri?.let { Uri.parse(it) })
-//        if (coverUri.isNullOrEmpty()) coverImage.setImageResource(R.drawable.gray_placeholder)
-//
-//        profileImage.setImageURI(profileUri?.let { Uri.parse(it) })
-//        if (profileUri.isNullOrEmpty()) profileImage.setImageResource(R.drawable.gray_placeholder)
     }
 
     private fun setupRecyclerView() {
-        fileAdapter = FileListAdapter { file -> openFile(Uri.parse(file.uri)) }
+        fileAdapter = FileRecyclerAdapter { file -> openFile(file.filePath) }
         binding.fileRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.fileRecyclerView.adapter = fileAdapter
-        fileAdapter.updateFiles(filteredFiles)
+
+        binding.fileRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = fileAdapter
+            itemAnimator = DefaultItemAnimator()
+        }
+
+        collectLatestOnViewLifecycle(fileViewModel.state) { state ->
+            fileAdapter.submitList(state.fileList)
+        }
     }
 
     private fun setupAddButton() {
-        binding.btnAdd.setOnClickListener {
+        binding.btnAddFile.setOnClickListener {
             filePickerLauncher.launch(arrayOf("*/*"))
         }
     }
 
     private val filePickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
-        uri?.let {
-            requireActivity().contentResolver.takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            val fileName = getFileName(it)
-            val newFile = Upload(fileName, it.toString())
-            files.add(newFile)
-            saveFilesToStorage()
-            filterList(binding.searchBar.text.toString())
+        uri?.let { fileUri ->
+            val fileName = FileHelper.getFileName(requireContext(), fileUri)
+
+            val mimeType = requireActivity().contentResolver.getType(fileUri) ?: "*/*"
+            val fileType = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: "bin"
+            val filePath = "file_${System.currentTimeMillis()}.$fileType"
+            val absolutePath = saveFileToInternalStorage(requireContext(), fileUri, filePath)
+
+            val newFile = File(
+                fileName = fileName,
+                fileType = fileType,
+                filePath = absolutePath,
+                folderId = folder.folderId
+            )
+
+            fileViewModel.onEvent(FileEvent.SaveFile(newFile))
         }
     }
 
-    companion object {
-        fun deleteFilesForCourse(context: Context, userId: String, courseTitle: String) {
-            val prefs = context.getSharedPreferences("uploaded_files_$userId", Context.MODE_PRIVATE)
-            val courseKey = courseTitle.replace(" ", "_")
-            prefs.edit().remove(courseKey).apply()
-        }
-    }
-
-
-    private fun getFileName(uri: Uri): String {
-        requireActivity().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            if (cursor.moveToFirst()) return cursor.getString(nameIndex)
-        }
-        return "Unknown File"
-    }
-
-    private fun setupSearchBar() {
-        binding.searchBar.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = filterList(s.toString())
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    private fun setupSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = false
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) {
+                    fileAdapter.clearFilter()
+                } else {
+                    fileAdapter.filter.filter(newText)
+                }
+                return true
+            }
         })
-    }
 
-    private fun filterList(query: String) {
-        filteredFiles.clear()
-        val lowerQuery = query.lowercase(Locale.ROOT)
-        filteredFiles.addAll(files.filter { it.name.lowercase(Locale.ROOT).contains(lowerQuery) })
-        fileAdapter.updateFiles(filteredFiles)
-        binding.noFilesText.visibility = if (filteredFiles.isEmpty()) View.VISIBLE else View.GONE
+        try {
+            val searchEditText = binding.searchView.findViewById<EditText>(
+                androidx.appcompat.R.id.search_src_text
+            )
+            searchEditText?.apply {
+                setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+                setHintTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun setupSwipeToDelete() {
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = false
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val fileToDelete = filteredFiles[position]
-                AlertDialog.Builder(context)
-                    .setTitle("Delete File")
-                    .setMessage("Are you sure you want to delete \"${fileToDelete.name}\"?")
-                    .setPositiveButton("Delete") { _, _ ->
-                        files.remove(fileToDelete)
-                        saveFilesToStorage()
-                        filterList(binding.searchBar.text.toString())
+                val position = viewHolder.bindingAdapterPosition
+                val fileToDelete = fileAdapter.currentList.getOrNull(position) ?: return
+
+                var fileDeleted = true
+                fileViewModel.onEvent(FileEvent.DeleteFile(fileToDelete))
+
+                val snackBar = Snackbar.make(binding.root, "File deleted", Snackbar.LENGTH_LONG)
+                    .setAction("Undo") {
+                        fileDeleted = false
+                        fileViewModel.onEvent(FileEvent.SaveFile(fileToDelete))
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        fileAdapter.notifyItemChanged(position)
-                        dialog.dismiss()
+
+                snackBar.show()
+
+                snackBar.addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        super.onDismissed(transientBottomBar, event)
+                        if (fileDeleted) {
+                            lifecycleScope.launch {
+                                withContext(Dispatchers.IO) {
+                                    FileHelper.deleteFileFromStorage(requireContext(), fileToDelete)
+                                }
+                            }
+                        }
                     }
-                    .show()
+                })
             }
         })
         itemTouchHelper.attachToRecyclerView(binding.fileRecyclerView)
     }
 
-    private fun openFile(uri: Uri) {
+
+    private fun openFile(filePath: String) {
+        val file = java.io.File(filePath)
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.fileprovider",
+            file
+        )
+
+        val mimeType = requireContext().contentResolver.getType(uri) ?: "*/*"
+
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, requireActivity().contentResolver.getType(uri) ?: "*/*")
+            setDataAndType(uri, mimeType)
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
-        startActivity(Intent.createChooser(intent, "Open file with"))
+
+        try {
+            startActivity(Intent.createChooser(intent, "Open file with"))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), "No app found to open this file", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun saveFilesToStorage() {
-        val sharedPrefs = requireActivity().getSharedPreferences("uploaded_files_$currentUser", Context.MODE_PRIVATE)
-        val jsonArray = JSONArray()
-        files.forEach {
-            val obj = JSONObject()
-            obj.put("name", it.name)
-            obj.put("uri", it.uri)
-            jsonArray.put(obj)
-        }
-        sharedPrefs.edit().putString(courseKey, jsonArray.toString()).apply()
-    }
+    private fun saveFileToInternalStorage(context: Context, uri: Uri, fileName: String): String {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri) ?: return ""
 
-    private fun loadFilesFromStorage() {
-        val sharedPrefs = requireActivity().getSharedPreferences("uploaded_files_$currentUser", Context.MODE_PRIVATE)
-        val jsonString = sharedPrefs.getString(courseKey, null) ?: return
-        val jsonArray = JSONArray(jsonString)
-        for (i in 0 until jsonArray.length()) {
-            val obj = jsonArray.getJSONObject(i)
-            val name = obj.getString("name")
-            val uri = obj.getString("uri")
-            files.add(Upload(name, uri))
+            val file = java.io.File(context.filesDir, fileName)
+            val outputStream = FileOutputStream(file)
+
+            inputStream.copyTo(outputStream)
+
+            inputStream.close()
+            outputStream.close()
+
+            file.absolutePath
+        } catch (e: IOException) {
+            e.printStackTrace()
+            ""
         }
-        filteredFiles.addAll(files)
     }
 
     override fun onDestroyView() {

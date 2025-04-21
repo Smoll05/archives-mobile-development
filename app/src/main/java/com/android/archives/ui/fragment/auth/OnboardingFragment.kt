@@ -137,14 +137,6 @@ class OnboardingFragment : Fragment() {
             onEvent(UserEvent.SetBirthday(selection))
         }
 
-        datePicker.addOnNegativeButtonClickListener {
-            // Handle negative button click (optional)
-        }
-
-        datePicker.addOnCancelListener {
-            // Handle cancel event (optional)
-        }
-
         datePicker.addOnDismissListener {
             existingPicker = null
         }
