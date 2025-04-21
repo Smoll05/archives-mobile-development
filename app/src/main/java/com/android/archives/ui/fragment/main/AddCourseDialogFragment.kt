@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import com.android.archives.R
 import com.android.archives.data.model.FolderItem
 import com.android.archives.databinding.FragmentAddCourseDialogBinding
@@ -61,7 +60,6 @@ class AddCourseDialogFragment(
             val courseName = binding.etCourseName.text.toString().trim()
             if (courseName.isNotEmpty()) {
                 val folder = FolderItem(
-                    title = courseName,
                     name = courseName,
                     iconRes = selectedColorRes
                 )
