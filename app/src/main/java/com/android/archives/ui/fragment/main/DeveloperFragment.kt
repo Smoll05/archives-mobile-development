@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.DialogFragment
 import com.android.archives.databinding.FragmentDeveloperBinding
 
-class DeveloperFragment : Fragment() {
+class DeveloperFragment : DialogFragment() {
     private var _binding: FragmentDeveloperBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +29,7 @@ class DeveloperFragment : Fragment() {
 
         // Use View Binding to access developerToolbar
         binding.developerToolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            dismiss()
         }
     }
 

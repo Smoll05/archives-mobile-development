@@ -8,15 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.android.archives.R
 import com.android.archives.databinding.FragmentSettingsBinding
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.DateConverter
 import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -57,15 +59,30 @@ class SettingsFragment : Fragment() {
         }
 
         binding.settingsDelete.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Delete Account")
-                .setMessage("Are you sure you want to delete your account permanently?")
-                .setPositiveButton("Delete") { _, _ ->
-                    val prefs = requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE)
-                    prefs.edit().clear().apply()
+            val tintedIcon = AppCompatResources.getDrawable(
+                requireContext(),
+                R.drawable.ic_person_remove_24px
+            )?.apply {
+                setTint(ContextCompat.getColor(requireContext(), R.color.error))
+            }
+
+            MaterialAlertDialogBuilder(
+                requireContext(),
+                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+            )
+                .setTitle("Delete Task")
+                .setMessage("Are you sure you want to delete this task?")
+                .setIcon(tintedIcon)
+                .setNeutralButton("Cancel") { _, _ -> }
+                .setNegativeButton("Delete") { _, _ ->
+
                 }
-                .setNegativeButton("Cancel", null)
                 .show()
+                .apply {
+                    getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                        ContextCompat.getColor(context, R.color.error)
+                    )
+                }
         }
 
         binding.settingsReportProblem.setOnClickListener {
@@ -79,7 +96,8 @@ class SettingsFragment : Fragment() {
         }
 
         binding.settingsAbout.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_developerFragment)
+            DeveloperFragment().show(parentFragmentManager, "FullScreenDialog")
+//            findNavController().navigate(R.id.action_settingsFragment_to_developerFragment)
         }
 
         binding.settingsEditProfile.setOnClickListener {
