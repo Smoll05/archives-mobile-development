@@ -1,5 +1,6 @@
 package com.android.archives.ui.adapter
 
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,13 +24,24 @@ class FileRecyclerAdapter(
         private val fileIcon: ImageView = itemView.findViewById(R.id.fileIcon)
         private val fileName: TextView = itemView.findViewById(R.id.fileName)
 
+        private var lastClickTime: Long = 0
+        private val clickInterval: Long = 3000 // 1 second
+
         fun bind(file: File) {
             fileName.text = file.fileName
             fileIcon.setImageResource(getIconForFileType(file.fileType))
+
+            itemView.setOnClickListener {
+                val now = SystemClock.elapsedRealtime()
+                if (now - lastClickTime < clickInterval) return@setOnClickListener
+
+                lastClickTime = now
+                onFileClick(file)
+            }
         }
 
         private fun getIconForFileType(extension: String): Int {
-            return when (extension) {
+            return when (extension.lowercase()) {
                 "pdf" -> R.drawable.ic_pdf
                 "doc", "docx" -> R.drawable.ic_word
                 "ppt", "pptx" -> R.drawable.ic_ppt
@@ -40,6 +52,7 @@ class FileRecyclerAdapter(
             }
         }
     }
+
 
     private val differCallback = object : DiffUtil.ItemCallback<File>() {
         override fun areItemsTheSame(oldItem: File, newItem: File): Boolean {

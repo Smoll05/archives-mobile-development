@@ -46,8 +46,16 @@ class TaskRecyclerAdapter(
             onCheckChanged(task, isChecked)
         }
 
+        // Double-tap prevention
+        var lastClickTime = 0L
+        val clickInterval = 3000L // 1 second
+
         holder.binding.root.setOnClickListener {
+            val now = android.os.SystemClock.elapsedRealtime()
+            if (now - lastClickTime < clickInterval) return@setOnClickListener
+            lastClickTime = now
             onClick(task)
         }
     }
+
 }

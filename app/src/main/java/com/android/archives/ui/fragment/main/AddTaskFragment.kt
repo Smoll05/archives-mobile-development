@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AddTaskFragment : DialogFragment() {
+    private var check = false;
     private var _binding: FragmentAddTaskBinding? = null
     private val binding get() = _binding!!
     private val taskViewModel: TaskViewModel by activityViewModels()
@@ -76,14 +77,22 @@ class AddTaskFragment : DialogFragment() {
             }
         }
 
-        btnAdd.setOnClickListener {
-            if (areFieldsEmpty()) return@setOnClickListener
-            Toast.makeText(context, "Task Successfully Added", Toast.LENGTH_SHORT).show()
 
+        btnAdd.setOnClickListener {
+            if (check) return@setOnClickListener  // Prevent multiple clicks
+            if (areFieldsEmpty()) return@setOnClickListener
+
+            check = true // Set the flag so the button can't be clicked again
+            btnAdd.isEnabled = false // Also disable the button
+
+            Toast.makeText(context, "Task Successfully Added", Toast.LENGTH_SHORT).show()
             taskViewModel.onEvent(TaskEvent.SaveTask)
 
-            dismiss()
+            dismiss() // Dismiss dialog
         }
+
+
+
 
         // Add text listeners
         etTaskTitle.addTextChangedListener {
@@ -132,4 +141,16 @@ class AddTaskFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        const val TAG = "AddTaskFragment"
+
+        fun showIfNotOpen(fragmentManager: androidx.fragment.app.FragmentManager) {
+            val existing = fragmentManager.findFragmentByTag(TAG)
+            if (existing == null) {
+                AddTaskFragment().show(fragmentManager, TAG)
+            }
+        }
+    }
+
 }

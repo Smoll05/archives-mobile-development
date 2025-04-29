@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,9 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
     private val userViewModel: UserViewModel by activityViewModels()
 
+    private var lastClickTime: Long = 0
+    private val clickInterval: Long = 1000 // 1 second
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,15 +42,15 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         loadProfile()
 
         binding.settingsEditUser.setOnClickListener {
-            val editUserFragment = EditUserFragment()
-            editUserFragment.show(parentFragmentManager, "EditUserDialog")
+            if (isDoubleClick()) return@setOnClickListener
+            EditUserFragment().show(parentFragmentManager, "EditUserDialog")
         }
 
         binding.settingsErase.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
             AlertDialog.Builder(requireContext())
                 .setTitle("Erase All Content")
                 .setMessage("Are you sure you want to erase all app data? This action cannot be undone.")
@@ -59,6 +63,8 @@ class SettingsFragment : Fragment() {
         }
 
         binding.settingsDelete.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
+
             val tintedIcon = AppCompatResources.getDrawable(
                 requireContext(),
                 R.drawable.ic_person_remove_24px
@@ -86,28 +92,47 @@ class SettingsFragment : Fragment() {
         }
 
         binding.settingsReportProblem.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
             val report = Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLScCo0HRxxtpJAvBvmgJOSrorQLgMLMrR_iMmYrP3Anw2EegnA/viewform?usp=header"))
             startActivity(report)
         }
 
         binding.settingsRequestFeature.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
             val report = Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.google.com/forms/d/e/1FAIpQLSdi18YdSY-gaGEl0Zm-qIAJDzWgFlAbFRHE9lRsRlQquUKceA/viewform?usp=header"))
             startActivity(report)
         }
 
         binding.settingsAbout.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
             DeveloperFragment().show(parentFragmentManager, "FullScreenDialog")
-//            findNavController().navigate(R.id.action_settingsFragment_to_developerFragment)
         }
 
         binding.settingsEditProfile.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
             ProfileFragment().show(parentFragmentManager, "FullScreenDialog")
         }
 
         binding.btnLogout.setOnClickListener {
+            if (isDoubleClick()) return@setOnClickListener
             val bottomSheet = LogOutDialogFragment()
             bottomSheet.show(parentFragmentManager, "ModalBottomSheet")
         }
+    }
+
+    private fun isDoubleClick(): Boolean {
+        val currentClickTime = SystemClock.elapsedRealtime()
+        return if (currentClickTime - lastClickTime < clickInterval) {
+            true
+        } else {
+            lastClickTime = currentClickTime
+            false
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lastClickTime = 0
     }
 
     override fun onDestroyView() {
