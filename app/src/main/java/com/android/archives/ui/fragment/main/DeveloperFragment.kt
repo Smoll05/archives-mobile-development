@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.android.archives.R
 import com.android.archives.databinding.FragmentDeveloperBinding
 
 class DeveloperFragment : DialogFragment() {
@@ -31,6 +32,12 @@ class DeveloperFragment : DialogFragment() {
         binding.developerToolbar.setNavigationOnClickListener {
             dismiss()
         }
+    }
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setWindowAnimations(
+            R.style.dialog_animation_enter_up)
     }
 
     override fun onDestroyView() {
