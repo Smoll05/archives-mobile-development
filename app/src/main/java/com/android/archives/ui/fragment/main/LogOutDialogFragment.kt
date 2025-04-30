@@ -5,13 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import com.android.archives.R
-import com.android.archives.databinding.FragmentHomeBinding
+import com.android.archives.data.service.SharedPrefsService
 import com.android.archives.databinding.FragmentLogOutDialogBinding
 import com.android.archives.ui.activity.AuthActivity
-import com.android.archives.utils.SharedPrefsHelper
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,7 +19,7 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var sharedPrefs: SharedPrefsHelper
+    lateinit var sharedPrefs: SharedPrefsService
 
     override fun onCreateView(
         inflater: LayoutInflater,

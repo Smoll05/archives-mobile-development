@@ -278,40 +278,6 @@
                             style="@style/Widget.App.Switch" />
 
                     </LinearLayout>
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:dividerColor="@color/black"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="14dp"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_task_alt_24px"
-                            app:tint="@color/black"
-                            android:layout_marginEnd="12dp"/>
-
-                        <TextView
-                            android:textAppearance="@style/App.Settings.Preference.Text"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text="Enable Task Notification"/>
-
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            style="@style/Widget.App.Switch"
-                            android:checked="true"/>
-
-                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

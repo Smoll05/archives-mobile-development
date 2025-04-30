@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.archives.databinding.FragmentLoginBinding
-import com.android.archives.ui.activity.MainActivity
+import com.android.archives.ui.activity.AuthActivity
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.getContent
 import com.android.archives.utils.isFieldEmptyOrNull
@@ -59,9 +59,10 @@ class LoginFragment : Fragment() {
                 )
 
                 if (success) {
-                    startActivity(
-                        Intent(requireContext(), MainActivity::class.java)
-                    )
+                    val intent = Intent(requireContext(), AuthActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    startActivity(intent)
                 } else {
                     Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
                 }

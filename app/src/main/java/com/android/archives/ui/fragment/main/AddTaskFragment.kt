@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -16,13 +14,11 @@ import com.android.archives.databinding.FragmentAddTaskBinding
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.viewmodel.TaskViewModel
 import com.android.archives.utils.isFieldEmptyOrNull
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AddTaskFragment : DialogFragment() {
-    private var check = false;
+    private var check = false
     private var _binding: FragmentAddTaskBinding? = null
     private val binding get() = _binding!!
     private val taskViewModel: TaskViewModel by activityViewModels()
@@ -143,7 +139,7 @@ class AddTaskFragment : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "AddTaskFragment"
+        private const val TAG = "AddTaskFragment"
 
         fun showIfNotOpen(fragmentManager: androidx.fragment.app.FragmentManager) {
             val existing = fragmentManager.findFragmentByTag(TAG)

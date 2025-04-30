@@ -7,6 +7,7 @@ sealed interface ScheduleEvent {
     data object SaveSchedule : ScheduleEvent
     data class EditSchedule(val schedule: Schedule): ScheduleEvent
     data class DeleteSchedule(val schedule: Schedule) : ScheduleEvent
+    data object DeleteAllSchedule: ScheduleEvent
     data class SetTitle(val title: String) : ScheduleEvent
     data class SetLocation(val location: String) : ScheduleEvent
     data class SetDate(val dateInMillis: Long) : ScheduleEvent

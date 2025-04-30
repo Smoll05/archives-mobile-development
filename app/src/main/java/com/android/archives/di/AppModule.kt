@@ -8,7 +8,7 @@ import com.android.archives.data.dao.ScheduleDao
 import com.android.archives.data.dao.TaskDao
 import com.android.archives.data.dao.UserDao
 import com.android.archives.data.db.ArchivesDatabase
-import com.android.archives.utils.SharedPrefsHelper
+import com.android.archives.data.service.SharedPrefsService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,6 +53,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSharedPrefsHelper(@ApplicationContext context: Context) : SharedPrefsHelper
-        = SharedPrefsHelper(context)
+    fun provideSharedPrefsHelper(@ApplicationContext context: Context) : SharedPrefsService
+        = SharedPrefsService(context)
 }
