@@ -1,105 +1,109 @@
-package com.android.archives.ui.fragment.main
+    package com.android.archives.ui.fragment.main
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
-import com.android.archives.R
-import com.android.archives.data.model.FolderItem
-import com.android.archives.databinding.FragmentAddCourseDialogBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
+    import android.os.Bundle
+    import android.view.LayoutInflater
+    import android.view.View
+    import android.view.ViewGroup
+    import android.widget.ImageView
+    import android.widget.Toast
+    import com.android.archives.R
+    import com.android.archives.data.model.FolderItem
+    import com.android.archives.databinding.FragmentAddCourseDialogBinding
+    import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+    import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class AddCourseDialogFragment(
-    private val onFolderAdded: (FolderItem) -> Unit
-) : BottomSheetDialogFragment() {
+    @AndroidEntryPoint
+    class AddCourseDialogFragment(
+        private val onFolderAdded: (FolderItem) -> Unit
+    ) : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentAddCourseDialogBinding? = null
-    private val binding get() = _binding!!
+        private var _binding: FragmentAddCourseDialogBinding? = null
+        private val binding get() = _binding!!
 
-    private var selectedColorRes: Int = R.drawable.ic_folder
-    private var itemClicked: Boolean = false  // 1. flag to prevent multiple clicks
+        private var selectedColorRes: Int = R.drawable.ic_folder
+        private var itemClicked: Boolean = false  // 1. flag to prevent multiple clicks
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAddCourseDialogBinding.inflate(inflater, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View {
+            _binding = FragmentAddCourseDialogBinding.inflate(inflater, container, false)
 
-        val colorOptions = listOf(
-            binding.colorOption1,
-            binding.colorOption2,
-            binding.colorOption3,
-            binding.colorOption4,
-            binding.colorOption5,
-            binding.colorOption6
-        )
-        val colorDrawables = listOf(
-            R.drawable.ic_folder_yellow,
-            R.drawable.ic_folder_orange,
-            R.drawable.ic_folder_red,
-            R.drawable.ic_folder_violet,
-            R.drawable.ic_folder_blue,
-            R.drawable.ic_folder_green
-        )
+            val colorOptions = listOf(
+                binding.colorOption1,
+                binding.colorOption2,
+                binding.colorOption3,
+                binding.colorOption4,
+                binding.colorOption5,
+                binding.colorOption6
+            )
+            val colorDrawables = listOf(
+                R.drawable.ic_folder_yellow,
+                R.drawable.ic_folder_orange,
+                R.drawable.ic_folder_red,
+                R.drawable.ic_folder_violet,
+                R.drawable.ic_folder_blue,
+                R.drawable.ic_folder_green
+            )
 
-        colorOptions.forEachIndexed { index, imageView ->
-            imageView.setOnClickListener {
-                selectedColorRes = colorDrawables[index]
-                highlightSelected(imageView, colorOptions)
-            }
-        }
 
-        binding.btnAddCourse.setOnClickListener {
-            // 2. Prevent multiple taps
-            if (!itemClicked) {
-                itemClicked = true
-                val courseName = binding.etCourseName.text.toString().trim()
+            selectedColorRes = colorDrawables[0]
+            highlightSelected(colorOptions[0], colorOptions)
 
-                if (courseName.isNotEmpty()) {
-                    binding.btnAddCourse.isEnabled = false
-
-                    val folder = FolderItem(
-                        name = courseName,
-                        iconRes = selectedColorRes
-                    )
-                    onFolderAdded(folder)
-                    dismiss()
-                } else {
-                    Toast.makeText(context, "Please enter a course name", Toast.LENGTH_SHORT).show()
-                    itemClicked = false // allow retry
+            colorOptions.forEachIndexed { index, imageView ->
+                imageView.setOnClickListener {
+                    selectedColorRes = colorDrawables[index]
+                    highlightSelected(imageView, colorOptions)
                 }
             }
+
+            binding.btnAddCourse.setOnClickListener {
+                if (!itemClicked) {
+                    itemClicked = true
+                    val courseName = binding.etCourseName.text.toString().trim()
+
+                    if (courseName.isNotEmpty()) {
+                        binding.btnAddCourse.isEnabled = false
+
+                        val folder = FolderItem(
+                            name = courseName,
+                            iconRes = selectedColorRes
+                        )
+                        onFolderAdded(folder)
+                        dismiss()
+                    } else {
+                        Toast.makeText(context, "Please enter a course name", Toast.LENGTH_SHORT).show()
+                        itemClicked = false
+                    }
+                }
+            }
+
+            return binding.root
         }
 
-        return binding.root
-    }
 
-    override fun onResume() {
-        super.onResume()
-        // 3. Reset itemClicked to allow next interaction
-        itemClicked = false
-    }
+        override fun onResume() {
+            super.onResume()
+            // 3. Reset itemClicked to allow next interaction
+            itemClicked = false
+        }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setWindowAnimations(R.style.dialog_animation_enter_up)
-    }
+        override fun onStart() {
+            super.onStart()
+            dialog?.window?.setWindowAnimations(R.style.dialog_animation_enter_up)
+        }
 
-    private fun highlightSelected(selected: ImageView, allOptions: List<ImageView>) {
-        allOptions.forEach { imageView ->
-            imageView.setBackgroundResource(
-                if (imageView == selected) R.drawable.bg_selected_border else 0
-            )
+        private fun highlightSelected(selected: ImageView, allOptions: List<ImageView>) {
+            allOptions.forEach { imageView ->
+                imageView.setBackgroundResource(
+                    if (imageView == selected) R.drawable.bg_selected_border else 0
+                )
+            }
+        }
+
+        override fun onDestroyView() {
+            super.onDestroyView()
+            _binding = null
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-}
