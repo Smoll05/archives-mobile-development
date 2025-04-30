@@ -2,6 +2,7 @@ package com.android.archives.ui.fragment.main
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,6 @@ import com.android.archives.ui.viewmodel.FileViewModel
 import com.android.archives.ui.viewmodel.FolderViewModel
 import com.android.archives.utils.collectLatestOnViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-
 @AndroidEntryPoint
 class MainCourseFragment : Fragment() {
 
@@ -29,6 +29,9 @@ class MainCourseFragment : Fragment() {
     private lateinit var adapter: FolderAdapter
     private lateinit var currentUser: String
 
+    private var lastClickTime: Long = 0 // ✅ Time tracker for last click
+    private val clickInterval: Long = 1000 // ✅ Interval to prevent double-tap (1 second)
+
     private val folderViewModel: FolderViewModel by activityViewModels()
     private val fileViewModel: FileViewModel by activityViewModels()
 
@@ -37,7 +40,6 @@ class MainCourseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainCourseBinding.inflate(inflater, container, false)
-
         setupRecyclerView()
         return binding.root
     }
@@ -54,9 +56,10 @@ class MainCourseFragment : Fragment() {
         adapter = FolderAdapter { folderItem ->
             fileViewModel.onEvent(FileEvent.SetFolderId(folderItem.folderId))
 
-            val filesFragment = FilesFragment()
-            filesFragment.arguments = Bundle().apply {
-                putParcelable("folder", folderItem)
+            val filesFragment = FilesFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("folder", folderItem)
+                }
             }
 
             filesFragment.show(parentFragmentManager, "FullScreenDialog")
@@ -90,9 +93,7 @@ class MainCourseFragment : Fragment() {
         })
 
         try {
-            val searchEditText = binding.searchView.findViewById<EditText>(
-                androidx.appcompat.R.id.search_src_text
-            )
+            val searchEditText = binding.searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
             searchEditText?.apply {
                 setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
                 setHintTextColor(ContextCompat.getColor(requireContext(), android.R.color.darker_gray))
@@ -110,8 +111,26 @@ class MainCourseFragment : Fragment() {
             dialog.show(parentFragmentManager, "AddCourseDialog")
         }
 
-        binding.addButton.setOnClickListener { showAddDialog() }
-        binding.centerAddButton.setOnClickListener { showAddDialog() }
+        binding.addButton.setOnClickListener {
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastClickTime < clickInterval) return@setOnClickListener // Prevent double-click
+
+            lastClickTime = now // Update last click time
+            showAddDialog()
+        }
+
+        binding.centerAddButton.setOnClickListener {
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastClickTime < clickInterval) return@setOnClickListener // Prevent double-click
+
+            lastClickTime = now // Update last click time
+            showAddDialog()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lastClickTime = 0 // Reset click prevention flag when returning to the fragment
     }
 
     override fun onDestroyView() {

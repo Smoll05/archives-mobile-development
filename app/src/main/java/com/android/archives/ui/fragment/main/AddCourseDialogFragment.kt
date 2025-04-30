@@ -21,13 +21,13 @@ class AddCourseDialogFragment(
     private val binding get() = _binding!!
 
     private var selectedColorRes: Int = R.drawable.ic_folder
+    private var itemClicked: Boolean = false  // 1. flag to prevent multiple clicks
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the binding
         _binding = FragmentAddCourseDialogBinding.inflate(inflater, container, false)
 
         val colorOptions = listOf(
@@ -47,7 +47,6 @@ class AddCourseDialogFragment(
             R.drawable.ic_folder_green
         )
 
-        // Set up the color option click listeners
         colorOptions.forEachIndexed { index, imageView ->
             imageView.setOnClickListener {
                 selectedColorRes = colorDrawables[index]
@@ -55,34 +54,41 @@ class AddCourseDialogFragment(
             }
         }
 
-        // Add course button click listener
         binding.btnAddCourse.setOnClickListener {
-            val courseName = binding.etCourseName.text.toString().trim()
-            if (courseName.isNotEmpty()) {
-                val folder = FolderItem(
-                    name = courseName,
-                    iconRes = selectedColorRes
-                )
-                onFolderAdded(folder)
-                dismiss()
-            } else {
-                Toast.makeText(context, "Please enter a course name", Toast.LENGTH_SHORT).show()
+            // 2. Prevent multiple taps
+            if (!itemClicked) {
+                itemClicked = true
+                val courseName = binding.etCourseName.text.toString().trim()
+
+                if (courseName.isNotEmpty()) {
+                    binding.btnAddCourse.isEnabled = false
+
+                    val folder = FolderItem(
+                        name = courseName,
+                        iconRes = selectedColorRes
+                    )
+                    onFolderAdded(folder)
+                    dismiss()
+                } else {
+                    Toast.makeText(context, "Please enter a course name", Toast.LENGTH_SHORT).show()
+                    itemClicked = false // allow retry
+                }
             }
         }
 
-        // Cancel button click listener
-        binding.btnCancelCourse.setOnClickListener {
-            dismiss()
-        }
-
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 3. Reset itemClicked to allow next interaction
+        itemClicked = false
     }
 
     override fun onStart() {
         super.onStart()
         dialog?.window?.setWindowAnimations(R.style.dialog_animation_enter_up)
     }
-
 
     private fun highlightSelected(selected: ImageView, allOptions: List<ImageView>) {
         allOptions.forEach { imageView ->

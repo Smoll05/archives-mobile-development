@@ -69,10 +69,10 @@
         <action
             android:id="@+id/action_settingsFragment_to_developerFragment"
             app:destination="@id/developerFragment"
-            app:enterAnim="@anim/slide_in_right"
+            app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/no_animation"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/no_animation"/>
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/no_animation" />
         <action
             android:id="@+id/action_settingsFragment_to_profileFragment"
             app:destination="@id/profileFragment"

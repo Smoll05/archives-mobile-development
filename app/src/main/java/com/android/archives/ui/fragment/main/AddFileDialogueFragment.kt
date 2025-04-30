@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,6 @@ import com.android.archives.R
 import com.android.archives.databinding.FragmentAddFileDialogueBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-
 @AndroidEntryPoint
 class AddFileDialogueFragment : BottomSheetDialogFragment() {
 
@@ -35,6 +35,10 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
     private var listener: OnFileAddedListener? = null
 
     private var selectedUri: Uri? = null
+
+    // Time tracking to prevent multiple uploads in a short time
+    private var lastClickTime: Long = 0 // Last click time
+    private val clickInterval: Long = 1000 // 1 second interval
 
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -90,6 +94,11 @@ class AddFileDialogueFragment : BottomSheetDialogFragment() {
         }
 
         binding.uploadButton.setOnClickListener {
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastClickTime < clickInterval) return@setOnClickListener // Prevent double-click
+
+            lastClickTime = now // Update last click time
+
             val title = binding.titleInput.text.toString()
             if (selectedUri != null && title.isNotBlank()) {
                 listener?.onFileAdded(title, selectedUri!!)
