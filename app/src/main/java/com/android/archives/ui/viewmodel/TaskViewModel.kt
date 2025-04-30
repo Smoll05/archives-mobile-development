@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.archives.data.dao.TaskDao
 import com.android.archives.data.model.Task
+import com.android.archives.data.service.SharedPrefsService
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.state.TaskState
-import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor (
-    private val sharedPrefs: SharedPrefsHelper,
+    private val sharedPrefs: SharedPrefsService,
     private val dao: TaskDao
 ): ViewModel() {
 
@@ -129,6 +129,24 @@ class TaskViewModel @Inject constructor (
                     val task = event.task
                     task.isComplete = event.isComplete
                     dao.upsertTask(task)
+                }
+            }
+
+            TaskEvent.DeleteAllTask -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(isLoading = true) }
+                    state.value.todoTask.let{ todoTask ->
+                        todoTask.forEach { task ->
+                            dao.deleteTask(task)
+                        }
+                    }
+
+                    state.value.completeTask.let{ completeTask ->
+                        completeTask.forEach { task ->
+                            dao.deleteTask(task)
+                        }
+                    }
+                    _state.update { it.copy(isLoading = false) }
                 }
             }
         }

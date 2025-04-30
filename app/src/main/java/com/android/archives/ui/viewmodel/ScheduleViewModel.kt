@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.archives.data.dao.ScheduleDao
 import com.android.archives.data.model.Schedule
+import com.android.archives.data.service.SharedPrefsService
 import com.android.archives.ui.event.ScheduleEvent
 import com.android.archives.ui.state.ScheduleState
-import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ScheduleViewModel @Inject constructor (
-    private val sharedPrefs: SharedPrefsHelper,
+    private val sharedPrefs: SharedPrefsService,
     private val dao: ScheduleDao,
 ) : ViewModel() {
     private val _state = MutableStateFlow(ScheduleState())
@@ -122,6 +122,16 @@ class ScheduleViewModel @Inject constructor (
                 _state.update { it.copy(
                     colorType = event.colorType
                 )}
+            }
+
+            ScheduleEvent.DeleteAllSchedule -> {
+                viewModelScope.launch {
+                    state.value.scheduleList.let{ scheduleList ->
+                        scheduleList.forEach { schedule ->
+                            dao.deleteSchedule(schedule)
+                        }
+                    }
+                }
             }
         }
     }
