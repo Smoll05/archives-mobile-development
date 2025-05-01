@@ -1,5 +1,6 @@
 package com.android.archives.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.archives.data.dao.TaskDao
@@ -49,23 +50,6 @@ class TaskViewModel @Inject constructor (
                     dao.deleteTask(event.task)
                 }
             }
-            is TaskEvent.EditTask -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(
-                        currentTask = event.task,
-                        isLoading = true
-                    ) }
-
-                    val task = event.task
-                    val current = state.value
-
-                    task.title = current.title
-                    task.description = current.description
-                    task.emojiIcon = current.emojiIcon
-
-                    dao.upsertTask(task)
-                }
-            }
             is TaskEvent.LoadTask -> {
                 val task = event.task
 
@@ -82,7 +66,7 @@ class TaskViewModel @Inject constructor (
                         isLoading = true
                     ) }
 
-                    val current = _state.value
+                    val current = state.value
                     val (title, description, emoji) = Triple(
                         current.title, current.description, current.emojiIcon
                     )
@@ -147,6 +131,26 @@ class TaskViewModel @Inject constructor (
                         }
                     }
                     _state.update { it.copy(isLoading = false) }
+                }
+            }
+
+            is TaskEvent.EditTask -> {
+                viewModelScope.launch {
+                    val updatedTask = event.task.copy(
+                        title = state.value.title,
+                        description = state.value.description,
+                        emojiIcon = state.value.emojiIcon
+                    )
+
+                    Log.d("TaskAdded", "Updated task: $updatedTask")
+
+                    _state.update {
+                        it.copy(
+                            currentTask = updatedTask,
+                            isLoading = true
+                        )
+                    }
+                    dao.upsertTask(updatedTask)
                 }
             }
         }

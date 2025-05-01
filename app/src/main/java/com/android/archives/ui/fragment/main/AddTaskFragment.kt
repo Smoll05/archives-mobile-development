@@ -23,6 +23,8 @@ class AddTaskFragment : DialogFragment() {
     private val binding get() = _binding!!
     private val taskViewModel: TaskViewModel by activityViewModels()
 
+    private var emojiPickerShown = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
@@ -57,6 +59,9 @@ class AddTaskFragment : DialogFragment() {
         }
 
         btnEmoji.setOnClickListener {
+            if(emojiPickerShown) return@setOnClickListener
+
+            emojiPickerShown = true
             EmojiPickerDialogueFragment().show(parentFragmentManager, "emoji_picker_dialog")
         }
 
@@ -71,6 +76,8 @@ class AddTaskFragment : DialogFragment() {
                 errorEmoji.visibility = TextView.INVISIBLE
                 taskViewModel.onEvent(TaskEvent.SetEmoji(emoji))
             }
+
+            emojiPickerShown = false
         }
 
 
@@ -86,9 +93,6 @@ class AddTaskFragment : DialogFragment() {
 
             dismiss() // Dismiss dialog
         }
-
-
-
 
         // Add text listeners
         etTaskTitle.addTextChangedListener {

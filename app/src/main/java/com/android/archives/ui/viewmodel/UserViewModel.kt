@@ -119,6 +119,10 @@ class UserViewModel @Inject constructor (
         }
     }
 
+    suspend fun userExists(username: String) : Boolean {
+        return dao.getUserWithUsername(username) != null
+    }
+
     suspend fun registerUser() : Boolean {
         val current = state.value
 

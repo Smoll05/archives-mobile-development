@@ -17,6 +17,7 @@ import java.io.File
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val userViewModel: UserViewModel by viewModels()
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,63 +35,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
 
         preloadProfileImage()
-
-//        navHostFragment.findNavController()
-//            .addOnDestinationChangedListener { _, destination, _ ->
-//                when(destination.id) {
-//                    R.id.settingsFragment, R.id.homeFragment,
-//                    R.id.scheduleFragment, R.id.mainCourseFragment ->
-//                        binding.bottomNavigation.visibility = View.VISIBLE
-//                    else -> binding.bottomNavigation.visibility = View.GONE
-//                }
-//            }
-
-//        navHostFragment.findNavController()
-//            .addOnDestinationChangedListener { _, destination, _ ->
-//                binding.root.doOnPreDraw {
-//                    when (destination.id) {
-//                        R.id.settingsFragment, R.id.homeFragment,
-//                        R.id.scheduleFragment, R.id.mainCourseFragment -> {
-//                            binding.bottomNavigation.visibility = View.VISIBLE
-//                        }
-//                        else -> {
-//                            binding.bottomNavigation.visibility = View.GONE
-//                        }
-//                    }
-//                }
-//            }
-
-//        val navHostFragment = supportFragmentManager
-//            .findFragmentById(R.id.newsNavHostFragment) as NavHostFragment
-//
-//        val navController = navHostFragment.navController
-//
-//        binding.bottomNavigationView.setupWithNavController(navController)
     }
-
-//    private val navListener = NavigationBarView.OnItemSelectedListener { item ->
-//        lateinit var selectedFragment: Fragment
-//        when(item.itemId) {
-//            R.id.navigation_home-> {
-//                selectedFragment = HomeFragment()
-//            }
-//
-//            R.id.navigation_course -> {
-//                selectedFragment = MainCourseFragment()
-//            }
-//
-//            R.id.navigation_schedule -> {
-//                selectedFragment = ScheduleFragment()
-//            }
-//
-//            R.id.navigation_settings -> {
-//                selectedFragment = SettingsFragment()
-//            }
-//        }
-//
-//        supportFragmentManager.beginTransaction().replace(R.id.content_frame, selectedFragment).commit()
-//        true
-//    }
 
     private fun preloadProfileImage() {
         collectLatestOnLifecycle(userViewModel.state) { state ->

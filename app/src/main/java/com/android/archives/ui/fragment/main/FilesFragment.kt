@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -152,7 +154,18 @@ class FilesFragment : DialogFragment() {
         }
 
         collectLatestOnViewLifecycle(fileViewModel.state) { state ->
-            fileAdapter.submitList(state.fileList)
+            val fileList = state.fileList
+            fileAdapter.submitList(fileList)
+
+            if(fileList.isEmpty()) {
+                binding.fileTodoEmpty.visibility = LinearLayout.VISIBLE
+                binding.tvNoteDelete.visibility = TextView.INVISIBLE
+                binding.fileRecyclerView.visibility = RecyclerView.INVISIBLE
+            } else {
+                binding.fileTodoEmpty.visibility = LinearLayout.INVISIBLE
+                binding.tvNoteDelete.visibility = TextView.VISIBLE
+                binding.fileRecyclerView.visibility = RecyclerView.VISIBLE
+            }
         }
     }
 

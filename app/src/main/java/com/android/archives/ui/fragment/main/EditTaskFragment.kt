@@ -26,6 +26,8 @@ class EditTaskFragment : DialogFragment() {
     private val taskViewModel: TaskViewModel by activityViewModels()
     lateinit var task : Task
 
+    private var emojiPickerShown = false
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,9 @@ class EditTaskFragment : DialogFragment() {
         }
 
         binding.editTaskEmojiButton.setOnClickListener {
+            if(emojiPickerShown) return@setOnClickListener
+
+            emojiPickerShown = true
             val emojiPickerDialogFragment = EmojiPickerDialogueFragment()
             emojiPickerDialogFragment.show(parentFragmentManager, "emoji_picker_dialog")
         }
@@ -83,6 +88,7 @@ class EditTaskFragment : DialogFragment() {
                 binding.errorEmojiTv.visibility = TextView.INVISIBLE
                 taskViewModel.onEvent(TaskEvent.SetEmoji(emoji))
             }
+            emojiPickerShown = false
         }
 
         binding.editTaskTitle.addTextChangedListener {
@@ -97,10 +103,10 @@ class EditTaskFragment : DialogFragment() {
 
         binding.editTaskButton.setOnClickListener {
             if(areFieldsEmpty()) return@setOnClickListener
-            Toast.makeText(context, "Task Edited", Toast.LENGTH_SHORT).show()
 
             taskViewModel.onEvent(TaskEvent.EditTask(task))
 
+            Toast.makeText(context, "Task Edited", Toast.LENGTH_SHORT).show()
             dismiss()
         }
     }

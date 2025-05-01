@@ -53,4 +53,14 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="password_recommendation">
+        Recommended:\n
+        - Password length should be at least 6 characters.\n
+        - The password must contain at least one letter.\n
+        - The password must contain at least one digit.\n\n
+
+        Optional:\n
+        - At least one special character (e.g., @, #, $, %, !).\n
+        - Use a mix of lowercase and uppercase letters.
+    </string>
 </resources>

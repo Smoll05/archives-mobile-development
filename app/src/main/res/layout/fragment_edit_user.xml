@@ -93,20 +93,12 @@
 
                 <!-- New password field -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilNewPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Enter New Password"
+                    app:errorEnabled="true"
                     android:layout_marginTop="12dp">
-
-                    <TextView
-                        android:id="@+id/tvPasswordStrength"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@android:color/darker_gray"
-                        android:layout_marginTop="4dp"
-                        />
-
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNewPassword"
@@ -116,10 +108,19 @@
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tvPasswordStrength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginTop="-20dp" />
+
                 <!-- Old password field -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilOldPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:errorEnabled="true"
                     android:hint="Enter Old Password"
                     android:layout_marginTop="12dp">
 
@@ -130,6 +131,16 @@
                         android:maxLength="50"
                         android:inputType="textPassword" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/password_recommendation"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="4dp"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/til_confirm_password" />
             </LinearLayout>
 
         </LinearLayout>

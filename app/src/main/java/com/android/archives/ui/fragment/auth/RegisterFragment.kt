@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.archives.R
 import com.android.archives.databinding.FragmentRegisterBinding
 import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
@@ -40,45 +42,66 @@ class RegisterFragment : Fragment() {
             onEvent(UserEvent.SetUserName(it.toString().trim()))
         }
 
-        binding.tfPassword.addTextChangedListener {
-            onEvent(UserEvent.SetPassword(it.toString().trim()))
-        }
-
         binding.registrationToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
             onEvent(UserEvent.HideForm)
         }
+
         binding.tfPassword.addTextChangedListener { input ->
             val password = input.toString().trim()
             userViewModel.onEvent(UserEvent.SetPassword(password))
-            val strength = getPasswordStrength(password)
-            binding.tvPasswordStrength.text = strength.first
-            binding.tvPasswordStrength.setTextColor(strength.second)
+            if(password.isNotEmpty()) {
+                val strength = getPasswordStrength(password)
+                binding.tvPasswordStrength.text = strength.first
+                binding.tvPasswordStrength.setTextColor(strength.second)
+            } else {
+                binding.tvPasswordStrength.text = null
+                binding.tilPassword.error = null
+            }
+        }
+
+        binding.tfConfirmPassword.addTextChangedListener { input ->
+            val confirmPassword = input.toString().trim()
+            if(confirmPassword.isEmpty()) {
+                binding.tilPassword.error = null
+            }
         }
 
         binding.btnRegister.setOnClickListener {
-            val username = binding.tfEmail.text.toString().trim()
-            val password = binding.tfPassword.text.toString().trim()
-            val confirmPassword = binding.tfConfirmPassword.text.toString().trim()
+            lifecycleScope.launch {
+                val username = binding.tfEmail.text.toString().trim()
+                val password = binding.tfPassword.text.toString().trim()
+                val confirmPassword = binding.tfConfirmPassword.text.toString().trim()
 
-            if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                if (userViewModel.userExists(username)) {
+                    Toast.makeText(requireContext(), "Username already taken", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                    Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                val strength = getPasswordStrength(password)
+                binding.tilPassword.error = null
+                binding.tilConfirmPassword.error = null
+
+                if (strength.first == "Weak Password") {
+                    binding.tilPassword.error = " "
+                    binding.tilPassword.errorIconDrawable = null
+                    Toast.makeText(requireContext(), "Create a much stronger password", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                if (password != confirmPassword) {
+                    binding.tilConfirmPassword.error = "Passwords do not match"
+                    binding.tilPassword.errorIconDrawable = null
+                    return@launch
+                }
+
+                findNavController().navigate(R.id.action_registerFragment_to_onboardingFragment)
             }
-
-            val strength = getPasswordStrength(password)
-            if (strength.first == "Weak Password") {
-                binding.tilPassword.error = "Please choose a stronger password"
-                Toast.makeText(requireContext(), "Create a much stronger password", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (password != confirmPassword) {
-                binding.tilConfirmPassword.error = "Passwords do not match"
-                return@setOnClickListener
-            }
-
-            findNavController().navigate(R.id.action_registerFragment_to_onboardingFragment)
         }
     }
 

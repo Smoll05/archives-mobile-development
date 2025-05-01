@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.archives.R
 import com.android.archives.databinding.FragmentTaskTodoBinding
 import com.android.archives.ui.adapter.TaskRecyclerAdapter
 import com.android.archives.ui.event.TaskEvent
@@ -38,17 +37,14 @@ class TaskTodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val taskEmptySign = view.findViewById<LinearLayout>(R.id.task_todo_empty)
-        val rvTask = view.findViewById<RecyclerView>(R.id.task_todo_recycler_view)
-
-        rvTask.addItemDecoration (
+        binding.taskTodoRecyclerView.addItemDecoration (
             SpacingDecorator(0, 0, 0, 24)
         )
 
         adapter = TaskRecyclerAdapter(
             onClick = { task ->
                 taskViewModel.onEvent(TaskEvent.LoadTask(task))
-                TaskDetailViewFragment().show(parentFragmentManager, "FullScreenDialog")
+                TaskDetailViewFragment().show(parentFragmentManager, "TaskDetailDialog")
             },
 
             onCheckChanged = { task, isChecked ->
@@ -57,31 +53,19 @@ class TaskTodoFragment : Fragment() {
             }
         )
 
-        rvTask.adapter = adapter
-        rvTask.layoutManager = LinearLayoutManager(requireContext())
-
         loadTask()
-    }
 
-    override fun onResume() {
-        super.onResume()
-        loadTask()
+        binding.taskTodoRecyclerView.adapter = adapter
+        binding.taskTodoRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun loadTask() {
         collectLatestOnViewLifecycle(taskViewModel.state) { state ->
-            if (state.isLoading) {
-                binding.taskTodoRecyclerView.isEnabled = false
-                return@collectLatestOnViewLifecycle
-            } else {
-                binding.taskTodoRecyclerView.isEnabled = true
-            }
-
-            Log.d("Task", "I am updated ${state.title}")
-
             val todoList = state.todoTask
-
+            Log.d("TaskAdd", "todolist state $todoList")
+            Log.d("TaskAdd", "task add before ${adapter.differ.currentList}")
             adapter.differ.submitList(todoList)
+            Log.d("TaskAdd", "task add after ${adapter.differ.currentList}")
 
             if(todoList.isEmpty()) {
                 binding.taskTodoEmpty.visibility = LinearLayout.VISIBLE
