@@ -25,7 +25,7 @@ class LogOutDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Properly initialize the binding
         _binding = FragmentLogOutDialogBinding.inflate(inflater, container, false)
         val view = binding.root

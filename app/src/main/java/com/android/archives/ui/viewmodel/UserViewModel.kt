@@ -11,7 +11,6 @@ import com.android.archives.ui.state.UserState
 import com.android.archives.utils.PasswordEncryptor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -127,7 +126,7 @@ class UserViewModel @Inject constructor (
         val current = state.value
 
         val username = current.username
-        val password = PasswordEncryptor.hashPassword(current.password)
+        val password = current.password
         val fullName = current.fullName
         val birthday = current.birthday
         val program = current.program
@@ -161,7 +160,7 @@ class UserViewModel @Inject constructor (
 
         val userId = current.currentUser?.userId
         val username = current.username
-        val password = PasswordEncryptor.hashPassword(current.password)
+        val password = current.password
         val fullName = current.fullName
         val birthday = current.birthday
         val program = current.program
@@ -240,15 +239,4 @@ class UserViewModel @Inject constructor (
             isAddingUser = false,
         ) }
     }
-
-    fun getUserById(userId: Long): Flow<User> {
-        return dao.getUserWithId(userId)
-    }
-
-    fun saveUser(user: User) {
-        viewModelScope.launch {
-            dao.upsertUser(user)
-        }
-    }
-
 }

@@ -86,7 +86,7 @@ class FolderViewModel @Inject constructor(
                         Log.d("FileDeletion", "File not found: ${file.absolutePath}")
                     }
                 }
-                dao.deleteFolder(fi);
+                dao.deleteFolder(fi)
             }
         }
     }

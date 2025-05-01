@@ -1,6 +1,7 @@
 package com.android.archives.ui.fragment.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.android.archives.R
 import com.android.archives.databinding.FragmentRegisterBinding
 import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
+import com.android.archives.utils.PasswordEncryptor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,7 +51,6 @@ class RegisterFragment : Fragment() {
 
         binding.tfPassword.addTextChangedListener { input ->
             val password = input.toString().trim()
-            userViewModel.onEvent(UserEvent.SetPassword(password))
             if(password.isNotEmpty()) {
                 val strength = getPasswordStrength(password)
                 binding.tvPasswordStrength.text = strength.first
@@ -83,6 +84,12 @@ class RegisterFragment : Fragment() {
                     return@launch
                 }
 
+                userViewModel.onEvent(UserEvent.SetPassword(
+                    PasswordEncryptor.hashPassword(password))
+                )
+
+                Log.d("Register", password)
+
                 val strength = getPasswordStrength(password)
                 binding.tilPassword.error = null
                 binding.tilConfirmPassword.error = null
@@ -96,7 +103,7 @@ class RegisterFragment : Fragment() {
 
                 if (password != confirmPassword) {
                     binding.tilConfirmPassword.error = "Passwords do not match"
-                    binding.tilPassword.errorIconDrawable = null
+                    binding.tilConfirmPassword.errorIconDrawable = null
                     return@launch
                 }
 

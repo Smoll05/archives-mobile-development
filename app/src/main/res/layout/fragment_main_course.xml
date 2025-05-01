@@ -79,6 +79,7 @@
         android:contentDescription="Add Course"
         android:visibility="gone"
         android:clickable="true"
+        android:focusable="true"
         app:srcCompat="@drawable/ic_add"
         app:backgroundTint="@color/background" />
 

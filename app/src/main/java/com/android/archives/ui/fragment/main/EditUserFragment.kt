@@ -1,6 +1,7 @@
 package com.android.archives.ui.fragment.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.android.archives.databinding.FragmentEditUserBinding
 import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.PasswordEncryptor
+import com.android.archives.utils.collectLatestOnViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -46,6 +48,7 @@ class EditUserFragment: DialogFragment() {
 
         userViewModel.loadStateFromCurrentUser()
         loadUserInputs()
+        loadUsername()
 
         // Disable username input by default
         binding.etNewUsername.isEnabled = false
@@ -66,7 +69,6 @@ class EditUserFragment: DialogFragment() {
 
         binding.etNewPassword.addTextChangedListener { input ->
             val password = input.toString().trim()
-            userViewModel.onEvent(UserEvent.SetPassword(password))
             if(password.isNotEmpty()) {
                 val strength = getPasswordStrength(password)
                 binding.tvPasswordStrength.text = strength.first
@@ -94,11 +96,6 @@ class EditUserFragment: DialogFragment() {
                 val oldPassword = binding.etOldPassword.text.toString().trim()
                 val newPassword = binding.etNewPassword.text.toString().trim()
 
-                if (userViewModel.userExists(newUsername)) {
-                    Toast.makeText(requireContext(), "Username already taken", Toast.LENGTH_SHORT).show()
-                    return@launch
-                }
-
                 // Nothing selected to update
                 if (!isUsernameEditing && !isPasswordEditing) {
                     Toast.makeText(requireContext(), "Nothing to update.", Toast.LENGTH_SHORT).show()
@@ -125,21 +122,34 @@ class EditUserFragment: DialogFragment() {
                     }
 
                     if (PasswordEncryptor.hashPassword(oldPassword) != dbPassword) {
+                        Log.d("EditUser", PasswordEncryptor.hashPassword(oldPassword))
+                        Log.d("EditUser", dbPassword)
                         binding.tilOldPassword.error = "Old password is incorrect"
                         binding.tilOldPassword.errorIconDrawable = null
                         return@launch
                     }
 
-                    userViewModel.onEvent(UserEvent.SetPassword(newPassword))
+                    userViewModel.onEvent(UserEvent.SetPassword(
+                        PasswordEncryptor.hashPassword(newPassword)
+                    ))
                 }
 
                 // Apply username update if selected
                 if (isUsernameEditing) {
+                    if(userViewModel.userExists(newUsername)) {
+                        Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
                     if (newUsername.isEmpty()) {
                         Toast.makeText(requireContext(), "Username cannot be empty", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
                     userViewModel.onEvent(UserEvent.SetUserName(newUsername))
+                }
+
+                collectLatestOnViewLifecycle(userViewModel.state) { state->
+                    Log.d("EditUser", state.password)
                 }
 
                 // Proceed with update
@@ -174,7 +184,7 @@ class EditUserFragment: DialogFragment() {
         super.onStart()
 
         dialog?.window?.setWindowAnimations(
-            R.style.dialog_animation_enter_up);
+            R.style.dialog_animation_enter_up)
     }
 
 
@@ -183,11 +193,28 @@ class EditUserFragment: DialogFragment() {
         _binding = null
     }
 
-    private fun loadUserInputs() {
+    private fun loadUsername() {
         viewLifecycleOwner.lifecycleScope.launch {
             val state = userViewModel.state.first()
-            dbPassword = state.password
             binding.etNewUsername.setText(state.username)
         }
+    }
+
+    private fun loadUserInputs() {
+        collectLatestOnViewLifecycle(userViewModel.state) { state->
+            val user = state.currentUser
+            if (user != null) {
+                dbPassword = user.password
+            }
+        }
+
+//        userViewModel.onEvent(UserEvent.SetUserName(task.title))
+//        userViewModel.onEvent(UserEvent.SetPassword(task.description))
+//        userViewModel.onEvent(UserEvent.SetBirthday(task.emojiIcon))
+//        userViewModel.onEvent(UserEvent.SetProgram(task.isComplete))
+//        userViewModel.onEvent(UserEvent.SetFullName(task.isComplete))
+//        userViewModel.onEvent(UserEvent.Set(task.isComplete))
+//        userViewModel.onEvent(UserEvent.SetProgram(task.isComplete))
+//        userViewModel.onEvent(UserEvent.SetProgram(task.isComplete))
     }
 }

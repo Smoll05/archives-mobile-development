@@ -44,7 +44,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver android:name=".receiver.ScheduleNotificationReceiver"/>
     </application>
 
 </manifest>
