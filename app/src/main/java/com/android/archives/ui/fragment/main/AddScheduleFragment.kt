@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -18,10 +15,8 @@ import com.android.archives.ui.event.ScheduleEvent
 import com.android.archives.ui.viewmodel.ScheduleViewModel
 import com.android.archives.utils.DateConverter
 import com.android.archives.utils.isFieldEmptyOrNull
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,23 +28,8 @@ class AddScheduleFragment : DialogFragment() {
 
     private val scheduleViewModel: ScheduleViewModel by activityViewModels()
 
-    private lateinit var etDate : EditText
-    private lateinit var etStart : EditText
-    private lateinit var etEnd : EditText
-    private lateinit var etTitle : EditText
-    private lateinit var etLocation : EditText
-
-
-    private lateinit var tilDate : TextInputLayout
-    private lateinit var tilStart : TextInputLayout
-    private lateinit var tilEnd : TextInputLayout
-    private lateinit var tilTitle : TextInputLayout
-    private lateinit var tilLocation : TextInputLayout
-
     private lateinit var datePicker: MaterialDatePicker<Long>
     private var existingDatePicker: Fragment? = null
-    private var existingStartTimePicker: Fragment? = null
-    private var existingEndTimePicker: Fragment? = null
     private val datePickerTag = "DATE PICKER"
     private val timePickerTag = "TIME PICKER"
 

@@ -1,6 +1,5 @@
 package com.android.archives.ui.fragment.main
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,13 +7,22 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.android.archives.R
+import com.android.archives.data.service.SharedPrefsService
 import com.android.archives.databinding.FragmentSettingsBinding
+import com.android.archives.ui.activity.AuthActivity
+import com.android.archives.ui.event.ScheduleEvent
+import com.android.archives.ui.event.TaskEvent
+import com.android.archives.ui.event.UserEvent
+import com.android.archives.ui.viewmodel.FolderViewModel
+import com.android.archives.ui.viewmodel.ScheduleViewModel
+import com.android.archives.ui.viewmodel.TaskViewModel
 import com.android.archives.ui.viewmodel.UserViewModel
 import com.android.archives.utils.DateConverter
 import com.android.archives.utils.collectLatestOnViewLifecycle
@@ -22,12 +30,18 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SettingsFragment : Fragment() {
+class SettingsFragment: Fragment() {
+    @Inject lateinit var sharedPrefs: SharedPrefsService
+
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     private val userViewModel: UserViewModel by activityViewModels()
+    private val folderViewModel: FolderViewModel by activityViewModels()
+    private val taskViewModel: TaskViewModel by activityViewModels()
+    private val scheduleViewModel: ScheduleViewModel by activityViewModels()
 
     private var lastClickTime: Long = 0
     private val clickInterval: Long = 1000 // 1 second
@@ -51,15 +65,33 @@ class SettingsFragment : Fragment() {
 
         binding.settingsErase.setOnClickListener {
             if (isDoubleClick()) return@setOnClickListener
-            AlertDialog.Builder(requireContext())
-                .setTitle("Erase All Content")
+            val tintedIcon = AppCompatResources.getDrawable(
+                requireContext(),
+                R.drawable.ic_delete_24px
+            )?.apply {
+                setTint(ContextCompat.getColor(requireContext(), R.color.error))
+            }
+
+            MaterialAlertDialogBuilder(
+                requireContext(),
+                com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+            )
+                .setTitle("Delete All Content")
                 .setMessage("Are you sure you want to erase all app data? This action cannot be undone.")
-                .setPositiveButton("Yes") { _, _ ->
-                    val prefs = requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE)
-                    prefs.edit().clear().apply()
+                .setIcon(tintedIcon)
+                .setNeutralButton("Cancel") { _, _ -> }
+                .setNegativeButton("Delete") { _, _ ->
+                    taskViewModel.onEvent(TaskEvent.DeleteAllTask)
+                    scheduleViewModel.onEvent(ScheduleEvent.DeleteAllSchedule)
+                    folderViewModel.deleteAllFilesFromFolders()
+                    Toast.makeText(requireContext(), "All content and data deleted", Toast.LENGTH_SHORT).show()
                 }
-                .setNegativeButton("Cancel", null)
                 .show()
+                .apply {
+                    getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                        ContextCompat.getColor(context, R.color.error)
+                    )
+                }
         }
 
         binding.settingsDelete.setOnClickListener {
@@ -76,12 +108,19 @@ class SettingsFragment : Fragment() {
                 requireContext(),
                 com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
             )
-                .setTitle("Delete Task")
-                .setMessage("Are you sure you want to delete this task?")
+                .setTitle("Delete User Account")
+                .setMessage("Are you sure you want to delete this user account?")
                 .setIcon(tintedIcon)
                 .setNeutralButton("Cancel") { _, _ -> }
                 .setNegativeButton("Delete") { _, _ ->
+                    folderViewModel.deleteAllFilesFromFolders()
+                    userViewModel.onEvent(UserEvent.DeleteUser)
+                    sharedPrefs.clearCurrentUser()
 
+                    val intent = Intent(requireContext(), AuthActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    startActivity(intent)
                 }
                 .show()
                 .apply {

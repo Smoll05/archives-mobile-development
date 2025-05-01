@@ -59,11 +59,12 @@ class LoginFragment : Fragment() {
                 )
 
                 if (success) {
-                    startActivity(
-                        Intent(requireContext(), MainActivity::class.java)
-                    )
+                    val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    startActivity(intent)
                 } else {
-                    Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Invalid user credentials", Toast.LENGTH_SHORT).show()
                 }
             }
         }

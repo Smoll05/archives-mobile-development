@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import android.widget.RadioGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
@@ -23,8 +21,8 @@ import com.android.archives.databinding.FragmentEditScheduleBinding
 import com.android.archives.ui.event.ScheduleEvent
 import com.android.archives.ui.viewmodel.ScheduleViewModel
 import com.android.archives.utils.DateConverter
+import com.android.archives.utils.collectLatestOnViewLifecycle
 import com.android.archives.utils.isFieldEmptyOrNull
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
@@ -99,17 +97,18 @@ class EditScheduleFragment @Inject constructor(
 
         loadTask()
 
-        val tilDate = binding.dateTil
-        val tilStart = binding.tilStart
-        val tilEnd = binding.tilEnd
-        val tilTitle = binding.editTaskLayout
-        val tilLocation = binding.editTaskLocationLayout
+        tilDate = binding.dateTil
+        tilStart = binding.tilStart
+        tilEnd = binding.tilEnd
+        tilTitle = binding.editTaskLayout
+        tilLocation = binding.editTaskLocationLayout
 
-        val etTitle = binding.editScheduleTitle
-        val etLocation = binding.editScheduleLocation
-        val etDate = binding.editScheduleDate
-        val etStart = binding.etStart
-        val etEnd = binding.etEnd
+        etTitle = binding.editScheduleTitle
+        etLocation = binding.editScheduleLocation
+        etDate = binding.editScheduleDate
+        etStart = binding.etStart
+        etEnd = binding.etEnd
+
         val colorRadio = binding.editScheduleColor
         val toolBar = binding.editScheduleToolbar
         val editBtn = binding.editScheduleBtn
@@ -273,6 +272,7 @@ class EditScheduleFragment @Inject constructor(
                     startTimePicker.hour, startTimePicker.minute
                 )
             )
+
             startTimeHour = startTimePicker.hour
             startTimeMin = startTimePicker.minute
             scheduleViewModel.onEvent(ScheduleEvent.SetTimeStartHour(startTimeHour))
@@ -383,6 +383,13 @@ class EditScheduleFragment @Inject constructor(
         scheduleViewModel.onEvent(ScheduleEvent.SetTimeStartMin(schedule.startTimeMin))
         scheduleViewModel.onEvent(ScheduleEvent.SetTimeEndHour(schedule.endTimeHour))
         scheduleViewModel.onEvent(ScheduleEvent.SetTimeEndMin(schedule.endTimeMin))
+
+        collectLatestOnViewLifecycle(scheduleViewModel.state) { state->
+            startTimeHour = state.startHour
+            startTimeMin = state.startMin
+            endTimeHour = state.endHour
+            endTimeMin = state.endMin
+        }
     }
 
     private fun inputsAreInvalid() : Boolean {

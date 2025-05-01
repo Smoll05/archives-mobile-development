@@ -5,11 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.archives.data.dao.UserDao
 import com.android.archives.data.model.User
+import com.android.archives.data.service.SharedPrefsService
 import com.android.archives.ui.event.UserEvent
 import com.android.archives.ui.state.UserState
 import com.android.archives.utils.PasswordEncryptor
-import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor (
-    private val sharedPrefs: SharedPrefsHelper,
+    private val sharedPrefs: SharedPrefsService,
     private val dao: UserDao
 ) : ViewModel() {
 
@@ -32,6 +33,18 @@ class UserViewModel @Inject constructor (
     fun onEvent(event: UserEvent) {
         when(event) {
             is UserEvent.DeleteUser -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    state.value.pictureFilePath?.let { filePath ->
+                        val file = java.io.File(filePath)
+                        if (file.exists()) {
+                            val deleted = file.delete()
+                            Log.d("FileDeletion", "Deleted ${file.absolutePath}: $deleted")
+                        } else {
+                            Log.d("FileDeletion", "File not found: ${file.absolutePath}")
+                        }
+                    }
+                }
+
                 viewModelScope.launch {
                     _state.value.currentUser?.let { dao.deleteUser(it) }
                 }
@@ -104,6 +117,10 @@ class UserViewModel @Inject constructor (
                 ) }
             }
         }
+    }
+
+    suspend fun userExists(username: String) : Boolean {
+        return dao.getUserWithUsername(username) != null
     }
 
     suspend fun registerUser() : Boolean {

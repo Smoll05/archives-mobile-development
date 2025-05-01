@@ -1,5 +1,6 @@
 package com.android.archives.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -17,10 +18,16 @@ class TaskRecyclerAdapter(
 
     private val differCallback = object : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+            Log.d("TaskAdded", "oldItem: $oldItem")
+            Log.d("TaskAdded", "newItem: $newItem")
+            val same = oldItem.taskId == newItem.taskId
+            Log.d("TaskAdded", "Are Items The Same: $same")
             return oldItem.taskId == newItem.taskId
         }
 
         override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+            val same = oldItem == newItem
+            Log.d("TaskAdded", "Are Contents The Same: $same")
             return oldItem == newItem
         }
     }
@@ -48,7 +55,7 @@ class TaskRecyclerAdapter(
 
         // Double-tap prevention
         var lastClickTime = 0L
-        val clickInterval = 3000L // 1 second
+        val clickInterval = 1000L
 
         holder.binding.root.setOnClickListener {
             val now = android.os.SystemClock.elapsedRealtime()

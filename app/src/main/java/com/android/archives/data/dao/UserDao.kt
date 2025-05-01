@@ -19,6 +19,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE username = :username AND password = :password")
     suspend fun getUserWithUsernameAndPassword(username: String, password: String): User?
 
+    @Query("SELECT * FROM users WHERE username = :username")
+    suspend fun getUserWithUsername(username: String): User?
+
     @Query("SELECT * FROM users WHERE userId = :userId")
     fun getUserWithId(userId: Long): Flow<User>
 }

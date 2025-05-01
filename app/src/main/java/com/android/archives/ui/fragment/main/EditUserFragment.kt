@@ -60,21 +60,6 @@ class EditUserFragment: DialogFragment() {
             binding.passwordFieldsContainer.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
 
-        // Listen to new password input and check strength
-//        binding.etNewPassword.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-//
-//            // This function runs when user types in new password
-//            override fun afterTextChanged(s: Editable?) {
-//                val password = s.toString()
-//                val strength = getPasswordStrength(password)
-//                binding.tvPasswordStrength.text = strength.first
-//                binding.tvPasswordStrength.setTextColor(strength.second)
-//            }
-//        })
-
         binding.etNewUsername.addTextChangedListener { input ->
             userViewModel.onEvent(UserEvent.SetUserName(input.toString().trim()))
         }
@@ -82,99 +67,95 @@ class EditUserFragment: DialogFragment() {
         binding.etNewPassword.addTextChangedListener { input ->
             val password = input.toString().trim()
             userViewModel.onEvent(UserEvent.SetPassword(password))
-            val strength = getPasswordStrength(password)
-            binding.tvPasswordStrength.text = strength.first
-            binding.tvPasswordStrength.setTextColor(strength.second)
+            if(password.isNotEmpty()) {
+                val strength = getPasswordStrength(password)
+                binding.tvPasswordStrength.text = strength.first
+                binding.tvPasswordStrength.setTextColor(strength.second)
+            } else {
+                binding.tvPasswordStrength.text = null
+                binding.tilNewPassword.error = null
+            }
+        }
+
+        binding.etOldPassword.addTextChangedListener { input ->
+            val confirmPassword = input.toString().trim()
+            if(confirmPassword.isEmpty()) {
+                binding.tilOldPassword.error = null
+            }
         }
 
         // Save button logic
         binding.btnSave.setOnClickListener {
-            val isUsernameEditing = binding.cbEditUsername.isChecked
-            val isPasswordEditing = binding.cbEditPassword.isChecked
-
-            val newUsername = binding.etNewUsername.text.toString().trim()
-            val oldPassword = binding.etOldPassword.text.toString().trim()
-            val newPassword = binding.etNewPassword.text.toString().trim()
-
-            // Nothing selected to update
-            if (!isUsernameEditing && !isPasswordEditing) {
-                Toast.makeText(requireContext(), "Nothing to update.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // Validate password update
-            if (isPasswordEditing) {
-                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
-                    Toast.makeText(requireContext(), "Old and New Password are required", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                val strength = getPasswordStrength(newPassword)
-                if (strength.first == "Weak Password") {
-                    Toast.makeText(requireContext(), "Create a much stronger password", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                if (PasswordEncryptor.hashPassword(oldPassword) != dbPassword) {
-                    Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                userViewModel.onEvent(UserEvent.SetPassword(newPassword))
-            }
-
-            // Apply username update if selected
-            if (isUsernameEditing) {
-                if (newUsername.isEmpty()) {
-                    Toast.makeText(requireContext(), "Username cannot be empty", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                userViewModel.onEvent(UserEvent.SetUserName(newUsername))
-            }
-
-            // Proceed with update
             lifecycleScope.launch {
-                if (userViewModel.updateUser()) {
-                    Toast.makeText(requireContext(), "User info updated", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Failed to update user info",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                dismiss()
-            }
+                val isUsernameEditing = binding.cbEditUsername.isChecked
+                val isPasswordEditing = binding.cbEditPassword.isChecked
 
-//            lifecycleScope.launch {
-//                currentUser?.let {
-//                    val userFromDb = viewModel.getUserById(it.userId).first()
-//                    var finalUsername = userFromDb.username
-//                    var finalPassword = userFromDb.password
-//
-//                    if (isUsernameEditing) {
-//                        finalUsername = newUsername
-//                    }
-//
-//                    if (isPasswordEditing) {
-//                        val hashedOldPassword = PasswordEncryptor.hashPassword(oldPassword)
-//                        if (userFromDb.password != hashedOldPassword) {
-//                            Toast.makeText(requireContext(), "Old password is incorrect.", Toast.LENGTH_SHORT).show()
-//                            return@launch
-//                        }
-//                        finalPassword = PasswordEncryptor.hashPassword(newPassword)
-//                    }
-//
-//                    val updatedUser = userFromDb.copy(
-//                        username = finalUsername,
-//                        password = finalPassword
-//                    )
-//
-//                    userViewModel.updateUser()
-//                    Toast.makeText(requireContext(), "User info updated.", Toast.LENGTH_SHORT).show()
-//                    dismiss()
-//                }
-//            }
+                val newUsername = binding.etNewUsername.text.toString().trim()
+                val oldPassword = binding.etOldPassword.text.toString().trim()
+                val newPassword = binding.etNewPassword.text.toString().trim()
+
+                if (userViewModel.userExists(newUsername)) {
+                    Toast.makeText(requireContext(), "Username already taken", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                // Nothing selected to update
+                if (!isUsernameEditing && !isPasswordEditing) {
+                    Toast.makeText(requireContext(), "Nothing to update.", Toast.LENGTH_SHORT).show()
+                    return@launch
+                }
+
+                // Validate password update
+                if (isPasswordEditing) {
+                    if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                        Toast.makeText(requireContext(), "Old and New Password are required", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    val strength = getPasswordStrength(newPassword)
+
+                    binding.tilNewPassword.error = null
+                    binding.tilOldPassword.error = null
+
+                    if (strength.first == "Weak Password") {
+                        binding.tilNewPassword.error = " "
+                        binding.tilNewPassword.errorIconDrawable = null
+                        Toast.makeText(requireContext(), "Create a much stronger password", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    if (PasswordEncryptor.hashPassword(oldPassword) != dbPassword) {
+                        binding.tilOldPassword.error = "Old password is incorrect"
+                        binding.tilOldPassword.errorIconDrawable = null
+                        return@launch
+                    }
+
+                    userViewModel.onEvent(UserEvent.SetPassword(newPassword))
+                }
+
+                // Apply username update if selected
+                if (isUsernameEditing) {
+                    if (newUsername.isEmpty()) {
+                        Toast.makeText(requireContext(), "Username cannot be empty", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+                    userViewModel.onEvent(UserEvent.SetUserName(newUsername))
+                }
+
+                // Proceed with update
+                lifecycleScope.launch {
+                    if (userViewModel.updateUser()) {
+                        Toast.makeText(requireContext(), "User info updated", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to update user info",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    dismiss()
+                }
+            }
         }
     }
 

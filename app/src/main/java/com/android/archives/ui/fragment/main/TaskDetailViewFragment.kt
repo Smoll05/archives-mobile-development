@@ -1,15 +1,16 @@
 package com.android.archives.ui.fragment.main
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
@@ -22,7 +23,6 @@ import com.android.archives.databinding.FragmentTaskDetailViewBinding
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.viewmodel.TaskViewModel
 import com.android.archives.utils.collectLatestOnViewLifecycle
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,9 +60,8 @@ class TaskDetailViewFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadTask()
+
         val toolBar = binding.taskDetailToolbar
-        val tvTitle = binding.taskDetailTitle
-        val tvDescription = binding.taskDetailDescription
 
         val btnEdit = binding.taskDetailEdit
         val btnDelete = binding.taskDetailDelete
@@ -120,29 +119,47 @@ class TaskDetailViewFragment : DialogFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("TaskDetail", "Resume")
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun markTaskComplete() {
-        spannableString.setSpan(StrikethroughSpan(), 0, spannableString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString = SpannableString("Mark As Complete")
+        spannableString.setSpan(
+            StrikethroughSpan(),
+            0,
+            spannableString.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannableString.setSpan(
+            ForegroundColorSpan(Color.GRAY),
+            0,
+            spannableString.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
         binding.taskDetailMark.text = spannableString
     }
 
     private fun unMarkTaskComplete() {
-        val spans = spannableString.getSpans(0, spannableString.length, StrikethroughSpan::class.java)
-
-        if(spans.isNotEmpty()) {
-            spannableString.removeSpan(spans[0])
-            binding.taskDetailMark.text = spannableString
-        }
+        spannableString = SpannableString("Mark As Complete")
+        spannableString.removeSpan(StrikethroughSpan())
+        binding.taskDetailMark.text = spannableString
     }
 
     private fun loadTask() {
         collectLatestOnViewLifecycle(taskViewModel.state) { state ->
             state.currentTask?.let { task ->
                 this.task = task
+
+                Log.d("TaskDetail", "Changed")
 
                 val titleText = "${task.emojiIcon} ${task.title}"
                 binding.taskDetailTitle.text = titleText

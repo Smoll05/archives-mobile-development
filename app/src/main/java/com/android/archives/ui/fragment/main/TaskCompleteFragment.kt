@@ -48,7 +48,7 @@ class TaskCompleteFragment : Fragment() {
         adapter = TaskRecyclerAdapter(
             onClick = { task ->
                 taskViewModel.onEvent(TaskEvent.LoadTask(task))
-                TaskDetailViewFragment().show(parentFragmentManager, "FullScreenDialog")
+                TaskDetailViewFragment().show(parentFragmentManager, "TaskDetailDialog")
             },
 
             onCheckChanged = { task, isChecked ->
@@ -92,5 +92,4 @@ class TaskCompleteFragment : Fragment() {
             }
         }
     }
-
 }

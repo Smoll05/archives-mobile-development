@@ -1,12 +1,13 @@
 package com.android.archives.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.archives.data.dao.TaskDao
 import com.android.archives.data.model.Task
+import com.android.archives.data.service.SharedPrefsService
 import com.android.archives.ui.event.TaskEvent
 import com.android.archives.ui.state.TaskState
-import com.android.archives.utils.SharedPrefsHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor (
-    private val sharedPrefs: SharedPrefsHelper,
+    private val sharedPrefs: SharedPrefsService,
     private val dao: TaskDao
 ): ViewModel() {
 
@@ -49,23 +50,6 @@ class TaskViewModel @Inject constructor (
                     dao.deleteTask(event.task)
                 }
             }
-            is TaskEvent.EditTask -> {
-                viewModelScope.launch {
-                    _state.update { it.copy(
-                        currentTask = event.task,
-                        isLoading = true
-                    ) }
-
-                    val task = event.task
-                    val current = state.value
-
-                    task.title = current.title
-                    task.description = current.description
-                    task.emojiIcon = current.emojiIcon
-
-                    dao.upsertTask(task)
-                }
-            }
             is TaskEvent.LoadTask -> {
                 val task = event.task
 
@@ -82,7 +66,7 @@ class TaskViewModel @Inject constructor (
                         isLoading = true
                     ) }
 
-                    val current = _state.value
+                    val current = state.value
                     val (title, description, emoji) = Triple(
                         current.title, current.description, current.emojiIcon
                     )
@@ -129,6 +113,44 @@ class TaskViewModel @Inject constructor (
                     val task = event.task
                     task.isComplete = event.isComplete
                     dao.upsertTask(task)
+                }
+            }
+
+            TaskEvent.DeleteAllTask -> {
+                viewModelScope.launch {
+                    _state.update { it.copy(isLoading = true) }
+                    state.value.todoTask.let{ todoTask ->
+                        todoTask.forEach { task ->
+                            dao.deleteTask(task)
+                        }
+                    }
+
+                    state.value.completeTask.let{ completeTask ->
+                        completeTask.forEach { task ->
+                            dao.deleteTask(task)
+                        }
+                    }
+                    _state.update { it.copy(isLoading = false) }
+                }
+            }
+
+            is TaskEvent.EditTask -> {
+                viewModelScope.launch {
+                    val updatedTask = event.task.copy(
+                        title = state.value.title,
+                        description = state.value.description,
+                        emojiIcon = state.value.emojiIcon
+                    )
+
+                    Log.d("TaskAdded", "Updated task: $updatedTask")
+
+                    _state.update {
+                        it.copy(
+                            currentTask = updatedTask,
+                            isLoading = true
+                        )
+                    }
+                    dao.upsertTask(updatedTask)
                 }
             }
         }
