@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -28,14 +27,16 @@ class EditTaskFragment : DialogFragment() {
 
     private var emojiPickerShown = false
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
 
         arguments?.let { arg ->
-            arg.getParcelable("task", Task::class.java)?.let { argTask ->
-                task = argTask
+            task = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arg.getParcelable("task", Task::class.java)!!
+            } else {
+                @Suppress("DEPRECATION")
+                arg.getParcelable("task")!!
             }
         }
     }

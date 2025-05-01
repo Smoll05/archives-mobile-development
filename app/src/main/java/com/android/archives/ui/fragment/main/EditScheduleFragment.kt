@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -66,14 +65,16 @@ class EditScheduleFragment @Inject constructor(
 
     private lateinit var schedule: Schedule
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
 
         arguments?.let { arg ->
-            arg.getParcelable("schedule", Schedule::class.java)?.let { argSchedule ->
-                schedule = argSchedule
+            schedule = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arg.getParcelable("schedule", Schedule::class.java)!!
+            } else {
+                @Suppress("DEPRECATION")
+                arg.getParcelable("schedule")!!
             }
         }
     }

@@ -15,7 +15,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
@@ -60,15 +59,16 @@ class FilesFragment : DialogFragment() {
 
     private lateinit var folder: FolderItem
 
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Material_Light_NoActionBar_Fullscreen)
 
         arguments?.let { arg ->
-            arg.getParcelable("folder", FolderItem::class.java)?.let { argFolder ->
-                folder = argFolder
+            folder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                arg.getParcelable("folder", FolderItem::class.java)!!
+            } else {
+                @Suppress("DEPRECATION")
+                arg.getParcelable("folder")!!
             }
         }
     }
