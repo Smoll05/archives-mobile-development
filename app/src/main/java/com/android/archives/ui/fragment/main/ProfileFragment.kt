@@ -136,7 +136,7 @@ class ProfileFragment : DialogFragment() {
         etName.addTextChangedListener {
             val name = it.toString()
             tvName.smoothTextChangeAnimation(name)
-            onEvent(UserEvent.SetUserName(name))
+            onEvent(UserEvent.SetFullName(name))
             tilName.error = null
         }
 
